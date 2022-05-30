@@ -15,7 +15,7 @@ Lua scripts useful for RNG abusing in Pokémon games
 * [Admiral_Fish](https://github.com/Admiral-Fish), [bumba](https://github.com/pkmnbumba), and [EzPzStreamz](https://github.com/SteveCookTU) for the research and for their great app [PokeFinder](https://github.com/Admiral-Fish/PokeFinder) always up to date
 * [zep715](https://github.com/zep715) for his [gen1](https://github.com/zep715/rbylua) scripts
 * [wwwwwwzx](https://github.com/wwwwwwzx) for his [gen2](https://github.com/wwwwwwzx/gsclua) scripts
-* [SciresM](https://github.com/SciresM), Zari, amab, OmegaDonut, Bond697 and all the other Pokémon researchers!
+* [SciresM](https://github.com/SciresM), Zari, [amab](https://github.com/AskMeAboutBirds), [OmegaDonut](https://github.com/OmegaDonut), [Bond697](https://github.com/Bond697) and all the other Pokémon researchers!
 * [MKDasher](https://github.com/mkdasher) for his [gen4/gen5](https://www.dropbox.com/s/qx2fo1zc44p1jr7/Pokemon%20Gen%204-5%20Lua%20script.rar) scripts
 * [BizHawk](https://github.com/TASEmulators/BizHawk), [DeSmuMe](https://github.com/TASEmulators/desmume), [VBA-ReRecording](https://github.com/TASEmulators/vba-rerecording) devs
 * [SwareJonge](https://github.com/SwareJonge) for his [Dolphin version](https://github.com/SwareJonge/Dolphin-Lua-Core) with lua scripts support
