@@ -57,7 +57,7 @@ local partySlotsCounterAddr
 local wildDVsAddr
 local shinyFound = {false, "None"}
 
-local botTargetFishingSpecies = 27  -- Input here the fishing bot target species index you can find in the link below
+local botTargetFishingSpecies = 27  -- Input here the fishing bot target species index. You can find it in the link below
                                     -- https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 local fishedSpeciesAddr
 local biteFlagAddr = 0xCD3D
@@ -66,7 +66,7 @@ local tidAddr
 local TIDFound = false
 local botTargetTIDs = {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333}  -- Input here the bot target TIDs
 
-if versionAddr == 0x4C41 then  -- Check version version
+if versionAddr == 0x4C41 then  -- Check game version
  version = "Crystal"
 elseif versionAddr == 0x4C42 then
  version = "Blue"
@@ -84,7 +84,7 @@ else
  version = "Unknown"
 end
 
-if languageAddr == 0x04 or languageAddr == 0x91 or languageAddr == 0x9D then  -- Check version language
+if languageAddr == 0x04 or languageAddr == 0x91 or languageAddr == 0x9D then  -- Check game language and set addresses
  language = "USA"
 
  if version == "Blue" or version == "Red" then
@@ -143,21 +143,17 @@ function getInput()
 
  if (key["1"] or key["numpad1"]) and (not prevKey["1"] and not prevKey["numpad1"]) then
   leftArrowColor = "orange"
-  index = index - 1
-
-  if index < 1 then
-   index = 7
-  end
+  index = index - 1 < 1 and 7 or index - 1
  elseif (key["2"] or key["numpad2"]) and (not prevKey["2"] and not prevKey["numpad2"]) then
   rightArrowColor = "orange"
-  index = index + 1
-
-  if index > 7 then
-   index = 1
-  end
+  index = index + 1 > 7 and 1 or index + 1
  end
 
  prevKey = key
+ gui.text(1, 1, "Mode: "..mode[index])
+ drawArrowLeft(100, 1, leftArrowColor)
+ gui.text(110, 1, "1 - 2")
+ drawArrowRight(138, 1, rightArrowColor)
 end
 
 function drawArrowLeft(a, b, c)
@@ -185,8 +181,8 @@ end
 
 function isShiny(atkDV, defDV, speDV, spcDV)
  return {defDV == 0xA and speDV == 0xA and spcDV == 0xA and
-       (atkDV == 0x2 or atkDV == 0x3 or atkDV == 0x6 or atkDV == 0x7 or
-        atkDV == 0xA or atkDV == 0xB or atkDV == 0xE or atkDV == 0xF), mode[index]}
+        (atkDV == 0x2 or atkDV == 0x3 or atkDV == 0x6 or atkDV == 0x7 or
+         atkDV == 0xA or atkDV == 0xB or atkDV == 0xE or atkDV == 0xF), mode[index]}
 end
 
 function shinyBotLoop(pokemonDVsAddr)
@@ -235,7 +231,8 @@ end
 function showFoundShiny(pokemonDVsAddr)
  if shinyFound[1] and shinyFound[2] == mode[index] then
   local atkDV, defDV, speDV, spcDV = getDVs(pokemonDVsAddr)
-  local hpDV = (atkDV % 2 * 8) + (defDV % 2 * 4) + (speDV % 2 * 2) + (spcDV % 2)
+  local hpDV = ((atkDV % 2) * 8) + ((defDV % 2) * 4) + ((speDV % 2) * 2) + (spcDV % 2)
+
   gui.text(1, 91, "Shiny Found!")
   gui.text(1, 100, string.format("Hp: %d", hpDV))
   gui.text(1, 109, string.format("Atk: %d", atkDV))
@@ -324,6 +321,7 @@ function isTIDFound()
    return true
   end
  end
+
  return false
 end
 
@@ -359,6 +357,7 @@ end
 function showFoundTID()
  if TIDFound then
   local TID = reverseWord(read16Bit(tidAddr))
+
   gui.text(1, 100, "TID Found!")
   gui.text(1, 109, "TID: "..TID)
 
@@ -381,15 +380,12 @@ function TIDBot()
 end
 
 function shinyText(atkDV, defDV, speDV, spcDV)
- if isShiny(atkDV, defDV, speDV, spcDV)[1] then
-  return "\tShiny"
- else
-  return ""
- end
+ return isShiny(atkDV, defDV, speDV, spcDV)[1] and "\tShiny" or ""
 end
 
 function showPartyPokemonInfo()
  local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
+
  gui.text(1, 18, "Party natures:")
 
  for i = 0, partySlotsCounter do
@@ -408,10 +404,6 @@ end
 
 while warning == "" do
  getInput()
- gui.text(1, 1, "Mode: "..mode[index])
- drawArrowLeft(100, 1, leftArrowColor)
- gui.text(110, 1, "1 - 2")
- drawArrowRight(138, 1, rightArrowColor)
 
  if mode[index] == "Gift Bot" or mode[index] == "In-Game Trade Bot" then
   local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
