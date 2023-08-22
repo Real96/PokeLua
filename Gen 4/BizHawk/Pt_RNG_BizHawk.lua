@@ -604,12 +604,11 @@ function getRngInfoInput()
  end
 end
 
-function LCRNG(s, mul1, mul2, sum)
- local a = mul1 * (s % 0x10000) + (s >> 16) * mul2
- local b = mul2 * (s % 0x10000) + (a % 0x10000) * 0x10000 + sum
- local c = b % 0x100000000
+function LCRNG(s, mul, sum)
+ local a = (mul >> 16) * (s % 0x10000) + (s >> 16) * (mul % 0x10000)
+ local b = (mul % 0x10000) * (s % 0x10000) + (a % 0x10000) * 0x10000 + sum
 
- return c
+ return b % 0x100000000
 end
 
 function LCRNGDistance(state0, state1)
@@ -625,7 +624,7 @@ function LCRNGDistance(state0, state1)
    end
 
    if ((state0 ~ state1) & mask) ~= 0 then
-    state0 = LCRNG(state0, mult >> 16, mult & 0xFFFF, add) & 0xFFFFFFFF
+    state0 = LCRNG(state0, mult, add)
     dist = dist + mask
    end
 
@@ -643,9 +642,8 @@ function buildInitialSeed(delay)
  local cd = dateTime["hour"]
  local abcd = ab * 0x100 + cd
  local efgh = dateTime["year"] + delay
- local calculatedSeed = (ab * 0x1000000 + cd * 0x10000 + efgh) % 0x100000000
 
- return calculatedSeed
+ return (ab * 0x1000000 + cd * 0x10000 + efgh) % 0x100000000
 end
 
 function setInitialSeed(mtSeed, current, delay)
@@ -905,10 +903,10 @@ function showIVsAndHP(ivsValue)
 end
 
 function showMoves(moveIndexesList)
- gui.pixelText(1, 64, "Move: "..moveNamesList[moveIndexesList[1]])
- gui.pixelText(1, 71, "Move: "..moveNamesList[moveIndexesList[2]])
- gui.pixelText(1, 78, "Move: "..moveNamesList[moveIndexesList[3]])
- gui.pixelText(1, 85, "Move: "..moveNamesList[moveIndexesList[4]])
+ gui.pixelText(1, 64, "Move: "..moveNamesList[moveIndexesList[1] > 468 and 1 or moveIndexesList[1]])
+ gui.pixelText(1, 71, "Move: "..moveNamesList[moveIndexesList[2] > 468 and 1 or moveIndexesList[2]])
+ gui.pixelText(1, 78, "Move: "..moveNamesList[moveIndexesList[3] > 468 and 1 or moveIndexesList[3]])
+ gui.pixelText(1, 85, "Move: "..moveNamesList[moveIndexesList[4] > 468 and 1 or moveIndexesList[4]])
 end
 
 function showPP(movePPList)
@@ -938,119 +936,77 @@ function showInfo(pidAddr)
  local prng = checksum
 
  for i = 1, getOffset("growth", orderIndex) do
-  prng = LCRNG(prng, 0x5F74, 0x8241, 0xCBA72510)  -- 16 cycles
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
  end
 
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  local speciesDexIndex = read16Bit(pidAddr + growthOffset + 0x8) ~ (prng >> 16)
 
- if speciesDexIndex > 494 or speciesDexIndex < 1 then
-  speciesDexIndex = 1
- end
-
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  local heldItemIndex = (read16Bit(pidAddr + growthOffset + 0xA) ~ (prng >> 16)) + 1
-
- if heldItemIndex > 537 then
-  speciesDexIndex = 1
-  heldItemIndex = 1
- end
 
  local OTID, OTSID = nil, nil
  local shinyTypeTextColor, shinyType
 
  if mode[index] == "Pokemon Info" then
-  prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+  prng = LCRNG(prng, 0x41C64E6D, 0x6073)
   OTID = read16Bit(pidAddr + growthOffset + 0xC) ~ (prng >> 16)
-  prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+  prng = LCRNG(prng, 0x41C64E6D, 0x6073)
   OTSID = read16Bit(pidAddr + growthOffset + 0xE) ~ (prng >> 16)
  else
-  prng = LCRNG(prng, 0xC2A2, 0x9A69, 0xE97E7B6A)  -- 2 cycles
+  prng = LCRNG(prng, 0xC2A29A69, 0xE97E7B6A)  -- 2 cycles
  end
 
  shinyTypeTextColor, shinyType = shinyCheck(pokemonPID, OTID, OTSID)
 
- prng = LCRNG(prng, 0x807D, 0xBCB5, 0x52713895)  -- 3 cycles
+ prng = LCRNG(prng, 0x807DBCB5, 0x52713895)  -- 3 cycles
  local abilityIndex = read16Bit(pidAddr + growthOffset + 0x14) ~ (prng >> 16)
  abilityIndex = getBits(abilityIndex, 8, 8)
-
- if abilityIndex > 124 or abilityIndex < 1 then
-  speciesDexIndex = 1
-  abilityIndex = 1
- end
 
  prng = checksum
 
  for i = 1, getOffset("attack", orderIndex) do
-  prng = LCRNG(prng, 0x5F74, 0x8241, 0xCBA72510)  -- 16 cycles
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
  end
 
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  move[1] = (read16Bit(pidAddr + attacksOffset + 0x8) ~ (prng >> 16)) + 1
-
- if move[1] > 468 then
-  speciesDexIndex = 1
-  move[1] = 1
- end
-
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  move[2] = (read16Bit(pidAddr + attacksOffset + 0xA) ~ (prng >> 16)) + 1
-
- if move[2] > 468 then
-  speciesDexIndex = 1
-  move[2] = 1
- end
-
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  move[3] = (read16Bit(pidAddr + attacksOffset + 0xC) ~ (prng >> 16)) + 1
-
- if move[3] > 468 then
-  speciesDexIndex = 1
-  move[3] = 1
- end
-
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  move[4] = (read16Bit(pidAddr + attacksOffset + 0xE) ~ (prng >> 16)) + 1
 
- if move[4] > 468 then
-  speciesDexIndex = 1
-  move[4] = 1
- end
-
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  local movePPAux = read16Bit(pidAddr + attacksOffset + 0x10) ~ (prng >> 16)
  movePP[1] = getBits(movePPAux, 0, 8)
  movePP[2] = getBits(movePPAux, 8, 8)
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  movePPAux = read16Bit(pidAddr + attacksOffset + 0x12) ~ (prng >> 16)
  movePP[3] = getBits(movePPAux, 0, 8)
  movePP[4] = getBits(movePPAux, 8, 8)
 
- prng = LCRNG(prng, 0x807D, 0xBCB5, 0x52713895)  -- 3 cycles
+ prng = LCRNG(prng, 0x807DBCB5, 0x52713895)  -- 3 cycles
  ivsPart[1] = read16Bit(pidAddr + attacksOffset + 0x18) ~ (prng >> 16)
- prng = LCRNG(prng, 0x41C6, 0x4E6D, 0x6073)
+ prng = LCRNG(prng, 0x41C64E6D, 0x6073)
  ivsPart[2] = read16Bit(pidAddr + attacksOffset + 0x1A) ~ (prng >> 16)
  local ivsValue = (ivsPart[2] << 16) + ivsPart[1]
 
  local isEgg = getBits(ivsValue, 30, 1) == 1
  local natureIndex = (pokemonPID % 25) + 1
 
- if natureIndex > 25 or natureIndex == nil then
-  speciesDexIndex = 1
-  natureIndex = 1
- end
-
  if (mode[index] ~= "Breeding" or isEgg) then
-  gui.pixelText(1, 8, "Species: "..speciesNamesList[speciesDexIndex])
+  gui.pixelText(1, 8, "Species: "..speciesNamesList[(speciesDexIndex > 493 or speciesDexIndex < 1) and 1 or speciesDexIndex])
   gui.pixelText(1, 15, "PID:")
   gui.pixelText(21, 15, string.format("%08X%s", pokemonPID, shinyType), shinyTypeTextColor)
-  gui.pixelText(1, 22, "Nature: "..natureNamesList[natureIndex])
-  gui.pixelText(1, 29, string.format("Ability: %s (%d)", abilityNamesList[abilityIndex],
-                abilityIndex == pokemonAbilities[speciesDexIndex][1] and "0" or "1"))
+  gui.pixelText(1, 22, "Nature: "..natureNamesList[(natureIndex > 25 or natureIndex == nil) and 1 or natureIndex])
+  gui.pixelText(1, 29, string.format("Ability: %s (%d)", abilityNamesList[(abilityIndex > 123 or abilityIndex < 1) and 1 or abilityIndex],
+                abilityIndex == pokemonAbilities[(speciesDexIndex > 493 or speciesDexIndex < 1) and 1 or speciesDexIndex][1] and "0" or "1"))
 
   showIVsAndHP(ivsValue)
 
-  gui.pixelText(1, 50, "Held item: "..itemNamesList[heldItemIndex])
+  gui.pixelText(1, 50, "Held item: "..itemNamesList[(heldItemIndex > 537) and 1 or heldItemIndex])
 
   showMoves(move)
   showPP(movePP)
@@ -1122,17 +1078,9 @@ function getRoamerInfo(roamerAddr)
    roamerStatus = statusConditionNamesList[7]
   end
 
-  if roamerSpeciesIndex > 494 or roamerSpeciesIndex < 1 then
-   roamerSpeciesIndex = 1
-  end
-
-  if roamerNatureIndex > 25 or roamerNatureIndex == nil then
-   roamerSpeciesIndex = 1
-   roamerNatureIndex = 1
-  end
-
-  return roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerNatureIndex, roamerIVsValue,
-         isRoamerActive, roamerLevel, roamerHP, roamerStatus, roamerMapIndex, playerMapIndex
+  return roamerPID, (roamerSpeciesIndex > 493 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor,
+         (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex, roamerIVsValue, isRoamerActive, roamerLevel, roamerHP,
+         roamerStatus, roamerMapIndex, playerMapIndex
  else
   return 0
  end
