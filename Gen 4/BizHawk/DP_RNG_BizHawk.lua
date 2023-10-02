@@ -688,6 +688,10 @@ function getRngInfo()
 
  local mtAdvances = (mtIndex - mtIndexOffset) + (mtCounter * mtIndexOffset)
 
+ if mtAdvances < 0 then
+  mtCounter = mtCounter + 1
+ end
+
  userdata.set("initialSeed", initialSeed)
  userdata.set("tempCurrentSeed", tempCurrentSeed)
  userdata.set("advances", advances)

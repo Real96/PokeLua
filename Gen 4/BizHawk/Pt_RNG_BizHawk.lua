@@ -463,7 +463,7 @@ if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  tempCurrentSeedDuringBattleAddr = 0x027E3634
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
- mtIndexAddr = 0x02100830
+ mtIndexAddr = 0x02100834
  pidPointerAddr = 0x02101D2C
  delayAddr = 0x021BF6A8
  currentSeedAddr = 0x021BFB14
@@ -698,6 +698,10 @@ function getRngInfo()
  end
 
  local mtAdvances = (mtIndex - mtIndexOffset) + (mtCounter * mtIndexOffset)
+
+ if mtAdvances < 0 then
+  mtCounter = mtCounter + 1
+ end
 
  userdata.set("initialSeed", initialSeed)
  userdata.set("tempCurrentSeed", tempCurrentSeed)
