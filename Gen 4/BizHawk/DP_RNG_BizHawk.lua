@@ -570,7 +570,7 @@ function setInitialSeed(mtSeed, delay)
   initialSeed = mtSeed
   tempCurrentSeed = mtSeed
   hitDelay = delay
-  hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"], 
+  hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"],
                           dateTime["hour"], dateTime["minute"], dateTime["second"])
 
   if mtSeed == buildSeedFromDelay(delay) then
@@ -795,15 +795,6 @@ function getOffset(offsetType, orderIndex)
                   ["attack"] = {1,1,2,3,2,3, 0,0,0,0,0,0, 2,3,1,1,3,2, 2,3,1,1,3,2}}
 
  return offsets[offsetType][orderIndex]
-end
-
-function getTrainerIDs()
- local trainerIDsAddr = read32Bit(trainerIDsPointerAddr) + 0x288
- local trainerIDs = read32Bit(trainerIDsAddr)
- local TID = trainerIDs & 0xFFFF
- local SID = trainerIDs >> 16
-
- return TID, SID
 end
 
 function shinyCheck(PID, trainerTID, trainerSID)
