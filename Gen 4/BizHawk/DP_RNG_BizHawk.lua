@@ -392,18 +392,10 @@ client.reboot_core()
 
 local gameCode = read32Bit(0x02FFFE0C)
 local gameVersionCode = gameCode & 0xFFFFFF
-local gameLanguageCode = gameCode >> 24
 local gameVersion = ""
+local gameLanguageCode = gameCode >> 24
 local gameLanguage = ""
 local wrongGameVersion = true
-
-local mode = {"None", "Capture", "Breeding", "Roamer", "Pandora", "Pokemon Info"}
-local index = 1
-local prevKey = {}
-local showRngInfoText = true
-local showInitialSeedInfoText = true
-local slotIndex = 0
-local roamerSlotIndex = 0
 
 if gameVersionCode == 0x414441 then  -- Check game version
  gameVersion = "Diamond"
@@ -419,23 +411,6 @@ end
 
 local mtIndexAddr, pidPointerAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr, tempCurrentSeedDuringBattleAddr
 local koreanOffset = 0
-
-local dateTimeAddr = 0x023FFDE8
-local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
-local hitDelay = 0
-local hitDate = "01/01/2000\n00:00:00"
-
-local initialSeed = 0
-local tempCurrentSeed = 0
-local advances = 0
-local prevMTSeed = 0
-local mtCounter = 0
-local mtIndexOffset = 624
-local lastCurrentSeedBeforeBattle = nil
-local battleStartJump = false
-
-local infoMode = {"Gift", "Party", "Party Stats", "Box", "Box Stats"}
-local infoIndex = 1
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
@@ -522,6 +497,9 @@ end
 
 printGameInfo()
 
+local mode = {"None", "Capture", "Breeding", "Roamer", "Pandora", "Pokemon Info"}
+local index = 1
+
 function setBackgroundBoxes()  -- Set transparent black boxes
  gui.defaultTextBackground("clear")
  gui.defaultPixelFont("gens")
@@ -552,10 +530,11 @@ function drawArrowRight(a, b, c)
  gui.drawLine(a, b + 3, a - 6, b + 3, c)
 end
 
-function getInput()
+local prevKey = {}
+
+function getTabInput()
  local leftArrowColor = "gray"
  local rightArrowColor = "gray"
-
  local key = input.get()
 
  if (key["Number1"] or key["Keypad1"]) and (not prevKey["Number1"] and not prevKey["Keypad1"]) then
@@ -573,20 +552,42 @@ function getInput()
  drawArrowRight(112, 1, rightArrowColor)
 end
 
-function getRngInfoInput()
- local key = input.get()
+local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
- if key["Number6"] or key["Keypad6"] then
-  showRngInfoText = true
- elseif key["Number5"] or key["Keypad5"] then
-  showRngInfoText = false
+function buildSeedFromDelay(delay)
+ local ab = ((dateTime["month"] * dateTime["day"]) + dateTime["minute"] + dateTime["second"]) % 0x100
+ local cd = dateTime["hour"]
+ local efgh = dateTime["year"] + delay
+
+ return ((ab * 0x1000000) + (cd * 0x10000) + efgh) % 0x100000000
+end
+
+local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, 0, 0, "01/01/2000\n00:00:00"
+
+function setInitialSeed(mtSeed, delay)
+ if prevMTSeed ~= mtSeed and delay ~= 0 then
+  prevMTSeed = mtSeed
+  initialSeed = mtSeed
+  tempCurrentSeed = mtSeed
+  hitDelay = delay
+  hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"], 
+                          dateTime["hour"], dateTime["minute"], dateTime["second"])
+
+  if mtSeed == buildSeedFromDelay(delay) then
+   print(string.format("Initial Seed: %08X", initialSeed))
+  end
+ elseif delay == 0 then
+  prevMTSeed = 0
+  initialSeed = 0
+  tempCurrentSeed = 0
+  mtCounter = 0
+  hitDelay = 0
+  hitDate = "01/01/2000\n00:00:00"
  end
 
- if showRngInfoText then
-  gui.pixelText(110, 183, "5 - Hide RNG info")
- else
-  gui.pixelText(110, 183, "6 - Show RNG info")
- end
+ userdata.set("initialSeed", initialSeed)
+ userdata.set("hitDelay", hitDelay)
+ userdata.set("hitDate", hitDate)
 end
 
 function LCRNG(s, mul, sum)
@@ -622,56 +623,23 @@ function LCRNGDistance(state0, state1)
  return dist > 999 and dist - 0x100000000 or dist
 end
 
-function buildInitialSeed(delay)
- local ab = ((dateTime["month"] * dateTime["day"]) + dateTime["minute"] + dateTime["second"]) % 256
- local cd = dateTime["hour"]
- local abcd = ab * 0x100 + cd
- local efgh = dateTime["year"] + delay
-
- return (ab * 0x1000000 + cd * 0x10000 + efgh) % 0x100000000
-end
-
-function setInitialSeed(mtSeed, current, delay)
- if prevMTSeed ~= mtSeed and delay ~= 0 then
-  initialSeed = mtSeed
-  tempCurrentSeed = mtSeed
-  prevMTSeed = mtSeed
-  hitDelay = delay
-  hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"],
-                          dateTime["hour"], dateTime["minute"], dateTime["second"])
-
-  if mtSeed == buildInitialSeed(delay) then
-   print(string.format("Initial Seed: %08X", initialSeed))
-  end
- elseif delay == 0 then
-  initialSeed = 0
-  tempCurrentSeed = 0
-  advances = 0
-  prevMTSeed = 0
-  mtCounter = 0
-  hitDelay = 0
-  hitDate = "01/01/2000\n00:00:00"
- end
-
- userdata.set("hitDelay", hitDelay)
- userdata.set("hitDate", hitDate)
-end
+local lastCurrentSeedBeforeBattle, battleStartJump, advances = nil, false, 0
 
 function getRngInfo()
  local mtSeed = read32Bit(mtSeedAddr)
  local current = read32Bit(currentSeedAddr)
- local mtIndex = read32Bit(mtIndexAddr)
  local delay = read32Bit(delayAddr)
+ local mtIndex = read32Bit(mtIndexAddr)
 
  if mtSeed == current then  -- Set the initial seed when the MT seed is equal to the LCRNG current seed
-  setInitialSeed(mtSeed, current, delay)
+  setInitialSeed(mtSeed, delay)
  elseif prevMTSeed ~= mtSeed then  -- Check when the value of the MT seed changes in RAM
   if mtIndex ~= 624 then  -- Avoid advancing the MT counter when the MT seed changes the first time
    mtCounter = mtCounter + 1
   end
 
   prevMTSeed = mtSeed
- elseif current == buildInitialSeed(delay) then  -- Check when initial battle seed is set on current seed address
+ elseif current == buildSeedFromDelay(delay) then  -- Check when initial battle seed is set on current seed address
   local lastCurrentSeedBeforeBattleAddr = read32Bit(currentSeedAddr - 0x4) + 0x15E4
   lastCurrentSeedBeforeBattle = read32Bit(lastCurrentSeedBeforeBattleAddr)
   battleStartJump = true
@@ -686,13 +654,12 @@ function getRngInfo()
   advances = mtSeed == current and 0 or advances + LCRNGDistance(tempCurrentSeed, current)
  end
 
- local mtAdvances = (mtIndex - mtIndexOffset) + (mtCounter * mtIndexOffset)
+ local mtAdvances = (mtIndex - 624) + (mtCounter * 624)
 
- if mtAdvances < 0 then
+ if mtAdvances < 0 then  -- Avoid negative MT advances (this may happens in korean games)
   mtCounter = mtCounter + 1
  end
 
- userdata.set("initialSeed", initialSeed)
  userdata.set("tempCurrentSeed", tempCurrentSeed)
  userdata.set("advances", advances)
  userdata.set("mtCounter", mtCounter)
@@ -701,6 +668,8 @@ function getRngInfo()
 
  return current, mtAdvances, delay
 end
+
+local showInitialSeedInfoText = true
 
 function getInitialSeedInfoInput()
  local key = input.get()
@@ -712,26 +681,23 @@ function getInitialSeedInfoInput()
  end
 
  gui.drawBox(1, 376, 105, 383, 0x7F000000, 0x7F000000)
-
- if showInitialSeedInfoText then
-  gui.pixelText(1, 376, "7 - Hide Initial Seed info")
- else
-  gui.pixelText(1, 376, "8 - Show Initial Seed info")
- end
+ gui.pixelText(1, 376, showInitialSeedInfoText and "7 - Hide Initial Seed info" or "8 - Show Initial Seed info")
 end
 
 function showInitialSeedInfo(delay)
-  local delayOffset = mode[index] == "Pandora" and 43 or 21
+ local delayOffset = mode[index] == "Pandora" and 43 or 21
 
-  gui.drawBox(1, 192, 109, 248, 0x7F000000, 0x7F000000)
-  gui.pixelText(1, 192, string.format("Next Initial Seed: %08X", buildInitialSeed(delay + delayOffset)))
-  gui.pixelText(1, 199, string.format("Next Delay: %d", delay + delayOffset))
-  gui.pixelText(1, 206, string.format("Delay: %d", delay))
-  gui.pixelText(1, 220, string.format("Hit Delay: %d", hitDelay))
-  gui.pixelText(1, 227, string.format("Hit Date/Hour:\n%s", hitDate))
+ gui.drawBox(1, 192, 109, 248, 0x7F000000, 0x7F000000)
+ gui.pixelText(1, 192, string.format("Next Initial Seed: %08X", buildSeedFromDelay(delay + delayOffset)))
+ gui.pixelText(1, 199, string.format("Next Delay: %d", delay + delayOffset))
+ gui.pixelText(1, 206, string.format("Delay: %d", delay))
+ gui.pixelText(1, 220, string.format("Hit Delay: %d", hitDelay))
+ gui.pixelText(1, 227, string.format("Hit Date/Hour:\n%s", hitDate))
 end
 
 function setDateTime()
+ local dateTimeAddr = 0x023FFDE8
+
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))
  dateTime["day"] = string.format("%02X", read8Bit(dateTimeAddr + 0x2))
@@ -749,6 +715,8 @@ function showDateTime()
   gui.pixelText(214, 199, string.format("%s:%s:%s", dateTime["hour"], dateTime["minute"], dateTime["second"]))
  end
 end
+
+local showRngInfoText = true
 
 function showRngInfo()
  local currentSeed, mtAdvances, delay = getRngInfo()
@@ -769,6 +737,18 @@ function showRngInfo()
  end
 end
 
+function getRngInfoInput()
+ local key = input.get()
+
+ if key["Number6"] or key["Keypad6"] then
+  showRngInfoText = true
+ elseif key["Number5"] or key["Keypad5"] then
+  showRngInfoText = false
+ end
+
+ gui.pixelText(110, 183, showRngInfoText and "5 - Hide RNG info" or "6 - Show RNG info")
+end
+
 function getTrainerIDs()
  local trainerIDsAddr = read32Bit(trainerIDsPointerAddr) + 0x288
  local trainerIDs = read32Bit(trainerIDsAddr)
@@ -785,10 +765,11 @@ function showTrainerIDs()
  gui.pixelText(214, 183, string.format("SID: %d", trainerSID))
 end
 
-function getSlotInput()
- leftSlotArrowColor = "gray"
- rightSlotArrowColor = "gray"
+local prevKeySlot, slotIndex = {}, 0
 
+function getSlotInput()
+ local leftSlotArrowColor = "gray"
+ local rightSlotArrowColor = "gray"
  local key = input.get()
 
  if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Keypad3"] and not prevKeySlot["Keypad3"]) then
@@ -816,43 +797,36 @@ function getOffset(offsetType, orderIndex)
  return offsets[offsetType][orderIndex]
 end
 
-function getBits(a, b, d)
- return (a >> b) % (1 << d)
+function getTrainerIDs()
+ local trainerIDsAddr = read32Bit(trainerIDsPointerAddr) + 0x288
+ local trainerIDs = read32Bit(trainerIDsAddr)
+ local TID = trainerIDs & 0xFFFF
+ local SID = trainerIDs >> 16
+
+ return TID, SID
 end
 
-function shinyCheck(PID, OTID, OTSID)
- OTID = OTID or nil
- OTSID = OTSID or nil
+function shinyCheck(PID, trainerTID, trainerSID)
+ trainerTID = trainerTID or nil
+ trainerSID = trainerSID or nil
 
- local trainerTID, trainerSID
-
- if OTID ~= nil then
-  trainerTID, trainerSID = OTID, OTSID
- else
+ if not trainerTID then
   trainerTID, trainerSID = getTrainerIDs()
  end
 
- local highPID = PID >> 16
  local lowPID = PID & 0xFFFF
+ local highPID = PID >> 16
  local shinyTypeValue = (trainerTID ~ trainerSID) ~ (lowPID ~ highPID)
 
  if shinyTypeValue < 8 then
   return "limegreen", shinyTypeValue == 0 and " (Square)" or " (Star)"
- else
-  return nil, ""
  end
+
+ return nil, ""
 end
 
-function getIVColor(value)
- if value >= 30 then
-  return "limegreen"
- elseif value >= 1 and value <= 5 then
-  return "orange"
- elseif value < 1 then
-  return "red"
- else  -- IV value from 6 to 29
-  return nil
- end
+function getBits(a, b, d)
+ return (a >> b) % (1 << d)
 end
 
 function getIVs(ivsValue)
@@ -873,6 +847,18 @@ function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
                  + 16 * ((spAtkIV >> 1) % 2) + 32 * ((spDefIV >> 1) % 2)) * 40 / 63)
 
  return hpType, hpPower
+end
+
+function getIVColor(value)
+ if value >= 30 then
+  return "limegreen"
+ elseif value >= 1 and value <= 5 then
+  return "orange"
+ elseif value < 1 then
+  return "red"
+ end
+
+ return nil  -- IV value from 6 to 29
 end
 
 function showIVsAndHP(ivsValue)
@@ -909,9 +895,7 @@ function showPP(movePPList)
  gui.pixelText(88, 85, "PP: "..(movePPList[4] < 100 and movePPList[4] or 0))
 end
 
-function showPokemonIDs(OTID, OTSID)
- local trainerTID, trainerSID = OTID, OTSID
-
+function showPokemonIDs(trainerTID, trainerSID)
  gui.pixelText(214, 176, string.format("TID: %d", trainerTID))
  gui.pixelText(214, 183, string.format("SID: %d", trainerSID))
 end
@@ -939,7 +923,6 @@ function showInfo(pidAddr)
  local heldItemIndex = (read16Bit(pidAddr + growthOffset + 0xA) ~ (prng >> 16)) + 1
 
  local OTID, OTSID = nil, nil
- local shinyTypeTextColor, shinyType
 
  if mode[index] == "Pokemon Info" then
   prng = LCRNG(prng, 0x41C64E6D, 0x6073)
@@ -950,7 +933,7 @@ function showInfo(pidAddr)
   prng = LCRNG(prng, 0xC2A29A69, 0xE97E7B6A)  -- 2 cycles
  end
 
- shinyTypeTextColor, shinyType = shinyCheck(pokemonPID, OTID, OTSID)
+ local shinyTypeTextColor, shinyType = shinyCheck(pokemonPID, OTID, OTSID)
 
  prng = LCRNG(prng, 0x807DBCB5, 0x52713895)  -- 3 cycles
  local abilityIndex = read16Bit(pidAddr + growthOffset + 0x14) ~ (prng >> 16)
@@ -989,7 +972,7 @@ function showInfo(pidAddr)
  local isEgg = getBits(ivsValue, 30, 1) == 1
  local natureIndex = (pokemonPID % 25) + 1
 
- if (mode[index] ~= "Breeding" or isEgg) then
+ if mode[index] ~= "Breeding" or isEgg then
   gui.pixelText(1, 8, "Species: "..speciesNamesList[(speciesDexIndex > 493 or speciesDexIndex < 1) and 1 or speciesDexIndex])
   gui.pixelText(1, 15, "PID:")
   gui.pixelText(21, 15, string.format("%08X%s", pokemonPID, shinyType), shinyTypeTextColor)
@@ -1010,33 +993,38 @@ function showInfo(pidAddr)
  end
 end
 
-function showPartyEggInfo(partyAddr, partySlotsCounterAddr)
+function showPartyEggInfo(pidAddr)
+ local partyAddr = pidAddr + 0xD2AC
+ local partySlotsCounterAddr = pidAddr + 0xD2A8
  local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
  local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0xEC)
 
  showInfo(lastPartySlotAddr)
 end
 
-function getInfoInput()
- leftInfoArrowColor = "gray"
- rightInfoArrowColor = "gray"
+local prevKeyRoamerSlot, roamerSlotIndex = {}, 0
 
- key = input.get()
+function getRoamerSlotInput()
+ local leftRoamerSlotArrowColor = "gray"
+ local rightRoamerSlotArrowColor = "gray"
+ local key = input.get()
 
- if (key["Number3"] or key["Keypad3"]) and (not prevKeyInfo["Number3"] and not prevKeyInfo["Keypad3"]) then
-  leftInfoArrowColor = "orange"
-  infoIndex = infoIndex - 1 < 1 and 5 or infoIndex - 1
- elseif (key["Number4"] or key["Keypad4"]) and (not prevKeyInfo["Number4"] and not prevKeyInfo["Keypad4"]) then
-  rightInfoArrowColor = "orange"
-  infoIndex = infoIndex + 1 > 5 and 1 or infoIndex + 1
+ if (key["Number3"] or key["Keypad3"]) and (not prevKeyRoamerSlot["Keypad3"] and not prevKeyRoamerSlot["Keypad3"]) then
+  leftRoamerSlotArrowColor = "orange"
+  roamerSlotIndex = roamerSlotIndex - 1 < 0 and 1 or roamerSlotIndex - 1
+ elseif (key["Number4"] or key["Keypad4"]) and (not prevKeyRoamerSlot["Keypad4"] and not prevKeyRoamerSlot["Keypad4"]) then
+  rightRoamerSlotArrowColor = "orange"
+  roamerSlotIndex = roamerSlotIndex + 1 > 1 and 0 or roamerSlotIndex + 1
  end
 
- prevKeyInfo = key
- gui.drawBox(167, 1, 254, 16, 0x7F000000, 0x7F000000)
- gui.pixelText(166, 1, "Info Mode: "..infoMode[infoIndex])
- drawArrowLeft(217, 9, leftInfoArrowColor)
- gui.pixelText(225, 9, "3 - 4")
- drawArrowRight(253, 9, rightInfoArrowColor)
+ prevKeyRoamerSlot = key
+ gui.drawBox(182, 1, 254, 8, 0x7F000000, 0x7F000000)
+ drawArrowLeft(183, 1, leftRoamerSlotArrowColor)
+ gui.pixelText(191, 1, "3 - 4")
+ drawArrowRight(219, 1, rightRoamerSlotArrowColor)
+ gui.pixelText(226, 1, "Slot: "..roamerSlotIndex + 1)
+
+ return roamerSlotIndex
 end
 
 function getRoamerInfo(roamerAddr)
@@ -1051,13 +1039,13 @@ function getRoamerInfo(roamerAddr)
   local roamerHP = read16Bit(roamerAddr + 0xE)
   local roamerLevel = read8Bit(roamerAddr + 0x10)
   local roamerStatusIndex = read8Bit(roamerAddr + 0x11)
-  local roamerStatus = statusConditionNamesList[1]  -- No altered status condition
+  local roamerStatus = statusConditionNamesList[1]  -- No altered status condition by default
   local roamerNatureIndex = (roamerPID % 25) + 1
 
   local playerMapIndexAddr = read32Bit(trainerIDsPointerAddr) + 0x144C
   local playerMapIndex = read16Bit(playerMapIndexAddr)
 
-  if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then
+  if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then  -- Check altered status condition
    roamerStatus = statusConditionNamesList[2]
   elseif roamerStatusIndex == 0x8 then
    roamerStatus = statusConditionNamesList[3]
@@ -1071,17 +1059,17 @@ function getRoamerInfo(roamerAddr)
    roamerStatus = statusConditionNamesList[7]
   end
 
-  return roamerPID, (roamerSpeciesIndex > 493 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor,
-         (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex, roamerIVsValue, isRoamerActive, roamerLevel, roamerHP,
+  return isRoamerActive, roamerPID, (roamerSpeciesIndex > 493 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerShinyType,
+         roamerShinyTypeTextColor, (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex, roamerIVsValue, roamerLevel, roamerHP,
          roamerStatus, roamerMapIndex, playerMapIndex
- else
-  return 0
  end
+
+ return nil
 end
 
 function showRoamerInfo(roamerAddr)
- local roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerNatureIndex, roamerIVsValue,
-       isRoamerActive, roamerLevel, roamerHP, roamerStatus, roamerMapIndex, playerMapIndex = getRoamerInfo(roamerAddr)
+ local isRoamerActive, roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerNatureIndex,
+       roamerIVsValue, roamerLevel, roamerHP, roamerStatus, roamerMapIndex, playerMapIndex = getRoamerInfo(roamerAddr)
 
  if isRoamerActive then
   gui.pixelText(1, 8, "Active Roamer? Yes")
@@ -1100,28 +1088,27 @@ function showRoamerInfo(roamerAddr)
  end
 end
 
-function getRoamerSlotInput()
- leftSlotArrowColor = "gray"
- rightSlotArrowColor = "gray"
+local prevKeyInfo, infoIndex, infoMode = {}, 1, {"Gift", "Party", "Party Stats", "Box", "Box Stats"}
 
- local key = input.get()
+function getInfoInput()
+ local leftInfoArrowColor = "gray"
+ local rightInfoArrowColor = "gray"
+ key = input.get()
 
- if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Keypad3"] and not prevKeySlot["Keypad3"]) then
-  leftSlotArrowColor = "orange"
-  roamerSlotIndex = roamerSlotIndex - 1 < 0 and 1 or roamerSlotIndex - 1
- elseif (key["Number4"] or key["Keypad4"]) and (not prevKeySlot["Keypad4"] and not prevKeySlot["Keypad4"]) then
-  rightSlotArrowColor = "orange"
-  roamerSlotIndex = roamerSlotIndex + 1 > 1 and 0 or roamerSlotIndex + 1
+ if (key["Number3"] or key["Keypad3"]) and (not prevKeyInfo["Number3"] and not prevKeyInfo["Keypad3"]) then
+  leftInfoArrowColor = "orange"
+  infoIndex = infoIndex - 1 < 1 and 5 or infoIndex - 1
+ elseif (key["Number4"] or key["Keypad4"]) and (not prevKeyInfo["Number4"] and not prevKeyInfo["Keypad4"]) then
+  rightInfoArrowColor = "orange"
+  infoIndex = infoIndex + 1 > 5 and 1 or infoIndex + 1
  end
 
- prevKeySlot = key
- gui.drawBox(182, 1, 254, 8, 0x7F000000, 0x7F000000)
- drawArrowLeft(183, 1, leftSlotArrowColor)
- gui.pixelText(191, 1, "3 - 4")
- drawArrowRight(219, 1, rightSlotArrowColor)
- gui.pixelText(226, 1, "Slot: "..roamerSlotIndex + 1)
-
- return roamerSlotIndex
+ prevKeyInfo = key
+ gui.drawBox(167, 1, 254, 16, 0x7F000000, 0x7F000000)
+ gui.pixelText(166, 1, "Info Mode: "..infoMode[infoIndex])
+ drawArrowLeft(217, 9, leftInfoArrowColor)
+ gui.pixelText(225, 9, "3 - 4")
+ drawArrowRight(253, 9, rightInfoArrowColor)
 end
 
 function showPokemonInfo(pidAddr)
@@ -1193,7 +1180,7 @@ event.onloadstate(setSaveStateValues)
 
 while not wrongGameVersion do
  setBackgroundBoxes()
- getInput()
+ getTabInput()
  showRngInfo()
  local pidAddr = read32Bit(pidPointerAddr)
 
@@ -1207,14 +1194,12 @@ while not wrongGameVersion do
 
  if mode[index] == "Capture" then
   local enemyAddr = pidAddr + 0x59D88 + koreanOffset
-  showInfo(enemyAddr + 0xEC * getSlotInput())
+  showInfo(enemyAddr + (0xEC * getSlotInput()))
  elseif mode[index] == "Breeding" then
-  local partyAddr = pidAddr + 0xD2AC
-  local partySlotsCounterAddr = pidAddr + 0xD2A8
-  showPartyEggInfo(partyAddr, partySlotsCounterAddr)
+  showPartyEggInfo(pidAddr)
  elseif mode[index] == "Roamer" then
   local roamerAddr = pidAddr + 0x145B4
-  showRoamerInfo(roamerAddr + 0x14 * getRoamerSlotInput())
+  showRoamerInfo(roamerAddr + (0x14 * getRoamerSlotInput()))
  elseif mode[index] == "Pokemon Info" then
   getInfoInput()
   showPokemonInfo(pidAddr)
