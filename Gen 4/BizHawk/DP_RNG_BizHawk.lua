@@ -518,6 +518,19 @@ function setBackgroundBoxes()  -- Set transparent black boxes
  end
 end
 
+local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
+
+function setDateTime()
+ local dateTimeAddr = 0x023FFDE8
+
+ dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
+ dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))
+ dateTime["day"] = string.format("%02X", read8Bit(dateTimeAddr + 0x2))
+ dateTime["hour"] = string.format("%02X", read8Bit(dateTimeAddr + 0x4) % 0x40)
+ dateTime["minute"] = string.format("%02X", read8Bit(dateTimeAddr + 0x5))
+ dateTime["second"] = string.format("%02X", read8Bit(dateTimeAddr + 0x6))
+end
+
 function drawArrowLeft(a, b, c)
  gui.drawLine(a, b + 3, a + 2, b + 5, c)
  gui.drawLine(a, b + 3, a + 2, b + 1, c)
@@ -551,8 +564,6 @@ function getTabInput()
  gui.pixelText(84, 1, "1 - 2")
  drawArrowRight(112, 1, rightArrowColor)
 end
-
-local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function buildSeedFromDelay(delay)
  local ab = ((dateTime["month"] * dateTime["day"]) + dateTime["minute"] + dateTime["second"]) % 0x100
@@ -695,20 +706,7 @@ function showInitialSeedInfo(delay)
  gui.pixelText(1, 227, string.format("Hit Date/Hour:\n%s", hitDate))
 end
 
-function setDateTime()
- local dateTimeAddr = 0x023FFDE8
-
- dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
- dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))
- dateTime["day"] = string.format("%02X", read8Bit(dateTimeAddr + 0x2))
- dateTime["hour"] = string.format("%02X", read8Bit(dateTimeAddr + 0x4) % 0x40)
- dateTime["minute"] = string.format("%02X", read8Bit(dateTimeAddr + 0x5))
- dateTime["second"] = string.format("%02X", read8Bit(dateTimeAddr + 0x6))
-end
-
 function showDateTime()
- setDateTime()
-
  if mode[index] ~= "None" then
   gui.drawBox(214, 192, 254, 206, 0x7F000000, 0x7F000000)
   gui.pixelText(214, 192, string.format("%s/%s/20%s", dateTime["day"], dateTime["month"], dateTime["year"]))
@@ -1171,6 +1169,7 @@ event.onloadstate(setSaveStateValues)
 
 while not wrongGameVersion do
  setBackgroundBoxes()
+ setDateTime()
  getTabInput()
  showRngInfo()
  local pidAddr = read32Bit(pidPointerAddr)
