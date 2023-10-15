@@ -165,7 +165,7 @@ local pokemonAbilities = {
  [464] = {31, 116}, [465] = {34, 102}, [466] = {78}, [467] = {49}, [468] = {55, 32}, [469] = {3, 110}, [470] = {102}, [471] = {81}, [472] = {52, 8},
  [473] = {12, 81}, [474] = {91, 88}, [475] = {80}, [476] = {5, 42}, [477] = {46}, [478] = {81}, [479] = {26}, [480] = {26}, [481] = {26}, [482] = {26},
  [483] = {46}, [484] = {46}, [485] = {18}, [486] = {112}, [487] = {46}, [488] = {26}, [489] = {93}, [490] = {93}, [491] = {123}, [492] = {30},
- [493] = {121}, [494] = {1}, [495] = {1}, [496] = {46}, [497] = {46}, [498] = {46}, [499] = {107}, [500] = {107}}
+ [493] = {121}}
 
 local moveNamesList = {
  -- Gen 1
@@ -966,7 +966,7 @@ function showInfo(pidAddr)
   gui.pixelText(1, 15, "PID:")
   gui.pixelText(21, 15, string.format("%08X%s", pokemonPID, shinyType), shinyTypeTextColor)
   gui.pixelText(1, 22, "Nature: "..natureNamesList[(natureIndex > 25 or natureIndex == nil) and 1 or natureIndex])
-  gui.pixelText(1, 29, string.format("Ability: %s (%d)", abilityNamesList[(abilityIndex > 123 or abilityIndex < 1) and 1 or abilityIndex],
+  gui.pixelText(1, 29, string.format("Ability: %s (%s)", abilityNamesList[(abilityIndex > 123 or abilityIndex < 1) and 1 or abilityIndex],
                 abilityIndex == pokemonAbilities[(speciesDexIndex > 493 or speciesDexIndex < 1) and 1 or speciesDexIndex][1] and "0" or "1"))
 
   showIVsAndHP(ivsValue)
