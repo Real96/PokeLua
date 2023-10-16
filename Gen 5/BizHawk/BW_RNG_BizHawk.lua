@@ -437,8 +437,8 @@ if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  trainerIDsAddr = 0x02234F00 + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE50 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x022696C0 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x022696D8 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x022696C4 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x022696D8 + getGameAddrOffset(0x20)
  enemyAddr = 0x0226AC34 + getGameAddrOffset(0x20)
  pokemonBoxStatsAddr = 0x0227994C + getGameAddrOffset(0x20)
  boxSelectedSlotIndexAddr = 0x022EB81D + getGameAddrOffset(0x20)
@@ -453,8 +453,8 @@ elseif gameLanguageCode == 0x46 then
  trainerIDsAddr = 0x02234F40 + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE90 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269700 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02269718 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269704 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x02269718 + getGameAddrOffset(0x20)
  enemyAddr = 0x0226AC74 + getGameAddrOffset(0x20)
  pokemonBoxStatsAddr = 0x0227998C + getGameAddrOffset(0x20)
  boxSelectedSlotIndexAddr = 0x022EB85D + getGameAddrOffset(0x20)
@@ -469,8 +469,8 @@ elseif gameLanguageCode == 0x49 then
  trainerIDsAddr = 0x02234EC0 + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE10 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269680 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02269698 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269684 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x02269698 + getGameAddrOffset(0x20)
  enemyAddr = 0x0226ABF4 + getGameAddrOffset(0x20)
  pokemonBoxStatsAddr = 0x0227990C + getGameAddrOffset(0x20)
  boxSelectedSlotIndexAddr = 0x022EB7DD + getGameAddrOffset(0x20)
@@ -485,8 +485,8 @@ elseif gameLanguageCode == 0x4A then
  trainerIDsAddr = 0x02234E20 + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CC84 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x022695E0 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x022695F8 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x022695E4 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x022695F8 + getGameAddrOffset(0x20)
  enemyAddr = 0x0226AB54 + getGameAddrOffset(0x20)
  pokemonBoxStatsAddr = 0x0227986C + getGameAddrOffset(0x20)
  boxSelectedSlotIndexAddr = 0x022EB745 + getGameAddrOffset(0x20)
@@ -501,8 +501,8 @@ elseif gameLanguageCode == 0x4B then
  trainerIDsAddr = 0x022356C0
  cgearEnemyAddr = 0x0225D610
  currBoxIndexAddr = 0x02269E80
- partySelectedSlotIndexAddr = 0x02269E98
  partyStatsSelectedSlotIndexAddr = 0x02269E84
+ partySelectedSlotIndexAddr = 0x02269E98
  enemyAddr = 0x0226B3F4
  pokemonBoxStatsAddr = 0x0227A10C
  boxSelectedSlotIndexAddr = 0x022EBFE1
@@ -517,8 +517,8 @@ elseif gameLanguageCode == 0x4F then
  trainerIDsAddr = 0x02234FC0 + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CF10 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269780 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02269798 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269784 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x02269798 + getGameAddrOffset(0x20)
  enemyAddr = 0x0226ACF4 + getGameAddrOffset(0x20)
  pokemonBoxStatsAddr = 0x02279A0C + getGameAddrOffset(0x20)
  boxSelectedSlotIndexAddr = 0x022EB8E1 + getGameAddrOffset(0x20)
@@ -533,8 +533,8 @@ elseif gameLanguageCode == 0x53 then
  trainerIDsAddr = 0x02234F80
  cgearEnemyAddr = 0x0225CED0
  currBoxIndexAddr = 0x02269740
- partySelectedSlotIndexAddr = 0x02269758
  partyStatsSelectedSlotIndexAddr = 0x02269744
+ partySelectedSlotIndexAddr = 0x02269758
  enemyAddr = 0x0226ACB4
  pokemonBoxStatsAddr = 0x022799CC
  boxSelectedSlotIndexAddr = 0x022EB8A1
