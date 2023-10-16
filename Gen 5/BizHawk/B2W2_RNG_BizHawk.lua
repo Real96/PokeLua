@@ -3,7 +3,6 @@ read16Bit = memory.read_u16_le
 read8Bit = memory.readbyte
 memoryWriteCheck = event.onmemorywrite
 floor = math.floor
-sqrt = math.sqrt
 
 local JUMP_DATA = {
  {0X6C078965, 0X269EC3}, {0X54341D9, 0X55AE9CB2}, {0X285E9F1, 0XC910A194}, {0XAE3294E1, 0X4EAC71E8},
