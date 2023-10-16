@@ -497,8 +497,7 @@ end
 
 printGameInfo()
 
-local mode = {"None", "Capture", "Breeding", "Roamer", "Pandora", "Pokemon Info"}
-local index = 1
+local mode, index = {"None", "Capture", "Breeding", "Roamer", "Pandora", "Pokemon Info"}, 1
 
 function setBackgroundBoxes()  -- Set transparent black boxes
  gui.defaultTextBackground("clear")
@@ -1102,43 +1101,38 @@ end
 
 function showPokemonInfo(pidAddr)
  local partyAddr = pidAddr + 0xD2AC
- local partySlotsCounterAddr = pidAddr + 0xD2A8
- local partySelectedSlotIndexAddr = pidAddr + 0x50511 + koreanOffset
- local partyStatsSelectedSlotIndexAddr = pidAddr + 0x3672C + koreanOffset
-
  local boxAddr = pidAddr + 0x19318
  local currBoxIndexAddr = pidAddr + 0x19314
- local boxSelectedSlotIndexAddr = pidAddr + 0x4F9FB + koreanOffset
- local boxStatsSelectedSlotIndexAddr = pidAddr + 0x4FB2C + koreanOffset
-
- local partySelectedSlotIndex, partySelectedPokemonAddr, pokemonPartyStatsAddr, currBoxIndex, boxSelectedSlotIndex, boxStatsSelectedSlotIndex
- local boxSelectedPokemonAddr
+ local currBoxIndex = read8Bit(currBoxIndexAddr)
 
  if infoMode[infoIndex] == "Gift" then
+  local partySlotsCounterAddr = pidAddr + 0xD2A8
   local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
   local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0xEC)
 
   showInfo(lastPartySlotAddr)
  elseif infoMode[infoIndex] == "Party" then
-  partySelectedSlotIndex = read8Bit(partySelectedSlotIndexAddr)
-  partySelectedPokemonAddr = partyAddr + (partySelectedSlotIndex * 0xEC)
+  local partySelectedSlotIndexAddr = pidAddr + 0x50511 + koreanOffset
+  local partySelectedSlotIndex = read8Bit(partySelectedSlotIndexAddr)
+  local partySelectedPokemonAddr = partyAddr + (partySelectedSlotIndex * 0xEC)
 
   showInfo(partySelectedPokemonAddr)
  elseif infoMode[infoIndex] == "Party Stats" then
-  partySelectedSlotIndex = read8Bit(partyStatsSelectedSlotIndexAddr)
-  pokemonPartyStatsAddr = partyAddr + (partySelectedSlotIndex * 0xEC)
+  local partyStatsSelectedSlotIndexAddr = pidAddr + 0x3672C + koreanOffset
+  local partyStatsSelectedSlotIndex = read8Bit(partyStatsSelectedSlotIndexAddr)
+  local pokemonPartyStatsAddr = partyAddr + (partyStatsSelectedSlotIndex * 0xEC)
 
   showInfo(pokemonPartyStatsAddr)
  elseif infoMode[infoIndex] == "Box" then
-  currBoxIndex = read8Bit(currBoxIndexAddr)
-  boxSelectedSlotIndex = read8Bit(boxSelectedSlotIndexAddr)
-  boxSelectedPokemonAddr = boxAddr + (0x88 * boxSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
+  local boxSelectedSlotIndexAddr = pidAddr + 0x4F9FB + koreanOffset
+  local boxSelectedSlotIndex = read8Bit(boxSelectedSlotIndexAddr)
+  local boxSelectedPokemonAddr = boxAddr + (0x88 * boxSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
 
   showInfo(boxSelectedPokemonAddr)
  elseif infoMode[infoIndex] == "Box Stats" then
-  currBoxIndex = read8Bit(currBoxIndexAddr)
-  boxStatsSelectedSlotIndex = read8Bit(boxStatsSelectedSlotIndexAddr)
-  pokemonBoxStatsAddr = boxAddr + (0x88 * boxStatsSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
+  local boxStatsSelectedSlotIndexAddr = pidAddr + 0x4FB2C + koreanOffset
+  local boxStatsSelectedSlotIndex = read8Bit(boxStatsSelectedSlotIndexAddr)
+  local pokemonBoxStatsAddr = boxAddr + (0x88 * boxStatsSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
 
   showInfo(pokemonBoxStatsAddr)
  end
