@@ -423,8 +423,8 @@ function getGameAddrOffset(offset)
  return gameVersion == "White" and offset or 0
 end
 
-local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, partyAddr, trainerIDsAddr, cgearEnemyAddr, currBoxIndexAddr
-local partySelectedSlotIndexAddr, partyStatsSelectedSlotIndexAddr, enemyAddr, pokemonBoxStatsAddr, boxSelectedSlotIndexAddr
+local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, partyAddr, trainerIDsAddr, roamerAddr, playerMapIndexAddr, cgearEnemyAddr,
+      currBoxIndexAddr, partySelectedSlotIndexAddr, partyStatsSelectedSlotIndexAddr, enemyAddr, pokemonBoxStatsAddr, boxSelectedSlotIndexAddr
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
@@ -435,6 +435,8 @@ if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  partySlotsCounterAddr = 0x022348F0 + getGameAddrOffset(0x20)
  partyAddr = 0x022348F4 + getGameAddrOffset(0x20)
  trainerIDsAddr = 0x02234F00 + getGameAddrOffset(0x20)
+ roamerAddr = 0x0223D604 + getGameAddrOffset(0xC)
+ playerMapIndexAddr = 0x0224F84C + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE50 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x022696C0 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x022696C4 + getGameAddrOffset(0x20)
@@ -451,6 +453,8 @@ elseif gameLanguageCode == 0x46 then
  partySlotsCounterAddr = 0x02234930 + getGameAddrOffset(0x20)
  partyAddr = 0x02234934 + getGameAddrOffset(0x20)
  trainerIDsAddr = 0x02234F40 + getGameAddrOffset(0x20)
+ roamerAddr = 0x0223D644 + getGameAddrOffset(0xC)
+ playerMapIndexAddr = 0x0224F88C + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE90 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269700 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269704 + getGameAddrOffset(0x20)
@@ -467,6 +471,8 @@ elseif gameLanguageCode == 0x49 then
  partySlotsCounterAddr = 0x022348B0 + getGameAddrOffset(0x20)
  partyAddr = 0x022348B4 + getGameAddrOffset(0x20)
  trainerIDsAddr = 0x02234EC0 + getGameAddrOffset(0x20)
+ roamerAddr = 0x0223D5C4 + getGameAddrOffset(0xC)
+ playerMapIndexAddr = 0x0224F80C + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CE10 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269680 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269684 + getGameAddrOffset(0x20)
@@ -483,6 +489,8 @@ elseif gameLanguageCode == 0x4A then
  partySlotsCounterAddr = 0x02234810 + getGameAddrOffset(0x20)
  partyAddr = 0x02234814 + getGameAddrOffset(0x20)
  trainerIDsAddr = 0x02234E20 + getGameAddrOffset(0x20)
+ roamerAddr = 0x0223D524 + getGameAddrOffset(0xC)
+ playerMapIndexAddr = 0x0224F76C + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CC84 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x022695E0 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x022695E4 + getGameAddrOffset(0x20)
@@ -499,6 +507,8 @@ elseif gameLanguageCode == 0x4B then
  partySlotsCounterAddr = 0x022350B0
  partyAddr = 0x022350B4
  trainerIDsAddr = 0x022356C0
+ roamerAddr = 0x0223DDB0
+ playerMapIndexAddr = 0x0225000C
  cgearEnemyAddr = 0x0225D610
  currBoxIndexAddr = 0x02269E80
  partyStatsSelectedSlotIndexAddr = 0x02269E84
@@ -515,6 +525,8 @@ elseif gameLanguageCode == 0x4F then
  partySlotsCounterAddr = 0x022349B0 + getGameAddrOffset(0x20)
  partyAddr = 0x022349B4 + getGameAddrOffset(0x20)
  trainerIDsAddr = 0x02234FC0 + getGameAddrOffset(0x20)
+ roamerAddr = 0x0223D6C4 + getGameAddrOffset(0xC)
+ playerMapIndexAddr = 0x0224F90C + getGameAddrOffset(0x20)
  cgearEnemyAddr = 0x0225CF10 + getGameAddrOffset(0x20)
  currBoxIndexAddr = 0x02269780 + getGameAddrOffset(0x20)
  partyStatsSelectedSlotIndexAddr = 0x02269784 + getGameAddrOffset(0x20)
@@ -531,6 +543,8 @@ elseif gameLanguageCode == 0x53 then
  partySlotsCounterAddr = 0x02234970
  partyAddr = 0x02234974
  trainerIDsAddr = 0x02234F80
+ roamerAddr = 0x0223D670
+ playerMapIndexAddr = 0x0224F8CC
  cgearEnemyAddr = 0x0225CED0
  currBoxIndexAddr = 0x02269740
  partyStatsSelectedSlotIndexAddr = 0x02269744
@@ -559,7 +573,7 @@ end
 
 printGameInfo()
 
-local mode, index = {"None", "Capture", "Breeding", "C-Gear", "Pandora", "Pokemon Info"}, 1
+local mode, index = {"None", "Capture", "Breeding", "Roamer", "C-Gear", "Pandora", "Pokemon Info"}, 1
 
 function setBackgroundBoxes()  -- Set transparent black boxes
  gui.defaultTextBackground("clear")
@@ -569,6 +583,8 @@ function setBackgroundBoxes()  -- Set transparent black boxes
   gui.drawBox(1, 1, 113, 8, 0x7F000000, 0x7F000000)
  elseif mode[index] == "Capture" or mode[index] == "Breeding" or mode[index] == "C-Gear" or mode[index] == "Pokemon Info" then
   gui.drawBox(1, 1, 113, 92, 0x7F000000, 0x7F000000)
+ elseif mode[index] == "Roamer" then
+  gui.drawBox(1, 1, 113, 85, 0x7F000000, 0x7F000000)
  end
 
  if mode[index] ~= "None" then
@@ -611,10 +627,10 @@ function getTabInput()
 
  if (key["Number1"] or key["Keypad1"]) and (not prevKey["Number1"] and not prevKey["Keypad1"]) then
   leftArrowColor = "orange"
-  index = index - 1 < 1 and 6 or index - 1
+  index = index - 1 < 1 and 7 or index - 1
  elseif (key["Number2"] or key["Keypad2"]) and (not prevKey["Number2"] and not prevKey["Keypad2"]) then
   rightArrowColor = "orange"
-  index = index + 1 > 6 and 1 or index + 1
+  index = index + 1 > 7 and 1 or index + 1
  end
 
  prevKey = key
@@ -982,6 +998,63 @@ function showPartyEggInfo()
  showInfo(lastPartySlotAddr)
 end
 
+function getRoamerInfo(roamerAddr)
+ local isRoamerActive = read8Bit(roamerAddr + 0x12) == 1
+
+ if isRoamerActive then
+  local roamerMapIndex = read16Bit(roamerAddr)
+  local roamerIVsValue = read32Bit(roamerAddr + 0x4)
+  local roamerPID = read32Bit(roamerAddr + 0x8)
+  local roamerShinyTypeTextColor, roamerShinyType = shinyCheck(roamerPID)
+  local roamerSpeciesIndex = read16Bit(roamerAddr + 0xC)
+  local roamerHP = read16Bit(roamerAddr + 0xE)
+  local roamerLevel = read8Bit(roamerAddr + 0x10)
+  local roamerStatusIndex = read8Bit(roamerAddr + 0x11)
+  local roamerStatus = statusConditionNamesList[1]  -- No altered status condition by default
+
+  local playerMapIndex = read16Bit(playerMapIndexAddr)
+
+  if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then  -- Check altered status condition
+   roamerStatus = statusConditionNamesList[2]
+  elseif roamerStatusIndex == 0x8 then
+   roamerStatus = statusConditionNamesList[3]
+  elseif roamerStatusIndex == 0x10 then
+   roamerStatus = statusConditionNamesList[4]
+  elseif roamerStatusIndex == 0x20 then
+   roamerStatus = statusConditionNamesList[5]
+  elseif roamerStatusIndex == 0x40 then
+   roamerStatus = statusConditionNamesList[6]
+  elseif roamerStatusIndex == 0x80 then
+   roamerStatus = statusConditionNamesList[7]
+  end
+
+  return isRoamerActive, roamerPID, (roamerSpeciesIndex > 649 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerShinyType,
+         roamerShinyTypeTextColor, roamerIVsValue, roamerLevel, roamerHP, roamerStatus, roamerMapIndex, playerMapIndex
+ end
+
+ return nil
+end
+
+function showRoamerInfo(roamerAddr)
+ local isRoamerActive, roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerIVsValue, roamerLevel, roamerHP,
+       roamerStatus, roamerMapIndex, playerMapIndex = getRoamerInfo(roamerAddr)
+
+ if isRoamerActive then
+  gui.pixelText(1, 8, "Active Roamer? Yes")
+  gui.pixelText(1, 15, "Species: "..speciesNamesList[roamerSpeciesIndex])
+  gui.pixelText(1, 22, "PID:")
+  gui.pixelText(21, 22, string.format("%08X%s", roamerPID, roamerShinyType), roamerShinyTypeTextColor)
+  showIVsAndHP(roamerIVsValue)
+  gui.pixelText(1, 50, "Level: "..roamerLevel)
+  gui.pixelText(1, 57, "HP: "..roamerHP)
+  gui.pixelText(1, 64, "Status condition: "..roamerStatus)
+  gui.pixelText(1, 71, "Current position:")
+  gui.pixelText(1, 78, locationNamesList[roamerMapIndex + 1], roamerMapIndex == playerMapIndex and "limegreen" or nil)
+ else
+  gui.pixelText(1, 8, "Active Roamer? No")
+ end
+end
+
 local prevKeyInfo, infoIndex, infoMode = {}, 1, {"Gift", "Party", "Party Stats", "Box", "Box Stats"}
 
 function getInfoInput()
@@ -1070,6 +1143,8 @@ while not wrongGameVersion do
   showInfo(enemyAddr + (0xDC * getSlotInput()))
  elseif mode[index] == "Breeding" then
   showPartyEggInfo()
+ elseif mode[index] == "Roamer" then
+  showRoamerInfo(roamerAddr)
  elseif mode[index] == "C-Gear" then
   showInfo(cgearEnemyAddr)
  elseif mode[index] == "Pokemon Info" then

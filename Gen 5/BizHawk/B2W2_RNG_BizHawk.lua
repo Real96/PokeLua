@@ -440,8 +440,8 @@ function getGameAddrOffset(offset)
  return gameVersion == "White 2" and offset or 0
 end
 
-local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, partyAddr, trainerIDsAddr, cgearEnemyAddr, currBoxIndexAddr
-local partySelectedSlotIndexAddr, partyStatsSelectedSlotIndexAddr, enemyAddr, pokemonBoxStatsAddr, boxSelectedSlotIndexAddr
+local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, partyAddr, trainerIDsAddr, cgearEnemyAddr, currBoxIndexAddr,
+      partySelectedSlotIndexAddr, partyStatsSelectedSlotIndexAddr, enemyAddr, pokemonBoxStatsAddr, boxSelectedSlotIndexAddr
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
