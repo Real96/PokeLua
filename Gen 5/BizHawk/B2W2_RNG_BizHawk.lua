@@ -415,8 +415,6 @@ local locationNamesList = {"Black City", "Black City", "Black City", "Black City
 "Striaton City", "Nacrene City", "Undella Town", "Floccesy Town", "Opelucid City", "Victory Road", "Driftveil City", "Giant Chasm", "Village Bridge", "Musical Theater", "Chargestone Cave",
 "Lentimas Town", "Underground Ruins", "Underground Ruins", "Rock Peak Chamber", "Iceberg Chamber", "Iron Chamber", "Pledge Grove"}
 
-local statusConditionNamesList = {"None", "SLP", "PSN", "BRN", "FRZ", "PAR", "PSN"}
-
 client.reboot_core()
 
 local gameCode = read32Bit(0x02FFFE0C)
