@@ -657,14 +657,13 @@ end
 local UPPER_MASK = 0x80000000
 
 function tobit(value)
- value = value >= UPPER_MASK and (value % 0x100000000) - 0x100000000 or value % 0x100000000
-
- return value
+ return (value % 0x100000000) - (value >= UPPER_MASK and 0x100000000 or 0)
 end
 
-local mt, N = {}, 624
+local N = 624
 
 function initializeMTArray(seed)
+ local mt = {}
  mt[1] = seed
 
  for i = 1, N - 1 do
@@ -675,35 +674,19 @@ function initializeMTArray(seed)
   local seedHigh2 = (0X6C078965 * seedHigh) & 0xFFFF
   seed = ((((seedLow2 >> 16) + seedHigh2) << 16) | (seedLow2 & 0xFFFF)) & 0xFFFFFFFF
   local seedLim = -tobit(seed)
-
-  if (seedLim > 0 and seedLim <= i) then
-   seed = i - seedLim
-  else
-   seed = seed + i
-  end
-
+  seed = (seedLim > 0 and seedLim <= i) and i - seedLim or seed + i
   mt[i + 1] = seed
  end
+
+ return mt
 end
 
 local M, LOWER_MASK, mag01 = 397, 0x7FFFFFFF, {0, 0x9908B0DF}
 
-function shuffleMTArray(seed)
- initializeMTArray(seed)
- local y
-
- for kk = 1, N - M do
-  y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK)
-  mt[kk] = mt[kk + M] ~ (y >> 1) ~ mag01[1 + (y & 1)]
- end
-
- for kk = N - M + 1, N - 1 do
-  y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK)
-  mt[kk] = mt[kk + (M - N)] ~ (y >> 1) ~ mag01[1 + (y & 1)]
- end
-
- y = (mt[N] & UPPER_MASK) | (mt[1] & LOWER_MASK)
- mt[N] = mt[M] ~ (y >> 1) ~ mag01[1 + (y & 1)]
+function getMTArrayFistSeed(seed)
+ local mt = initializeMTArray(seed)
+ local y = (mt[1] & UPPER_MASK) | (mt[2] & LOWER_MASK)
+ mt[1] = mt[M + 1] ~ (y >> 1) ~ mag01[1 + (y & 1)]
 
  return mt[1]
 end
@@ -718,7 +701,7 @@ function setPredictedDateTime()
   nextSeconds = dateTime["second"] + 6
   nextMinutes = dateTime["minute"]
  end
- 
+
  if nextMinutes == 60 then
   nextMinutes = nextMinutes - 60
   nextHours = dateTime["hour"] + 1
@@ -726,7 +709,7 @@ function setPredictedDateTime()
   nextMinutes = dateTime["minute"]
   nextHours = dateTime["hour"]
  end
- 
+
  if nextHours == 24 then
   nextHours = nextHours - 24
   nextDays = dateTime["day"] + 1
@@ -765,7 +748,7 @@ function handleMTAdvances(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
   cgearSeedTest = buildSeedFromDelay(delay - 1)
 
-  if convertToString(mtSeed) == convertToString(shuffleMTArray(cgearSeedTest)) then  -- Check C-Gear MT seeding
+  if convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest)) then  -- Check C-Gear MT seeding
    mtCounter = 0
    cgearSeed = cgearSeedTest
    hitDelay = delay - 1
@@ -773,7 +756,7 @@ function handleMTAdvances(mtSeed, delay)
                            dateTime["hour"], dateTime["minute"], dateTime["second"])
   end
 
-  mtCounter = mtCounter + 1 
+  mtCounter = mtCounter + 1
   prevMTSeed = mtSeed
  end
 end
