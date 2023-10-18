@@ -654,6 +654,130 @@ function checkInitialSeedGeneration(mtSeed, currentHigh, currentLow)
  userdata.set("initialSeedLow", initialSeedLow)
 end
 
+local UPPER_MASK = 0x80000000
+
+function tobit(value)
+ value = value >= UPPER_MASK and (value % 0x100000000) - 0x100000000 or value % 0x100000000
+
+ return value
+end
+
+local mt, N = {}, 624
+
+function initializeMTArray(seed)
+ mt[1] = seed
+
+ for i = 1, N - 1 do
+  seed = seed ~ (seed >> 30)
+  local seedLow = seed & 0xFFFF
+  local seedHigh = seed >> 16
+  local seedLow2 = (0X6C078965 * seedLow) & 0xFFFFFFFF
+  local seedHigh2 = (0X6C078965 * seedHigh) & 0xFFFF
+  seed = ((((seedLow2 >> 16) + seedHigh2) << 16) | (seedLow2 & 0xFFFF)) & 0xFFFFFFFF
+  local seedLim = -tobit(seed)
+
+  if (seedLim > 0 and seedLim <= i) then
+   seed = i - seedLim
+  else
+   seed = seed + i
+  end
+
+  mt[i + 1] = seed
+ end
+end
+
+local M, LOWER_MASK, mag01 = 397, 0x7FFFFFFF, {0, 0x9908B0DF}
+
+function shuffleMTArray(seed)
+ initializeMTArray(seed)
+ local y
+
+ for kk = 1, N - M do
+  y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK)
+  mt[kk] = mt[kk + M] ~ (y >> 1) ~ mag01[1 + (y & 1)]
+ end
+
+ for kk = N - M + 1, N - 1 do
+  y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK)
+  mt[kk] = mt[kk + (M - N)] ~ (y >> 1) ~ mag01[1 + (y & 1)]
+ end
+
+ y = (mt[N] & UPPER_MASK) | (mt[1] & LOWER_MASK)
+ mt[N] = mt[M] ~ (y >> 1) ~ mag01[1 + (y & 1)]
+
+ return mt[1]
+end
+
+function setPredictedDateTime()
+ local nextSeconds, nextMinutes, nextHours, nextDays = dateTime["second"], dateTime["minute"], dateTime["hour"], dateTime["day"]
+
+ if dateTime["second"] + 6 >= 60 then
+  nextSeconds = (dateTime["second"] + 6) - 60
+  nextMinutes = dateTime["minute"] + 1
+ else
+  nextSeconds = dateTime["second"] + 6
+  nextMinutes = dateTime["minute"]
+ end
+ 
+ if nextMinutes == 60 then
+  nextMinutes = nextMinutes - 60
+  nextHours = dateTime["hour"] + 1
+ else
+  nextMinutes = dateTime["minute"]
+  nextHours = dateTime["hour"]
+ end
+ 
+ if nextHours == 24 then
+  nextHours = nextHours - 24
+  nextDays = dateTime["day"] + 1
+ else
+  nextHours = dateTime["hour"]
+  nextDays = dateTime["day"]
+ end
+
+ return nextSeconds, nextMinutes, nextHours, nextDays
+end
+
+function buildSeedFromDelay(delay, predictSeedFlag)
+ predictSeedFlag = predictSeedFlag or false
+
+ local macAddr = 0x0e4916  -- BizHawk MAC addres
+ local nextSeconds, nextMinutes, nextHours, nextDays = dateTime["second"], dateTime["minute"], dateTime["hour"], dateTime["day"]
+
+ if predictSeedFlag then
+  nextSeconds, nextMinutes, nextHours, nextDays = setPredictedDateTime()
+ end
+
+ local ab = ((dateTime["month"] * nextDays) + nextMinutes + nextSeconds) % 0x100
+ local cd = nextHours
+ local efgh = dateTime["year"] + delay
+
+ return ((ab * 0x1000000) + (cd * 0x10000) + efgh + macAddr) % 0x100000000
+end
+
+function convertToString(seed)
+ return string.format("%08X", seed)
+end
+
+local cgearSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, "01/01/2000\n00:00:00"
+
+function handleMTAdvances(mtSeed, delay)
+ if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
+  cgearSeedTest = buildSeedFromDelay(delay - 1)
+
+  if convertToString(mtSeed) == convertToString(shuffleMTArray(cgearSeedTest)) then  -- Check C-Gear MT seeding
+   mtCounter = 0
+   cgearSeed = cgearSeedTest
+   hitDelay = delay - 1
+   hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"],
+                           dateTime["hour"], dateTime["minute"], dateTime["second"])
+  end
+
+  mtCounter = mtCounter + 1 
+  prevMTSeed = mtSeed
+ end
+end
+
 function LCRNG(s, mul, sum)
  local a = (mul >> 16) * (s % 0x10000) + (s >> 16) * (mul % 0x10000)
  local b = (mul % 0x10000) * (s % 0x10000) + (a % 0x10000) * 0x10000 + sum
@@ -687,7 +811,7 @@ function LCRNGDistance(state0, state1)
  return dist > 999 and dist - 0x100000000 or dist
 end
 
-local mtCounter, advances = 0, 0
+local advances = 0
 
 function getRngInfo()
  local mtSeed = read32Bit(mtSeedAddr)
@@ -697,20 +821,19 @@ function getRngInfo()
  local delay = read32Bit(0x02FFFC3C)
 
  checkInitialSeedGeneration(mtSeed, currentHigh, currentLow)
+ handleMTAdvances(mtSeed, delay)
 
- if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
-  mtCounter = mtCounter + 1
- end
-
- prevMTSeed = mtSeed
  advances = mtSeed == currentHigh and 0 or advances + LCRNGDistance(tempCurrentSeedLow, currentLow)
  local mtAdvances = (mtIndex - 624) + (mtCounter * 624)
 
  userdata.set("tempCurrentSeedLow", tempCurrentSeedLow)
  userdata.set("advances", advances)
  userdata.set("mtCounter", mtCounter)
+ userdata.set("cgearSeed", cgearSeed)
+ userdata.set("hitDelay", hitDelay)
+ userdata.set("hitDate", hitDate)
 
- return currentHigh, currentLow, mtAdvances
+ return currentHigh, currentLow, mtAdvances, delay
 end
 
 function showDateTime()
@@ -721,10 +844,37 @@ function showDateTime()
  end
 end
 
+local showCGearSeedInfoText = true
+
+function getInitialSeedInfoInput()
+ local key = input.get()
+
+ if key["Number7"] or key["Keypad7"] then
+  showCGearSeedInfoText = false
+ elseif key["Number8"] or key["Keypad8"] then
+  showCGearSeedInfoText = true
+ end
+
+ gui.drawBox(1, 376, 101, 383, 0x7F000000, 0x7F000000)
+ gui.pixelText(1, 376, showCGearSeedInfoText and "7 - Hide C-Gear Seed info" or "8 - Show C-Gear Seed info")
+end
+
+function showCGearSeedInfo(delay)
+ if showCGearSeedInfoText then
+  gui.drawBox(1, 192, 109, 255, 0x7F000000, 0x7F000000)
+  gui.pixelText(1, 192, string.format("Next Initial Seed: %08X", buildSeedFromDelay(delay + 349, true)))
+  gui.pixelText(1, 199, string.format("Next Delay: %d", delay + 349))
+  gui.pixelText(1, 206, string.format("Delay: %d", delay))
+  gui.pixelText(1, 220, string.format("C-Gear Seed: %08X", cgearSeed))
+  gui.pixelText(1, 227, string.format("Hit Delay: %d", hitDelay))
+  gui.pixelText(1, 234, string.format("Hit Date/Hour:\n%s", hitDate))
+ end
+end
+
 local showRngInfoText = true
 
 function showRngInfo()
- local currentSeedHigh, currentSeedLow, mtAdvances = getRngInfo()
+ local currentSeedHigh, currentSeedLow, mtAdvances, delay = getRngInfo()
 
  if showRngInfoText and mode[index] ~= "None" then
   gui.drawBox(1, 162, 121, 190, 0x7F000000, 0x7F000000)
@@ -734,6 +884,11 @@ function showRngInfo()
   gui.pixelText(1, 183, string.format("MT Advances: %d", mtAdvances))
 
   showDateTime()
+
+  if mode[index] == "C-Gear" then
+   getInitialSeedInfoInput()
+   showCGearSeedInfo(delay)
+  end
  end
 end
 
@@ -1092,6 +1247,9 @@ function setSaveStateValues()
  tempCurrentSeedLow = userdata.get("tempCurrentSeedLow")
  advances = userdata.get("advances")
  mtCounter = userdata.get("mtCounter")
+ cgearSeed = userdata.get("cgearSeed")
+ hitDelay = userdata.get("hitDelay")
+ hitDate = userdata.get("hitDate")
  prevMTSeed = read32Bit(mtSeedAddr)
 
  if prevInitialSeedHigh ~= initialSeedHigh then
