@@ -724,7 +724,6 @@ end
 function buildSeedFromDelay(delay, predictSeedFlag)
  predictSeedFlag = predictSeedFlag or false
 
- local macAddr = 0x0e4916  -- BizHawk MAC addres
  local nextSeconds, nextMinutes, nextHours, nextDays = dateTime["second"], dateTime["minute"], dateTime["hour"], dateTime["day"]
 
  if predictSeedFlag then
@@ -734,6 +733,7 @@ function buildSeedFromDelay(delay, predictSeedFlag)
  local ab = ((dateTime["month"] * nextDays) + nextMinutes + nextSeconds) % 0x100
  local cd = nextHours
  local efgh = dateTime["year"] + delay
+ local macAddr = 0x0e4916  -- BizHawk MAC addres
 
  return ((ab * 0x1000000) + (cd * 0x10000) + efgh + macAddr) % 0x100000000
 end
