@@ -742,7 +742,7 @@ function convertToString(seed)
  return string.format("%08X", seed)
 end
 
-local cgearSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, "01/01/2000\n00:00:00"
+local cgearSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, "2000/01/01\n00:00:00"
 
 function handleMTAdvances(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
@@ -752,7 +752,7 @@ function handleMTAdvances(mtSeed, delay)
    mtCounter = 0
    cgearSeed = cgearSeedTest
    hitDelay = delay - 1
-   hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"],
+   hitDate = string.format("20%s%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
                            dateTime["hour"], dateTime["minute"], dateTime["second"])
   end
 
@@ -822,7 +822,7 @@ end
 function showDateTime()
  if mode[index] ~= "None" then
   gui.drawBox(214, 192, 254, 206, 0x7F000000, 0x7F000000)
-  gui.pixelText(214, 192, string.format("%s/%s/20%s", dateTime["day"], dateTime["month"], dateTime["year"]))
+  gui.pixelText(214, 192, string.format("20%s/%s/%s", dateTime["year"], dateTime["month"], dateTime["day"]))
   gui.pixelText(214, 199, string.format("%s:%s:%s", dateTime["hour"], dateTime["minute"], dateTime["second"]))
  end
 end

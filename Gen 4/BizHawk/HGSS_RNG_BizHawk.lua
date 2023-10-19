@@ -512,7 +512,7 @@ function buildSeedFromDelay(delay)
  return ((ab * 0x1000000) + (cd * 0x10000) + efgh) % 0x100000000
 end
 
-local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, 0, 0, "01/01/2000\n00:00:00"
+local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00"
 
 function setInitialSeed(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay ~= 0 then
@@ -520,7 +520,7 @@ function setInitialSeed(mtSeed, delay)
   initialSeed = mtSeed
   tempCurrentSeed = mtSeed
   hitDelay = delay
-  hitDate = string.format("%s/%s/20%s\n%s:%s:%s", dateTime["day"], dateTime["month"], dateTime["year"],
+  hitDate = string.format("20%s/%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
                           dateTime["hour"], dateTime["minute"], dateTime["second"])
 
   if mtSeed == buildSeedFromDelay(delay) then
@@ -532,7 +532,7 @@ function setInitialSeed(mtSeed, delay)
   tempCurrentSeed = 0
   mtCounter = 0
   hitDelay = 0
-  hitDate = "01/01/2000\n00:00:00"
+  hitDate = "2000/01/01\n00:00:00"
  end
 
  userdata.set("initialSeed", initialSeed)
@@ -644,7 +644,7 @@ end
 function showDateTime()
  if mode[index] ~= "None" then
   gui.drawBox(214, 192, 254, 206, 0x7F000000, 0x7F000000)
-  gui.pixelText(214, 192, string.format("%s/%s/20%s", dateTime["day"], dateTime["month"], dateTime["year"]))
+  gui.pixelText(214, 192, string.format("20%s/%s/%s", dateTime["year"], dateTime["month"], dateTime["day"]))
   gui.pixelText(214, 199, string.format("%s:%s:%s", dateTime["hour"], dateTime["minute"], dateTime["second"]))
  end
 end
