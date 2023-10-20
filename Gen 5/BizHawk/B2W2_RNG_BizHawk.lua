@@ -1,7 +1,6 @@
 read32Bit = memory.read_u32_le
 read16Bit = memory.read_u16_le
 read8Bit = memory.readbyte
-memoryWriteCheck = event.onmemorywrite
 floor = math.floor
 
 local JUMP_DATA = {
