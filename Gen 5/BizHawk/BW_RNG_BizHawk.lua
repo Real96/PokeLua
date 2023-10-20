@@ -745,13 +745,13 @@ local cgearSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, "2000/01/01\n00:00:00"
 
 function handleMTAdvances(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
-  cgearSeedTest = buildSeedFromDelay(delay - 1)
+  local cgearSeedTest = buildSeedFromDelay(delay - 1)
 
   if convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest)) then  -- Check C-Gear MT seeding
    mtCounter = 0
    cgearSeed = cgearSeedTest
    hitDelay = delay - 1
-   hitDate = string.format("20%s%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
+   hitDate = string.format("20%s/%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
                            dateTime["hour"], dateTime["minute"], dateTime["second"])
   end
 
@@ -1166,7 +1166,8 @@ function showRoamerInfo(roamerAddr)
   gui.pixelText(1, 50, "Level: "..roamerLevel)
   gui.pixelText(1, 57, "HP: "..roamerHP)
   gui.pixelText(1, 64, "Current position:")
-  gui.pixelText(1, 71, locationNamesList[roamerMapIndex + 1], roamerMapIndex == playerMapIndex and "limegreen" or nil)
+  gui.pixelText(1, 71, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
+                        roamerMapIndex == playerMapIndex and "limegreen" or nil)
  else
   gui.pixelText(1, 8, "Active Roamer? No")
  end
@@ -1177,7 +1178,7 @@ local prevKeyInfo, infoIndex, infoMode = {}, 1, {"Gift", "Party", "Party Stats",
 function getInfoInput()
  local leftInfoArrowColor = "gray"
  local rightInfoArrowColor = "gray"
- key = input.get()
+ local key = input.get()
 
  if (key["Number3"] or key["Keypad3"]) and (not prevKeyInfo["Number3"] and not prevKeyInfo["Keypad3"]) then
   leftInfoArrowColor = "orange"

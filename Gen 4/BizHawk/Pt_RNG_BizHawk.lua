@@ -1089,7 +1089,7 @@ local prevKeyInfo, infoIndex, infoMode = {}, 1, {"Gift", "Party", "Party Stats",
 function getInfoInput()
  local leftInfoArrowColor = "gray"
  local rightInfoArrowColor = "gray"
- key = input.get()
+ local key = input.get()
 
  if (key["Number3"] or key["Keypad3"]) and (not prevKeyInfo["Number3"] and not prevKeyInfo["Keypad3"]) then
   leftInfoArrowColor = "orange"
