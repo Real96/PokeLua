@@ -712,10 +712,10 @@ function getSlotInput()
  local rightSlotArrowColor = "gray"
  local key = input.get()
 
- if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Keypad3"] and not prevKeySlot["Keypad3"]) then
+ if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Number3"] and not prevKeySlot["Keypad3"]) then
   leftSlotArrowColor = "orange"
   slotIndex = slotIndex - 1 < 0 and 2 or slotIndex - 1
- elseif (key["Number4"] or key["Keypad4"]) and (not prevKeySlot["Keypad4"] and not prevKeySlot["Keypad4"]) then
+ elseif (key["Number4"] or key["Keypad4"]) and (not prevKeySlot["Number4"] and not prevKeySlot["Keypad4"]) then
   rightSlotArrowColor = "orange"
   slotIndex = slotIndex + 1 > 2 and 0 or slotIndex + 1
  end
