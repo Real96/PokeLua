@@ -643,7 +643,7 @@ function getRngInfo()
  if mtSeed == current then  -- Set the initial seed when the MT seed is equal to the LCRNG current seed
   setInitialSeed(mtSeed, delay)
  elseif prevMTSeed ~= mtSeed then  -- Check when the value of the MT seed changes in RAM
-  if mtIndex ~= 624 then  -- Avoid advancing the MT counter when the MT seed changes the first time
+  if mtIndex ~= 624 and initialSeed ~= 0 then  -- Avoid advancing the MT counter when the MT seed changes the first time
    mtCounter = mtCounter + 1
   end
 
@@ -665,7 +665,7 @@ function getRngInfo()
 
  local mtAdvances = (mtIndex - 624) + (mtCounter * 624)
 
- if mtAdvances < 0 then  -- Avoid negative MT advances (this may happens in korean games)
+ if mtAdvances < 0 and initialSeed ~= 0 then  -- Avoid negative MT advances (this may happens in korean games)
   mtCounter = mtCounter + 1
  end
 
@@ -1145,7 +1145,7 @@ function createStateFile(statesFileName, stateSlot)
   end
 
   statesFile:close()
-  gui.text(2, 112, string.format("Saved state on slot %s", stateSlot))
+  gui.text(2, 134, string.format("Saved state on slot %s", stateSlot))
  end
 end
 
@@ -1168,7 +1168,7 @@ function writeStateFile(statesFileName, stateSlot)
  statesFile = io.open(statesFileName, "w")
  statesFile:write(lines)
  statesFile:close()
- gui.text(2, 112, string.format("Saved state on slot %s", stateSlot))
+ gui.text(2, 134, string.format("Saved state on slot %s", stateSlot))
 end
 
 function writeSaveStateValues(statesFileName, stateSlot)
@@ -1216,7 +1216,7 @@ function setSaveStateValues(statesFileName, stateSlot)
    print(string.format("Initial Seed: %08X", initialSeed))
   end
 
-  gui.text(2, 112, string.format("Loaded State %s", stateSlot))
+  gui.text(2, 134, string.format("Loaded State %s", stateSlot))
  end
 end
 
@@ -1228,7 +1228,7 @@ function getSaveStateInput()
 
  for slotNumber = 1, table.getn(Fbuttons) do
   if (key[Fbuttons[slotNumber]] and not prevStateKey[Fbuttons[slotNumber]]) then
-   local statesFileName = string.format("%s_%s_states_values.txt", gameVersion, gameLanguage)
+   local statesFileName = string.format("%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
 
    if (key["shift"]) then  -- Check if a save state is being created
     writeSaveStateValues(statesFileName, slotNumber)
