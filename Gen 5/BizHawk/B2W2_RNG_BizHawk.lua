@@ -287,7 +287,7 @@ local moveNamesList = {
  "Searing Shot", "Techno Blast", "Relic Song", "Secret Sword", "Glaciate", "Bolt Strike", "Blue Flare", "Fiery Dance",
  "Freeze Shock", "Ice Burn", "Snarl", "Icicle Crash", "V-create", "Fusion Flare", "Fusion Bolt"}
 
-itemNamesList = {
+local itemNamesList = {
  "None", "Master Ball", "Ultra Ball", "Great Ball", "Poké Ball", "Safari Ball", "Net Ball", "Dive Ball",
  "Nest Ball", "Repeat Ball", "Timer Ball", "Luxury Ball", "Premier Ball", "Dusk Ball", "Heal Ball", "Quick Ball",
  "Cherish Ball", "Potion", "Antidote", "Burn Heal", "Ice Heal", "Awakening", "Parlyz Heal", "Full Restore",
@@ -657,7 +657,7 @@ end
 function showDateTime()
  if mode[index] ~= "None" then
   gui.drawBox(214, 192, 254, 206, 0x7F000000, 0x7F000000)
-  gui.pixelText(214, 192, string.format("%s/%s/20%s", dateTime["day"], dateTime["month"], dateTime["year"]))
+  gui.pixelText(214, 192, string.format("20%s/%s/%s", dateTime["year"], dateTime["month"], dateTime["day"]))
   gui.pixelText(214, 199, string.format("%s:%s:%s", dateTime["hour"], dateTime["minute"], dateTime["second"]))
  end
 end
