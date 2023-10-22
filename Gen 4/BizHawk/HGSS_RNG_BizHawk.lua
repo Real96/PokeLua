@@ -704,10 +704,10 @@ function getSlotInput()
  local rightSlotArrowColor = "gray"
  local key = input.get()
 
- if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Keypad3"] and not prevKeySlot["Keypad3"]) then
+ if (key["Number3"] or key["Keypad3"]) and (not prevKeySlot["Number3"] and not prevKeySlot["Keypad3"]) then
   leftSlotArrowColor = "orange"
   slotIndex = slotIndex - 1 < 0 and 1 or slotIndex - 1
- elseif (key["Number4"] or key["Keypad4"]) and (not prevKeySlot["Keypad4"] and not prevKeySlot["Keypad4"]) then
+ elseif (key["Number4"] or key["Keypad4"]) and (not prevKeySlot["Number4"] and not prevKeySlot["Keypad4"]) then
   rightSlotArrowColor = "orange"
   slotIndex = slotIndex + 1 > 1 and 0 or slotIndex + 1
  end
@@ -932,10 +932,10 @@ function getRoamerSlotInput()
  local rightRoamerSlotArrowColor = "gray"
  local key = input.get()
 
- if (key["Number3"] or key["Keypad3"]) and (not prevKeyRoamerSlot["Keypad3"] and not prevKeyRoamerSlot["Keypad3"]) then
+ if (key["Number3"] or key["Keypad3"]) and (not prevKeyRoamerSlot["Number3"] and not prevKeyRoamerSlot["Keypad3"]) then
   leftRoamerSlotArrowColor = "orange"
   roamerSlotIndex = roamerSlotIndex - 1 < 0 and 2 or roamerSlotIndex - 1
- elseif (key["Number4"] or key["Keypad4"]) and (not prevKeyRoamerSlot["Keypad4"] and not prevKeyRoamerSlot["Keypad4"]) then
+ elseif (key["Number4"] or key["Keypad4"]) and (not prevKeyRoamerSlot["Number4"] and not prevKeyRoamerSlot["Keypad4"]) then
   rightRoamerSlotArrowColor = "orange"
   roamerSlotIndex = roamerSlotIndex + 1 > 2 and 0 or roamerSlotIndex + 1
  end

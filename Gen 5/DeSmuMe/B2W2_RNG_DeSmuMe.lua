@@ -706,10 +706,10 @@ function getSlotInput()
  local rightSlotArrowColor = "gray"
  local key = input.get()
 
- if (key["3"] or key["numpad3"]) and (not prevKeySlot["numpad3"] and not prevKeySlot["numpad3"]) then
+ if (key["3"] or key["numpad3"]) and (not prevKeySlot["3"] and not prevKeySlot["numpad3"]) then
   leftSlotArrowColor = "orange"
   slotIndex = slotIndex - 1 < 0 and 2 or slotIndex - 1
- elseif (key["4"] or key["numpad4"]) and (not prevKeySlot["numpad4"] and not prevKeySlot["numpad4"]) then
+ elseif (key["4"] or key["numpad4"]) and (not prevKeySlot["4"] and not prevKeySlot["numpad4"]) then
   rightSlotArrowColor = "orange"
   slotIndex = slotIndex + 1 > 2 and 0 or slotIndex + 1
  end
@@ -909,7 +909,7 @@ function showInfo(pidAddr)
   gui.text(32, -178, string.format("%08X%s", pokemonPID, shinyType), shinyTypeTextColor)
   gui.text(2, -167, "Nature: "..natureNamesList[(natureIndex > 25 or natureIndex == nil) and 1 or natureIndex])
   gui.text(2, -156, string.format("Ability: %s (%s)", abilityNamesList[(abilityIndex > 164 or abilityIndex < 1) and 1 or abilityIndex],
-                hiddenAbilityFlag and "H" or abilityIndex == pokemonAbilities[(speciesDexIndex > 649 or speciesDexIndex < 1) and 1 or speciesDexIndex][1] and "0" or "1"))
+           hiddenAbilityFlag and "H" or abilityIndex == pokemonAbilities[(speciesDexIndex > 649 or speciesDexIndex < 1) and 1 or speciesDexIndex][1] and "0" or "1"))
 
   showIVsAndHP(ivsValue)
 
