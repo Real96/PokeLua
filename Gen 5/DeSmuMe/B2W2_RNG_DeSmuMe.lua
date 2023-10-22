@@ -645,7 +645,7 @@ function getRngInfo()
  advances = mtSeed == currentHigh and 0 or advances + LCRNGDistance(tempCurrentSeedLow, currentLow)
  local mtAdvances = (mtIndex - 2) + (mtCounter * 624)
 
- return currentHigh, currentLow, mtAdvances, delay
+ return currentHigh, currentLow, mtAdvances
 end
 
 function showDateTime()
