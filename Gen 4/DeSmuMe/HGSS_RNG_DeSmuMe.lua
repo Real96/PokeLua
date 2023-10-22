@@ -511,10 +511,6 @@ function buildSeedFromDelay(delay)
  return ((ab * 0x1000000) + (cd * 0x10000) + efgh) % 0x100000000
 end
 
-function convertToString(seed)
- return string.format("%08X", seed)
-end
-
 local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00"
 
 function setInitialSeed(mtSeed, delay)
@@ -522,12 +518,17 @@ function setInitialSeed(mtSeed, delay)
   prevMTSeed = mtSeed
   initialSeed = mtSeed
   tempCurrentSeed = mtSeed
-  hitDelay = delay
-  hitDate = string.format("20%s/%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
-                          dateTime["hour"], dateTime["minute"], dateTime["second"])
+  local mtSeedTest = buildSeedFromDelay(delay)
+  local mtSeedTest2 = buildSeedFromDelay(delay - 1)
+  local mtSeedTest3 = buildSeedFromDelay(delay - 2)
+  local initilSeedGenerationFlag = mtSeed == mtSeedTest and 0 or mtSeed == mtSeedTest2 and 1 or
+                                   mtSeed == mtSeedTest3 and 2 or nil
 
-  if mtSeed == buildSeedFromDelay(delay) then
+  if initilSeedGenerationFlag then
    print(string.format("Initial Seed: %08X", initialSeed))
+   hitDelay = delay - initilSeedGenerationFlag
+   hitDate = string.format("20%s/%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
+                           dateTime["hour"], dateTime["minute"], dateTime["second"])
   end
  elseif delay == 0 then
   prevMTSeed = 0
@@ -537,10 +538,6 @@ function setInitialSeed(mtSeed, delay)
   hitDelay = 0
   hitDate = "2000/01/01\n00:00:00"
  end
-
- --userdata.set("initialSeed", initialSeed)
- --userdata.set("hitDelay", hitDelay)
- --userdata.set("hitDate", hitDate)
 end
 
 function LCRNG(s, mul, sum)
@@ -609,12 +606,6 @@ function getRngInfo()
   mtCounter = mtCounter + 1
  end
 
- --userdata.set("tempCurrentSeed", tempCurrentSeed)
- --userdata.set("advances", advances)
- --userdata.set("mtCounter", mtCounter)
- --userdata.set("lastCurrentSeedBeforeBattle", lastCurrentSeedBeforeBattle)
- --userdata.set("battleStartJump", battleStartJump)
-
  return current, mtAdvances, delay
 end
 
@@ -629,14 +620,14 @@ function getInitialSeedInfoInput()
   showInitialSeedInfoText = true
  end
 
- gui.box(1, 180, 122, 190, "#0000007F", "#0000007F")
- gui.text(2, 182, showInitialSeedInfoText and "7 - Hide Initial Seed info" or "8 - Show Initial Seed info")
+ gui.box(1, 180, 110, 190, "#0000007F", "#0000007F")
+ gui.text(2, 182, showInitialSeedInfoText and "7 - Hide Seed info" or "8 - Show Seed info")
 end
 
 function showInitialSeedInfo(delay)
  local delayOffset = mode[index] == "Pandora" and 181 or 21
 
- gui.box(1, 12, 164, 96, "#0000007F", "#0000007F")
+ gui.box(1, 12, 164, 86, "#0000007F", "#0000007F")
  gui.text(2, 13, string.format("Next Initial Seed: %08X", buildSeedFromDelay(delay + delayOffset, true)))
  gui.text(2, 24, string.format("Next Delay: %d", delay + delayOffset))
  gui.text(2, 35, string.format("Delay: %d", delay))
@@ -658,7 +649,7 @@ function showRngInfo()
  local currentSeed, mtAdvances, delay = getRngInfo()
 
  if showRngInfoText and mode[index] ~= "None" then
-  gui.box(1, -46, 182, -2, "#0000007F", "#0000007F")
+  gui.box(1, -46, 134, -2, "#0000007F", "#0000007F")
   gui.text(2, -44, string.format("Initial Seed: %08X", initialSeed))
   gui.text(2, -33, string.format("Current Seed: %08X", currentSeed))
   gui.text(2, -22, string.format("LCRNG Advances: %d", advances))
@@ -708,10 +699,10 @@ function getSlotInput()
  local rightSlotArrowColor = "gray"
  local key = input.get()
 
- if (key["3"] or key["numpad3"]) and (not prevKeySlot["numpad3"] and not prevKeySlot["numpad3"]) then
+ if (key["3"] or key["numpad3"]) and (not prevKeySlot["3"] and not prevKeySlot["numpad3"]) then
   leftSlotArrowColor = "orange"
   slotIndex = slotIndex - 1 < 0 and 1 or slotIndex - 1
- elseif (key["4"] or key["numpad4"]) and (not prevKeySlot["numpad4"] and not prevKeySlot["numpad4"]) then
+ elseif (key["4"] or key["numpad4"]) and (not prevKeySlot["4"] and not prevKeySlot["numpad4"]) then
   rightSlotArrowColor = "orange"
   slotIndex = slotIndex + 1 > 1 and 0 or slotIndex + 1
  end
@@ -897,8 +888,6 @@ function showInfo(pidAddr)
  local ivsValue = lshift(ivsPart[2], 16) + ivsPart[1]
 
  local isEgg = getBits(ivsValue, 30, 1) == 1
-
- prng = LCRNG(prng, 0x807DBCB5, 0x52713895)  -- 3 cycles
  local natureIndex = (pokemonPID % 25) + 1
 
  if mode[index] ~= "Breeding" or isEgg then
@@ -1005,11 +994,11 @@ function showRoamerInfo(roamerAddr)
   gui.text(2, -178, "Species: "..speciesNamesList[roamerSpeciesIndex])
   gui.text(2, -167, "PID:")
   gui.text(32, -167, string.format("%08X%s", roamerPID, roamerShinyType), roamerShinyTypeTextColor)
-  gui.pixelText(2, -156, "Nature: "..natureNamesList[roamerNatureIndex])
+  gui.text(2, -156, "Nature: "..natureNamesList[roamerNatureIndex])
   showIVsAndHP(roamerIVsValue)
   gui.text(2, -123, "Level: "..roamerLevel)
   gui.text(2, -112, "HP: "..roamerHP)
-  gui.pixelText(2, -101, "Status condition: "..roamerStatus)
+  gui.text(2, -101, "Status condition: "..roamerStatus)
   gui.text(2, -90, "Current position:")
   gui.text(2, -79, locationNamesList[roamerMapIndex + 1], roamerMapIndex == playerMapIndex and "limegreen" or nil)
  else
@@ -1033,11 +1022,11 @@ function getInfoInput()
  end
 
  prevKeyInfo = key
- gui.box(1, 12, 164, 33, "#0000007F", "#0000007F")
- gui.text(2, 13, "Info Mode: "..infoMode[infoIndex])
- drawArrowLeft(2, 24, leftInfoArrowColor)
- gui.text(10, 24, "3 - 4")
- drawArrowRight(48, 24, rightInfoArrowColor)
+ gui.box(1, 99, 134, 121, "#0000007F", "#0000007F")
+ gui.text(2, 101, "Info Mode: "..infoMode[infoIndex])
+ drawArrowLeft(2, 112, leftInfoArrowColor)
+ gui.text(10, 112, "3 - 4")
+ drawArrowRight(48, 112, rightInfoArrowColor)
 end
 
 function showPokemonInfo(pidAddr)

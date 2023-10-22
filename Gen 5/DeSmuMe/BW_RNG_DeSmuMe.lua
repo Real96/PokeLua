@@ -745,13 +745,13 @@ function handleMTAdvances(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
   local cgearSeedTest = buildSeedFromDelay(delay - 1)
   local cgearSeedTest2 = buildSeedFromDelay(delay - 2)
-  cgearGenerationFlag = convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest)) and 1 or
-                        convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest2)) and 2
+  local cgearGenerationFlag = convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest)) and 1 or
+                              convertToString(mtSeed) == convertToString(getMTArrayFistSeed(cgearSeedTest2)) and 2 or nil
 
-  if cgearGenerationFlag == 1 or cgearGenerationFlag == 2 then
+  if cgearGenerationFlag then
    mtCounter = 0
    cgearSeed = cgearGenerationFlag == 1 and cgearSeedTest or cgearSeedTest2
-   hitDelay = cgearGenerationFlag == 1  and delay - 1 or delay - 2
+   hitDelay = delay - cgearGenerationFlag
    hitDate = string.format("20%s/%s/%s\n%s:%s:%s", dateTime["year"], dateTime["month"], dateTime["day"],
                            dateTime["hour"], dateTime["minute"], dateTime["second"])
   end
