@@ -307,21 +307,87 @@ local itemNamesList = {
  "Data Card 26", "Data Card 27", "Jade Orb", "Lock Capsule", "Red Orb", "Blue Orb", "Enigma Stone"}
 
 local locationNamesList = {
- "Mystery Zone", "Mystery Zone", "Mystery Zone", "Mystery Zone", "Mystery Zone", "Mystery Zone",
- "Bellchime Trail", "Burned Tower", "Ruins of Alph", "Route 1", "Route 2", "Route 3", "Route 4",
- "Route 5", "Route 6", "Route 7", "Route 8", "Route 9", "Route 10", "Route 11", "Route 12",
- "Route 13", "Route 14", "Route 15", "Route 16", "Route 17", "Route 18", "Route 22", "Route 24",
- "Route 25", "Route 26", "Route 27", "Route 28", "Route 29", "Route 30", "Route 31", "Route 32",
- "Route 33", "Route 34", "Route 35", "Route 36", "Route 37", "Route 38", "Route 39", "Route 42",
- "Route 43", "Route 44", "Route 45", "Route 46", "Pallet Town", "Viridian City", "Pewter City",
- "Cerulean City", "Lavender Town", "Vermilion City", "Celadon City", "Fuchsia City",
- "Cinnabar Island", "Indigo Plateau", "Saffron City", "New Bark Town", "New Bark Town",
- "New Bark Town", "New Bark Town", "New Bark Town", "New Bark Town", "New Bark Town",
- "Cherrygrove City", "Cherrygrove City", "Cherrygrove City", "Cherrygrove City", "Cherrygrove City",
- "Cherrygrove City", "Violet City", "Azalea Town", "Cianwood City", "Goldenrod City", "Olivine City",
- "Ecruteak City", "Ecruteak City", "Ecruteak City", "Ecruteak City", "Jubilife City", "Ecruteak City",
- "Ecruteak City", "Ecruteak City", "Ecruteak City", "Mahogany Town", "Lake of Rage", "Blackthorn City",
- "Mt. Silver", "Route 19", "Route 20", "Route 21"}
+ "Mystery Zone", "Mystery Zone", "Mystery Zone", "Jubilife City", "Jubilife City", "Jubilife City",
+ "Jubilife City", "Jubilife City", "Pokétch Co.", "Pokétch Co.", "Pokétch Co.", "Jubilife TV",
+ "Jubilife TV", "Jubilife TV", "Jubilife TV", "Jubilife TV", "Jubilife TV", "Jubilife TV",
+ "Jubilife TV", "Jubilife City", "Jubilife City", "Jubilife City", "Jubilife City", "Jubilife City",
+ "Jubilife City", "Jubilife City", "Jubilife City", "Jubilife City", "GTS", "Trainers’ School",
+ "Jubilife City", "Jubilife City", "Jubilife City", "Canalave City", "Canalave City", "Canalave City",
+ "Canalave City", "Canalave City", "Canalave Library", "Canalave Library", "Canalave Library",
+ "Canalave City", "Canalave City", "Canalave City", "Canalave City", "Oreburgh City", "Oreburgh City",
+ "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City",
+ "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City",
+ "Mining Museum", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City", "Oreburgh City",
+ "Eterna City", "Eterna City", "Eterna City", "Eterna City", "Eterna City", "Eterna City", "Cycle Shop",
+ "Eterna City", "Eterna City", "Eterna City", "Eterna City", "Eterna City", "Eterna City",
+ "Eterna City", "Eterna City", "Route 206", "Eterna City", "Eterna City", "Eterna City", "Eterna City",
+ "Eterna City", "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City",
+ "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City",
+ "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City",
+ "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City",
+ "Hearthome City", "Hearthome City", "Hearthome City", "Route 208", "Route 209", "Route 212",
+ "Hearthome City", "Hearthome City", "Hearthome City", "Hearthome City", "Poffin House", "Contest Hall",
+ "Contest Hall", "Foreign Building", "Pastoria City", "Pastoria City", "Pastoria City", "Pastoria City",
+ "Pastoria City", "Pastoria City", "Pastoria City", "Pastoria City", "Pastoria City", "Pastoria City",
+ "Pastoria City", "Pastoria City", "Veilstone City", "Veilstone City", "Veilstone City", "Veilstone City",
+ "Game Corner", "Veilstone Store", "Veilstone Store", "Veilstone Store", "Veilstone Store",
+ "Veilstone Store", "Veilstone Store", "Veilstone City", "Veilstone City", "Veilstone City",
+ "Veilstone City", "Veilstone City", "Veilstone City", "Route 215", "Sunyshore City", "Sunyshore City",
+ "Sunyshore City", "Sunyshore City", "Sunyshore City", "Sunyshore City", "Sunyshore City",
+ "Sunyshore Market", "Sunyshore City", "Sunyshore City", "Sunyshore City", "Sunyshore City",
+ "Sunyshore City", "Sunyshore City", "Vista Lighthouse", "Snowpoint City", "Snowpoint City",
+ "Snowpoint City", "Snowpoint City", "Snowpoint City", "Snowpoint City", "Snowpoint City",
+ "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League",
+ "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League",
+ "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League", "Pokémon League", "Fight Area",
+ "Fight Area", "Fight Area", "Fight Area", "Battle Park", "Route 225", "Fight Area", "Fight Area",
+ "Mystery Zone", "Oreburgh Mine", "Oreburgh Mine", "Oreburgh Mine", "Valley Windworks", "Valley Windworks",
+ "Eterna Forest", "Eterna Forest", "Fuego Ironworks", "Fuego Ironworks", "Mystery Zone", "Mt. Coronet",
+ "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet",
+ "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Mt. Coronet", "Spear Pillar", "Spear Pillar",
+ "Mystery Zone", "Pastoria City", "Mystery Zone", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins",
+ "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins",
+ "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins",
+ "Solaceon Ruins", "Solaceon Ruins", "Solaceon Ruins", "Mystery Zone", "Victory Road", "Victory Road",
+ "Victory Road", "Victory Road", "Victory Road", "Victory Road", "Mystery Zone", "Pal Park", "Mystery Zone",
+ "Amity Square", "Ravaged Path", "Mystery Zone", "Floaroma Meadow", "Floaroma Meadow", "Oreburgh Gate",
+ "Oreburgh Gate", "Fullmoon Island", "Fullmoon Island", "Stark Mountain", "Stark Mountain", "Stark Mountain",
+ "Stark Mountain", "Mystery Zone", "Sendoff Spring", "Turnback Cave", "Turnback Cave", "Turnback Cave",
+ "Turnback Cave", "Turnback Cave", "Turnback Cave", "Flower Paradise", "Mystery Zone", "Mystery Zone",
+ "Mystery Zone", "Snowpoint Temple", "Snowpoint Temple", "Snowpoint Temple", "Snowpoint Temple",
+ "Snowpoint Temple", "Snowpoint Temple", "Wayward Cave", "Wayward Cave", "Ruin Maniac Cave", "Trophy Garden",
+ "Iron Island", "Iron Island", "Iron Island", "Iron Island", "Iron Island", "Iron Island", "Iron Island",
+ "Old Chateau", "Old Chateau", "Old Chateau", "Old Chateau", "Old Chateau", "Old Chateau", "Old Chateau",
+ "Old Chateau", "Old Chateau", "Mystery Zone", "Galactic HQ", "Galactic HQ", "Galactic HQ", "Galactic HQ",
+ "Galactic HQ", "Galactic HQ", "Lake Verity", "Lake Verity", "Verity Cavern", "Lake Valor", "Lake Valor",
+ "Valor Cavern", "Lake Acuity", "Lake Acuity", "Acuity Cavern", "Newmoon Island", "Newmoon Island",
+ "Battle Park", "Battle Park", "Mystery Zone", "Mystery Zone", "Battle Tower", "Battle Tower", "Battle Tower",
+ "Battle Tower", "Battle Tower", "Battle Tower", "Mystery Zone", "Mystery Zone", "Verity Lakefront",
+ "Verity Lakefront", "Valor Lakefront", "Restaurant", "Grand Lake", "Grand Lake", "Acuity Lakefront",
+ "Spring Path", "Route 201", "Route 202", "Route 203", "Route 204", "Route 204", "Route 205", "Route 205",
+ "Route 205", "Route 206", "Route 206", "Mystery Zone", "Route 207", "Route 208", "Route 208", "Route 209",
+ "Route 209", "Route 209", "Route 209", "Route 209", "Route 209", "Route 210", "Route 210", "Route 210",
+ "Route 211", "Route 211", "Route 212", "Pokémon Mansion", "Pokémon Mansion", "Pokémon Mansion", "Route 212",
+ "Route 212", "Route 213", "Route 213", "Footstep House", "Grand Lake", "Grand Lake", "Grand Lake",
+ "Grand Lake", "Route 214", "Route 214", "Route 215", "Route 216", "Route 216", "Route 217", "Route 217",
+ "Route 217", "Route 218", "Route 218", "Route 218", "Route 219", "Route 221", "Pal Park", "Route 221",
+ "Route 222", "Route 222", "Route 222", "Route 222", "Route 224", "Route 225", "Mystery Zone", "Mystery Zone",
+ "Route 227", "Mystery Zone", "Mystery Zone", "Route 228", "Route 229", "Mystery Zone", "Mystery Zone",
+ "Mystery Zone", "Twinleaf Town", "Twinleaf Town", "Twinleaf Town", "Twinleaf Town", "Twinleaf Town",
+ "Twinleaf Town", "Twinleaf Town", "Sandgem Town", "Sandgem Town", "Sandgem Town", "Sandgem Town",
+ "Sandgem Town", "Sandgem Town", "Sandgem Town", "Sandgem Town", "Floaroma Town", "Floaroma Town",
+ "Floaroma Town", "Floaroma Town", "Flower Shop", "Floaroma Town", "Floaroma Town", "Solaceon Town",
+ "Solaceon Town", "Solaceon Town", "Solaceon Town", "Pokémon Day Care", "Solaceon Town", "Solaceon Town",
+ "Solaceon Town", "Solaceon Town", "Celestic Town", "Celestic Town", "Celestic Town", "Celestic Town",
+ "Celestic Town", "Celestic Town", "Celestic Town", "Celestic Town", "Survival Area", "Survival Area",
+ "Survival Area", "Survival Area", "Survival Area", "Survival Area", "Survival Area", "Resort Area",
+ "Resort Area", "Resort Area", "Resort Area", "Resort Area", "Resort Area", "Resort Area", "Resort Area",
+ "Resort Area", "Mystery Zone", "Route 220", "Route 223", "Route 226", "Mystery Zone", "Route 230",
+ "Seabreak Path", "Mystery Zone", "Jubilife City", "Canalave City", "Oreburgh City", "Eterna City",
+ "Hearthome City", "Pastoria City", "Veilstone City", "Sunyshore City", "Snowpoint City", "Pokémon League",
+ "Fight Area", "Sandgem Town", "Floaroma Town", "Solaceon Town", "Celestic Town", "Survival Area",
+ "Resort Area", "Canalave City", "Cafe", "Battle Tower", "Galactic HQ", "Pokémon League", "Pokémon League",
+ "Galactic HQ", "Route 225", "Route 226", "Route 227", "Route 228", "Route 228", "Route 228"}
 
 local statusConditionNamesList = {"None", "SLP", "PSN", "BRN", "FRZ", "PAR", "PSN"}
 
@@ -346,87 +412,80 @@ elseif gameVersionCode == 0x4B5049 then
  gameVersion = "HeartGold"
 end
 
-local boxSelectedSlotIndexOffset, mtIndexAddr, pidPointerAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr, tempCurrentSeedDuringBattleAddr
+local mtIndexAddr, pidPointerAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr, tempCurrentSeedDuringBattleAddr
 local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- boxSelectedSlotIndexOffset = 0x975F1
- mtIndexAddr = 0x0210F6AC
- pidPointerAddr = 0x0211184C
- delayAddr = 0x021D1118
- currentSeedAddr = 0x021D1588
- mtSeedAddr = 0x021D158C
- trainerIDsPointerAddr = 0x021D2208
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x02105CE8
+ pidPointerAddr = 0x021070EC
+ delayAddr = 0x021C4A24
+ currentSeedAddr = 0x021C4E88
+ mtSeedAddr = 0x021C4E8C
+ trainerIDsPointerAddr = 0x021C5B08
+ tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
- boxSelectedSlotIndexOffset = 0x97339
- mtIndexAddr = 0x0210F6CC
- pidPointerAddr = 0x0211186C
- delayAddr = 0x021D1138
- currentSeedAddr = 0x021D15A8
- mtSeedAddr = 0x021D15AC
- trainerIDsPointerAddr = 0x021D2228
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x02105BA8
+ pidPointerAddr = 0x02106FAC
+ delayAddr = 0x021C48E4
+ currentSeedAddr = 0x021C4D48
+ mtSeedAddr = 0x021C4D4C
+ trainerIDsPointerAddr = 0x021C59C8
+ tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- boxSelectedSlotIndexOffset = 0x97611
- mtIndexAddr = 0x0210F6EC
- pidPointerAddr = 0x0211188C
- delayAddr = 0x021D1158
- currentSeedAddr = 0x021D15C8
- mtSeedAddr = 0x021D15CC
- trainerIDsPointerAddr = 0x021D2248
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x02105D28
+ pidPointerAddr = 0x0210712C
+ delayAddr = 0x021C4A64
+ currentSeedAddr = 0x021C4EC8
+ mtSeedAddr = 0x021C4ECC
+ trainerIDsPointerAddr = 0x021C5B48
+ tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- boxSelectedSlotIndexOffset = 0x975F1
- mtIndexAddr = 0x0210F66C
- pidPointerAddr = 0x0211180C
- delayAddr = 0x021D10D8
- currentSeedAddr = 0x021D1548
- mtSeedAddr = 0x021D154C
- trainerIDsPointerAddr = 0x021D21C8
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x02105C88
+ pidPointerAddr = 0x0210708C
+ delayAddr = 0x021C49C4
+ currentSeedAddr = 0x021C4E28
+ mtSeedAddr = 0x021C4E2C
+ trainerIDsPointerAddr = 0x021C5AA8
+ tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- boxSelectedSlotIndexOffset = 0x975C1
- mtIndexAddr = 0x0210EC00
- pidPointerAddr = 0x02110DAC
- delayAddr = 0x021D0678
- currentSeedAddr = 0x021D0AE8
- mtSeedAddr = 0x021D0AEC
- trainerIDsPointerAddr = 0x021D1768
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x021075A4
+ pidPointerAddr = 0x02108944
+ delayAddr = 0x021C6284
+ currentSeedAddr = 0x021C66E8
+ mtSeedAddr = 0x021C66EC
+ trainerIDsPointerAddr = 0x021C7374
+ tempCurrentSeedDuringBattleAddr = 0x027E39F0
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
  koreanOffset = 0x44
- boxSelectedSlotIndexOffset = 0x971B5
- mtIndexAddr = 0x021100AC
- pidPointerAddr = 0x0211226C
- delayAddr = 0x021D1B38
- currentSeedAddr = 0x021D1FA8
- mtSeedAddr = 0x021D1FAC
- trainerIDsPointerAddr = 0x021D2C28
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x021030A8
+ pidPointerAddr = 0x021045AC
+ delayAddr = 0x021C1EE4
+ currentSeedAddr = 0x021C2348
+ mtSeedAddr = 0x021C234C
+ trainerIDsPointerAddr = 0x021C2FC8
+ tempCurrentSeedDuringBattleAddr = 0x027E363C
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- boxSelectedSlotIndexOffset = 0x9760D
- mtIndexAddr =  gameVersion == "HeartGold" and 0x0210F6EC or 0x0210F70C
- pidPointerAddr = gameVersion == "HeartGold" and 0x0211188C or 0x021118AC
- delayAddr = gameVersion == "HeartGold" and 0x021D1158 or 0x021D1178
- currentSeedAddr = gameVersion == "HeartGold" and 0x021D15C8 or 0x021D15E8
- mtSeedAddr = gameVersion == "HeartGold" and 0x021D15CC or 0x021D15EC
- trainerIDsPointerAddr = gameVersion == "HeartGold" and 0x021D2248 or 0x021D2268
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x02105D48
+ pidPointerAddr = 0x0210714C
+ delayAddr = 0x021C4A84
+ currentSeedAddr = 0x021C4EE8
+ mtSeedAddr = 0x021C4EEC
+ trainerIDsPointerAddr = 0x021C5B68
+ tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 end
 
 function printGameInfo()
  if gameVersion == "" then  -- Print game info
   print("Version: Unknown game")
- elseif gameVersion ~= "HeartGold" and gameVersion ~= "SoulSilver" then
-  print(string.format("Version: %s - Wrong game version! Use HeartGold/SoulSilver instead\n", gameVersion))
+ elseif gameVersion ~= "Diamond" and gameVersion ~= "Pearl" then
+  print(string.format("Version: %s - Wrong game version! Use Diamond/Pearl instead\n", gameVersion))
  elseif gameLanguage == "" then
   print("Version: "..gameVersion)
   print("Language: Unknown language\n")
@@ -589,6 +648,10 @@ function getRngInfo()
   end
 
   prevMTSeed = mtSeed
+ elseif current == buildSeedFromDelay(delay) then  -- Check when initial battle seed is set on current seed address
+  local lastCurrentSeedBeforeBattleAddr = read32Bit(currentSeedAddr - 0x4) + 0x15E4
+  lastCurrentSeedBeforeBattle = read32Bit(lastCurrentSeedBeforeBattleAddr)
+  battleStartJump = true
  elseif tempCurrentSeed == read32Bit(tempCurrentSeedDuringBattleAddr) and tempCurrentSeed ~= 0 then  -- Check when current seed is set on battle temp current seed address
   lastCurrentSeedBeforeBattle = tempCurrentSeed
   battleStartJump = true
@@ -625,7 +688,7 @@ function getInitialSeedInfoInput()
 end
 
 function showInitialSeedInfo(delay)
- local delayOffset = mode[index] == "Pandora" and 181 or 21
+ local delayOffset = mode[index] == "Pandora" and 43 or 21
 
  gui.box(1, 12, 164, 86, "#0000007F", "#0000007F")
  gui.text(2, 13, string.format("Next Initial Seed: %08X", buildSeedFromDelay(delay + delayOffset, true)))
@@ -677,7 +740,7 @@ function getRngInfoInput()
 end
 
 function getTrainerIDs()
- local trainerIDsAddr = read32Bit(trainerIDsPointerAddr) + 0x84
+ local trainerIDsAddr = read32Bit(trainerIDsPointerAddr) + 0x288
  local trainerIDs = read32Bit(trainerIDsAddr)
  local TID = band(trainerIDs, 0xFFFF)
  local SID = rshift(trainerIDs, 16)
@@ -912,8 +975,8 @@ function showInfo(pidAddr)
 end
 
 function showPartyEggInfo(pidAddr)
- local partyAddr = pidAddr + 0xD088
- local partySlotsCounterAddr = pidAddr + 0xD084
+ local partyAddr = pidAddr + 0xD2AC
+ local partySlotsCounterAddr = pidAddr + 0xD2A8
  local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
  local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0xEC)
 
@@ -929,10 +992,10 @@ function getRoamerSlotInput()
 
  if (key["3"] or key["numpad3"]) and (not prevKeyRoamerSlot["3"] and not prevKeyRoamerSlot["numpad3"]) then
   leftRoamerSlotArrowColor = "orange"
-  roamerSlotIndex = roamerSlotIndex - 1 < 0 and 2 or roamerSlotIndex - 1
+  roamerSlotIndex = roamerSlotIndex - 1 < 0 and 1 or roamerSlotIndex - 1
  elseif (key["4"] or key["numpad4"]) and (not prevKeyRoamerSlot["4"] and not prevKeyRoamerSlot["numpad4"]) then
   rightRoamerSlotArrowColor = "orange"
-  roamerSlotIndex = roamerSlotIndex + 1 > 2 and 0 or roamerSlotIndex + 1
+  roamerSlotIndex = roamerSlotIndex + 1 > 1 and 0 or roamerSlotIndex + 1
  end
 
  prevKeyRoamerSlot = key
@@ -960,7 +1023,7 @@ function getRoamerInfo(roamerAddr)
   local roamerStatus = statusConditionNamesList[1]  -- No altered status condition by default
   local roamerNatureIndex = (roamerPID % 25) + 1
 
-  local playerMapIndexAddr = read32Bit(trainerIDsPointerAddr) + 0x1244
+  local playerMapIndexAddr = read32Bit(trainerIDsPointerAddr) + 0x144C
   local playerMapIndex = read16Bit(playerMapIndexAddr)
 
   if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then  -- Check altered status condition
@@ -1030,39 +1093,39 @@ function getInfoInput()
 end
 
 function showPokemonInfo(pidAddr)
- local partyAddr = pidAddr + 0xD088
- local boxAddr = pidAddr + 0x1C6F0
- local currBoxIndexAddr = pidAddr + 0x51007 + koreanOffset
+ local partyAddr = pidAddr + 0xD2AC
+ local boxAddr = pidAddr + 0x19318
+ local currBoxIndexAddr = pidAddr + 0x19314
  local currBoxIndex = read8Bit(currBoxIndexAddr)
 
  if infoMode[infoIndex] == "Gift" then
-  local partySlotsCounterAddr = pidAddr + 0xD084
+  local partySlotsCounterAddr = pidAddr + 0xD2A8
   local partySlotsCounter = read8Bit(partySlotsCounterAddr) - 1
   local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0xEC)
 
   showInfo(lastPartySlotAddr)
  elseif infoMode[infoIndex] == "Party" then
-  local partySelectedSlotIndexAddr = pidAddr + 0x51CC1 + koreanOffset
+  local partySelectedSlotIndexAddr = pidAddr + 0x50511 + koreanOffset
   local partySelectedSlotIndex = read8Bit(partySelectedSlotIndexAddr)
   local partySelectedPokemonAddr = partyAddr + (partySelectedSlotIndex * 0xEC)
 
   showInfo(partySelectedPokemonAddr)
  elseif infoMode[infoIndex] == "Party Stats" then
-  local partyStatsSelectedSlotIndexAddr = pidAddr + 0x37CE8 + koreanOffset
+  local partyStatsSelectedSlotIndexAddr = pidAddr + 0x3672C + koreanOffset
   local partyStatsSelectedSlotIndex = read8Bit(partyStatsSelectedSlotIndexAddr)
   local pokemonPartyStatsAddr = partyAddr + (partyStatsSelectedSlotIndex * 0xEC)
 
   showInfo(pokemonPartyStatsAddr)
  elseif infoMode[infoIndex] == "Box" then
-  local boxSelectedSlotIndexAddr = pidAddr + boxSelectedSlotIndexOffset + koreanOffset
+  local boxSelectedSlotIndexAddr = pidAddr + 0x4F9FB + koreanOffset
   local boxSelectedSlotIndex = read8Bit(boxSelectedSlotIndexAddr)
-  local boxSelectedPokemonAddr = boxAddr + (0x88 * boxSelectedSlotIndex) + ((0x1000 * currBoxIndex))
+  local boxSelectedPokemonAddr = boxAddr + (0x88 * boxSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
 
   showInfo(boxSelectedPokemonAddr)
  elseif infoMode[infoIndex] == "Box Stats" then
-  local boxStatsSelectedSlotIndexAddr = pidAddr + 0x51054 + koreanOffset
+  local boxStatsSelectedSlotIndexAddr = pidAddr + 0x4FB2C + koreanOffset
   local boxStatsSelectedSlotIndex = read8Bit(boxStatsSelectedSlotIndexAddr)
-  local pokemonBoxStatsAddr = boxAddr + (0x88 * boxStatsSelectedSlotIndex) + ((0x1000 * currBoxIndex))
+  local pokemonBoxStatsAddr = boxAddr + (0x88 * boxStatsSelectedSlotIndex) + ((0xFF0 * currBoxIndex))
 
   showInfo(pokemonBoxStatsAddr)
  end
@@ -1198,12 +1261,12 @@ function main()
   end
 
   if mode[index] == "Capture" then
-   local enemyAddr = pidAddr + 0x5C048 + koreanOffset
+   local enemyAddr = pidAddr + 0x59D88 + koreanOffset
    showInfo(enemyAddr + (0xEC * getSlotInput()))
   elseif mode[index] == "Breeding" then
    showPartyEggInfo(pidAddr)
   elseif mode[index] == "Roamer" then
-   local roamerAddr = pidAddr + 0x138A4
+   local roamerAddr = pidAddr + 0x145B4
    showRoamerInfo(roamerAddr + (0x14 * getRoamerSlotInput()))
   elseif mode[index] == "Pokemon Info" then
    getInfoInput()
