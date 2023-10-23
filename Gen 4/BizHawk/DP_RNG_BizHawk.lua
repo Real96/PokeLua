@@ -631,7 +631,7 @@ function LCRNGDistance(state0, state1)
  return dist > 999 and dist - 0x100000000 or dist
 end
 
-local lastCurrentSeedBeforeBattle, battleStartJump, advances = nil, false, 0
+local lastCurrentSeedBeforeBattle, battleStartJumpFlag, advances = nil, false, 0
 
 function getRngInfo()
  local mtSeed = read32Bit(mtSeedAddr)
@@ -650,15 +650,15 @@ function getRngInfo()
  elseif current == buildSeedFromDelay(delay) then  -- Check when initial battle seed is set on current seed address
   local lastCurrentSeedBeforeBattleAddr = read32Bit(currentSeedAddr - 0x4) + 0x15E4
   lastCurrentSeedBeforeBattle = read32Bit(lastCurrentSeedBeforeBattleAddr)
-  battleStartJump = true
+  battleStartJumpFlag = true
  elseif tempCurrentSeed == read32Bit(tempCurrentSeedDuringBattleAddr) and tempCurrentSeed ~= 0 then  -- Check when current seed is set on battle temp current seed address
   lastCurrentSeedBeforeBattle = tempCurrentSeed
-  battleStartJump = true
+  battleStartJumpFlag = true
  elseif current == lastCurrentSeedBeforeBattle then  -- Check when battle ends
-  battleStartJump = false
+  battleStartJumpFlag = false
  end
 
- if not battleStartJump then  -- Calculate prng jumps only when not in battle
+ if not battleStartJumpFlag then  -- Calculate prng jumps only when not in battle
   advances = mtSeed == current and 0 or advances + LCRNGDistance(tempCurrentSeed, current)
  end
 
@@ -672,7 +672,7 @@ function getRngInfo()
  userdata.set("advances", advances)
  userdata.set("mtCounter", mtCounter)
  userdata.set("lastCurrentSeedBeforeBattle", lastCurrentSeedBeforeBattle)
- userdata.set("battleStartJump", battleStartJump)
+ userdata.set("battleStartJumpFlag", battleStartJumpFlag)
 
  return current, mtAdvances, delay
 end
@@ -1145,7 +1145,7 @@ function setSaveStateValues()
  hitDelay = userdata.get("hitDelay")
  hitDate = userdata.get("hitDate")
  lastCurrentSeedBeforeBattle = userdata.get("lastCurrentSeedBeforeBattle")
- battleStartJump = userdata.get("battleStartJump")
+ battleStartJumpFlag = userdata.get("battleStartJumpFlag")
  prevMTSeed = read32Bit(mtSeedAddr)
 
  if prevInitialSeed ~= initialSeed then

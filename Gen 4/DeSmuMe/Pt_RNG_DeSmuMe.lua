@@ -584,7 +584,7 @@ function buildSeedFromDelay(delay)
  return ((ab * 0x1000000) + (cd * 0x10000) + efgh) % 0x100000000
 end
 
-local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate, battleStartJump = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00", false
+local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate, battleStartJumpFlag = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00", false
 
 function setInitialSeed(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay ~= 0 then
@@ -610,7 +610,7 @@ function setInitialSeed(mtSeed, delay)
   mtCounter = 0
   hitDelay = 0
   hitDate = "2000/01/01\n00:00:00"
-  battleStartJump = false
+  battleStartJumpFlag = false
  end
 end
 
@@ -665,12 +665,12 @@ function getRngInfo()
   prevMTSeed = mtSeed
  elseif tempCurrentSeed == read32Bit(tempCurrentSeedDuringBattleAddr) and tempCurrentSeed ~= 0 then  -- Check when current seed is set on battle temp current seed address
   lastCurrentSeedBeforeBattle = tempCurrentSeed
-  battleStartJump = true
+  battleStartJumpFlag = true
  elseif current == lastCurrentSeedBeforeBattle then  -- Check when battle ends
-  battleStartJump = false
+  battleStartJumpFlag = false
  end
 
- if not battleStartJump then  -- Calculate prng jumps only when not in battle
+ if not battleStartJumpFlag then  -- Calculate prng jumps only when not in battle
   advances = mtSeed == current and 0 or advances + LCRNGDistance(tempCurrentSeed, current)
  end
 
@@ -1150,7 +1150,7 @@ function createStateFile(statesFileName, stateSlot)
   for slotNumber = 1, 10 do
    if slotNumber == stateSlot then  -- Write only in the line of the saved slot
     statesFile:write(string.format("%08X %08X %d %d %d %s %08X %s\n", initialSeed, tempCurrentSeed, advances, mtCounter,
-                                   hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJump)))
+                                   hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJumpFlag)))
    else  -- Fill with empty data the lines of not saved state
     statesFile:write("00000000 00000000 0 0 0 2000/01/01 00:00:00 00000000 false\n")
    end
@@ -1169,7 +1169,7 @@ function writeStateFile(statesFileName, stateSlot)
  for line in statesFile:lines() do
   if line_num == stateSlot then  -- Overwrite only the line of the saved slot
    line = string.format("%08X %08X %d %d %d %s %08X %s", initialSeed, tempCurrentSeed, advances, mtCounter,
-                        hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJump))
+                        hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJumpFlag))
   end
 
   lines = lines..line.."\n"
@@ -1222,7 +1222,7 @@ function setSaveStateValues(statesFileName, stateSlot)
   hitDelay = tonumber(values[5])
   hitDate = string.format("%s\n%s", values[6], values[7])
   lastCurrentSeedBeforeBattle = tonumber(values[8], 16)
-  battleStartJump = values[9] ~= "false"
+  battleStartJumpFlag = values[9] ~= "false"
   prevMTSeed = read32Bit(mtSeedAddr)
 
   if prevInitialSeed ~= initialSeed and initialSeed ~= 0 then
