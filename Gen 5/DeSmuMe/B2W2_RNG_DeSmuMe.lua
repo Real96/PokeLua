@@ -753,7 +753,7 @@ function shinyCheck(PID, trainerTID, trainerSID)
  local shinyTypeValue = bxor(bxor(trainerTID, trainerSID), bxor(lowPID, highPID))
 
  if shinyTypeValue < 8 then
-  return "limegreen", shinyTypeValue == 0 and " (Square)" or " (Star)"
+  return "green", shinyTypeValue == 0 and " (Square)" or " (Star)"
  end
 
  return nil, ""
@@ -785,7 +785,7 @@ end
 
 function getIVColor(value)
  if value >= 30 then
-  return "limegreen"
+  return "green"
  elseif value >= 1 and value <= 5 then
   return "orange"
  elseif value < 1 then
