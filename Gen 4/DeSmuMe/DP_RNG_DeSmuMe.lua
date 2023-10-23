@@ -570,7 +570,7 @@ function buildSeedFromDelay(delay)
  return ((ab * 0x1000000) + (cd * 0x10000) + efgh) % 0x100000000
 end
 
-local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00"
+local prevMTSeed, initialSeed, tempCurrentSeed, mtCounter, hitDelay , hitDate, battleStartJump = 0, 0, 0, 0, 0, "2000/01/01\n00:00:00", false
 
 function setInitialSeed(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay ~= 0 then
@@ -596,6 +596,7 @@ function setInitialSeed(mtSeed, delay)
   mtCounter = 0
   hitDelay = 0
   hitDate = "2000/01/01\n00:00:00"
+  battleStartJump = false
  end
 end
 
@@ -632,7 +633,7 @@ function LCRNGDistance(state0, state1)
  return dist > 999 and dist - 0x100000000 or dist
 end
 
-local lastCurrentSeedBeforeBattle, battleStartJump, advances = 0, false, 0
+local lastCurrentSeedBeforeBattle, advances = 0, 0
 
 function getRngInfo()
  local mtSeed = read32Bit(mtSeedAddr)
@@ -1132,15 +1133,16 @@ function showPokemonInfo(pidAddr)
 end
 
 function createStateFile(statesFileName, stateSlot)
+ os.execute("mkdir states")
  local statesFile = io.open(statesFileName, "w")
 
  if statesFile then  -- Check if the state file has been created correctly
   for slotNumber = 1, 10 do
    if slotNumber == stateSlot then  -- Write only in the line of the saved slot
-    statesFile:write(string.format("%08X %08X %d %d %d %s %08X\n", initialSeed, tempCurrentSeed, advances, mtCounter,
-                                   hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle))
+    statesFile:write(string.format("%08X %08X %d %d %d %s %08X %s\n", initialSeed, tempCurrentSeed, advances, mtCounter,
+                                   hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJump)))
    else  -- Fill with empty data the lines of not saved state
-    statesFile:write("00000000 00000000 0 0 0 2000/01/01 00:00:00 00000000\n")
+    statesFile:write("00000000 00000000 0 0 0 2000/01/01 00:00:00 00000000 false\n")
    end
   end
 
@@ -1156,8 +1158,8 @@ function writeStateFile(statesFileName, stateSlot)
 
  for line in statesFile:lines() do
   if line_num == stateSlot then  -- Overwrite only the line of the saved slot
-   line = string.format("%08X %08X %d %d %d %s %08X", initialSeed, tempCurrentSeed, advances, mtCounter,
-                        hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle)
+   line = string.format("%08X %08X %d %d %d %s %08X %s", initialSeed, tempCurrentSeed, advances, mtCounter,
+                        hitDelay, (hitDate:gsub("\n", " ")), lastCurrentSeedBeforeBattle, tostring(battleStartJump))
   end
 
   lines = lines..line.."\n"
@@ -1210,6 +1212,7 @@ function setSaveStateValues(statesFileName, stateSlot)
   hitDelay = tonumber(values[5])
   hitDate = string.format("%s\n%s", values[6], values[7])
   lastCurrentSeedBeforeBattle = tonumber(values[8], 16)
+  battleStartJump = values[9] ~= "false"
   prevMTSeed = read32Bit(mtSeedAddr)
 
   if prevInitialSeed ~= initialSeed and initialSeed ~= 0 then
@@ -1228,7 +1231,7 @@ function getSaveStateInput()
 
  for slotNumber = 1, table.getn(Fbuttons) do
   if (key[Fbuttons[slotNumber]] and not prevStateKey[Fbuttons[slotNumber]]) then
-   local statesFileName = string.format("%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
+   local statesFileName = string.format("states/%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
 
    if (key["shift"]) then  -- Check if a save state is being created
     writeSaveStateValues(statesFileName, slotNumber)
