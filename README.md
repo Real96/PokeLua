@@ -10,6 +10,12 @@ Lua scripts useful for RNG abusing in Pokémon games
 * TID Bot
 * Party Pokemon Info checking
 
+## Gen 2 - _soon_
+### GS/C
+
+## Gen 3 - _soon_
+### RS/FRLG/E
+
 ## Gen 4
 ### DP/Pt/HGSS
 * Rng info checking
