@@ -637,17 +637,26 @@ function getTabInput()
  drawArrowRight(159, 2, rightArrowColor)
 end
 
-local initialSeedFlag, prevMTSeed, initialSeedHigh, initialSeedLow, tempCurrentSeedLow = false, 0, 0, 0, 0
+local initialSeedFlag, prevMTSeed, initialSeedHigh, initialSeedLow, tempCurrentSeedLow, mtCounter = false, 0, 0, 0, 0, 0
 
-function checkInitialSeedGeneration(mtSeed, currentHigh, currentLow)
+function checkInitialSeedGeneration(mtSeed, currentHigh, currentLow, delay)
  if currentLow ~= 0 and not initialSeedFlag then  -- Set the initial seed when the LCRNG current seed address is initialized in RAM
   initialSeedFlag = true
   prevMTSeed = mtSeed
   initialSeedHigh = currentHigh
   initialSeedLow = currentLow
   tempCurrentSeedLow = currentLow
-  print()
   print(string.format("Initial Seed: %08X%08X", initialSeedHigh, initialSeedLow))
+ elseif delay == 0 then
+   initialSeedFlag = false
+   prevMTSeed = 0
+   initialSeedHigh = 0
+   initialSeedLow = 0
+   tempCurrentSeedLow = 0
+   mtCounter = 0
+   cgearSeed = 0
+   hitDelay = 0
+   hitDate = "2000/01/01\n00:00:00"
  end
 end
 
@@ -739,7 +748,7 @@ function convertToString(seed)
  return string.format("%08X", seed)
 end
 
-local cgearSeed, mtCounter, hitDelay , hitDate = 0, 0, 0, "2000/01/01\n00:00:00"
+local cgearSeed, hitDelay , hitDate = 0, 0, "2000/01/01\n00:00:00"
 
 function handleMTAdvances(mtSeed, delay)
  if prevMTSeed ~= mtSeed and delay > 200 then  -- Check when the value of the MT seed changes in RAM
@@ -803,7 +812,7 @@ function getRngInfo()
  local mtIndex = read32Bit(mtIndexAddr)
  local delay = read32Bit(0x02FFFC3C)
 
- checkInitialSeedGeneration(mtSeed, currentHigh, currentLow)
+ checkInitialSeedGeneration(mtSeed, currentHigh, currentLow, delay)
  handleMTAdvances(mtSeed, delay)
 
  advances = mtSeed == currentHigh and 0 or advances + LCRNGDistance(tempCurrentSeedLow, currentLow)
