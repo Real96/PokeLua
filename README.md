@@ -38,8 +38,8 @@ Lua scripts useful for RNG abusing in Pokémon games
 * Box Pokemon info checking
 
 ## Notes for DeSmuMe scripts
-* Press the button `Restart` in the lua window to restart the game
-* Pause the game every time you have to save or load a state and hold `Shift` + `F(n)`/`F(n)` (ex. `Shift` + `F1` to save a state in slot 1) for some seconds, until you see the message `Saved State (n)`/`Loaded State (n)` appearing on the screen for less than a second
+* Press the button `Restart` in the lua window everytime you need to restart the game
+* Pause the game every time you need to save or load a state and hold `Shift` + `F(n)`/`F(n)` (ex. `Shift` + `F1` to save a state in slot 1) for some seconds, until you see the message `Saved State (n)`/`Loaded State (n)` appearing on the screen for less than a second
 
 
 ## Credits:
