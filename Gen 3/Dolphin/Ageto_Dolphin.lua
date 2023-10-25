@@ -24,16 +24,22 @@ local HPTypeNamesList = {
  "Fire", "Water", "Grass", "Electric",
  "Psychic", "Ice", "Dragon", "Dark"}
 
-local initialSeed, prevInitialSeed, initalSeedSetFlag, tempCurrentSeed, advances
+ local initialSeed, tempCurrentSeed, advances
 
 function setInitialSeed(seed)
+ initialSeed = seed
+ tempCurrentSeed = initialSeed
+ advances = 0
+end
+
+local prevInitialSeed, initalSeedSetFlag
+
+function getInitialSeeding(seed)
  if initialSeed == 0 and prevInitialSeed ~= seed then
   initalSeedSetFlag = initalSeedSetFlag + 1
 
   if initalSeedSetFlag == 2 then
-   initialSeed = seed
-   tempCurrentSeed = initialSeed
-   advances = 0
+    setInitialSeed(seed)
   end
 
   prevInitialSeed = seed
@@ -138,7 +144,7 @@ end
 
 function onScriptUpdate()
  local currentSeed = read32Bit(0x477098)
- setInitialSeed(currentSeed)
+ getInitialSeeding(currentSeed)
  advances = advances + LCRNGDistance(tempCurrentSeed, currentSeed)
  local celebiInfo = getCelebiInfo(currentSeed)
 
