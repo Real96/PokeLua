@@ -71,15 +71,6 @@ function getIVs(seed)
  return ivs
 end
 
-function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
- local hpType = ((hpIV % 2) + 2 * (atkIV % 2) + 4 * (defIV % 2) + 8 * (spdIV % 2) + 16 * (spAtkIV % 2)
-                + 32 * (spDefIV % 2)) * 15 // 63
- local hpPower = 30 + (((hpIV >> 1) % 2) + 2 * ((atkIV >> 1) % 2) + 4 * ((defIV >> 1) % 2) + 8 * ((spdIV >> 1) % 2)
-                 + 16 * ((spAtkIV >> 1) % 2) + 32 * ((spDefIV >> 1) % 2)) * 40 // 63
-
- return string.format("HPower: %s %02d", HPTypeNamesList[hpType + 1], hpPower)
-end
-
 function shinyCheck(highPID, lowPID, trainerID, trainerSID)
  local shinyTypeValue = trainerID ~ trainerSID ~ highPID ~ lowPID
 
@@ -88,6 +79,15 @@ function shinyCheck(highPID, lowPID, trainerID, trainerSID)
  end
 
  return ""
+end
+
+function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
+ local hpType = ((hpIV % 2) + 2 * (atkIV % 2) + 4 * (defIV % 2) + 8 * (spdIV % 2) + 16 * (spAtkIV % 2)
+                + 32 * (spDefIV % 2)) * 15 // 63
+ local hpPower = 30 + (((hpIV >> 1) % 2) + 2 * ((atkIV >> 1) % 2) + 4 * ((defIV >> 1) % 2) + 8 * ((spdIV >> 1) % 2)
+                 + 16 * ((spAtkIV >> 1) % 2) + 32 * ((spDefIV >> 1) % 2)) * 40 // 63
+
+ return string.format("HPower: %s %02d", HPTypeNamesList[hpType + 1], hpPower)
 end
 
 function getJirachiInfo(seed)
@@ -103,10 +103,10 @@ function getJirachiInfo(seed)
   pokemonHighPID = pokemonHighPID ~ 0x8000
  end
 
+ local ivs = getIVs(seed)
  local pokemonPID = (pokemonHighPID << 16) + pokemonLowPID
  local shinyType = shinyCheck(pokemonHighPID, pokemonLowPID, OTID, OTSID)
  local natureIndex = pokemonPID % 25
- local ivs = getIVs(seed)
  local info = string.format("PID: %08X %s\nNature: %s\nIVs: %s", pokemonPID, shinyType, natureNamesList[natureIndex + 1], table.concat(ivs, "/"))
  local hpTypeAndPower = getHPTypeAndPower(ivs[1], ivs[2], ivs[3], ivs[4], ivs[5], ivs[6])
  info = info.."\n"..hpTypeAndPower
@@ -114,7 +114,7 @@ function getJirachiInfo(seed)
  return info
 end
 
-local initialSeed, advances
+local currentSeedAddr, initialSeed, advances
 
 function onScriptStart()
  local gameLang = read8Bit(0x3)
