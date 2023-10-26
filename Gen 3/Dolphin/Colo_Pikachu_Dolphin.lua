@@ -97,7 +97,7 @@ function getPID(seed)
  local trainerID = 31121
  local trainerSID = 0
 
- repeat
+ repeat  -- Shiny lock reroll
   seed = LCRNG(seed, 0x343FD, 0x269EC3)
   highPID = seed >> 16
   seed = LCRNG(seed, 0x343FD, 0x269EC3)
@@ -116,7 +116,7 @@ function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
  return string.format("HPower: %s %02d", HPTypeNamesList[hpType + 1], hpPower)
 end
 
-function getCelebiInfo(seed)
+function getPikachuInfo(seed)
  seed = LCRNG(seed, 0xA9FC6809, 0x1E278E7A)  -- 2 cycles
  seed = LCRNG(seed, 0x343FD, 0x269EC3)
  local iv1 = seed >> 16
@@ -146,10 +146,10 @@ function onScriptUpdate()
  local currentSeed = read32Bit(0x477098)
  getInitialSeeding(currentSeed)
  advances = advances + LCRNGDistance(tempCurrentSeed, currentSeed)
- local celebiInfo = getCelebiInfo(currentSeed)
+ local pikachuInfo = getPikachuInfo(currentSeed)
 
- text = string.format("Visual Advances: %d\n\nInitial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nCelebi Info:\n%s",
-                      GetFrameCount(), initialSeed, currentSeed, advances, celebiInfo)
+ text = string.format("Visual Advances: %d\n\nInitial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nPikachu Info:\n%s",
+                      GetFrameCount(), initialSeed, currentSeed, advances, pikachuInfo)
  SetScreenText(text)
 end
 

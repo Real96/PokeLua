@@ -97,7 +97,7 @@ function getPID(seed)
  local trainerID = 31121
  local trainerSID = 0
 
- repeat
+ repeat  -- Shiny lock reroll
   seed = LCRNG(seed, 0x343FD, 0x269EC3)
   highPID = seed >> 16
   seed = LCRNG(seed, 0x343FD, 0x269EC3)
