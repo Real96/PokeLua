@@ -524,7 +524,7 @@ function setBackgroundBoxes()  -- Set transparent black boxes
   gui.box(1, -191, 156, -59, "#0000007F", "#0000007F")
  end
 
- gui.box(1, 0, 164, 11, "#0000007F", "#0000007F")
+ gui.box(1, 55, 164, 66, "#0000007F", "#0000007F")
 
  if mode[index] ~= "None" then
   gui.box(151, 180, 254, 190, "#0000007F", "#0000007F")
@@ -573,10 +573,10 @@ function getTabInput()
  end
 
  prevKey = key
- gui.text(2, 2, "Mode: "..mode[index])
- drawArrowLeft(113, 2, leftArrowColor)
- gui.text(121, 2, "1 - 2")
- drawArrowRight(159, 2, rightArrowColor)
+ gui.text(2, 57, "Mode: "..mode[index])
+ drawArrowLeft(113, 57, leftArrowColor)
+ gui.text(121, 57, "1 - 2")
+ drawArrowRight(159, 57, rightArrowColor)
 end
 
 local initialSeedFlag, prevMTSeed, initialSeedHigh, initialSeedLow, tempCurrentSeedLow, mtCounter = false, 0, 0, 0, 0, 0
@@ -671,11 +671,11 @@ function showRngInfo()
  local currentSeedHigh, currentSeedLow, mtAdvances = getRngInfo()
 
  if showRngInfoText and mode[index] ~= "None" then
-  gui.box(1, -46, 182, -2, "#0000007F", "#0000007F")
-  gui.text(2, -44, string.format("Initial Seed: %08X%08X", initialSeedHigh, initialSeedLow))
-  gui.text(2, -33, string.format("Current Seed: %08X%08X", currentSeedHigh, currentSeedLow))
-  gui.text(2, -22, string.format("LCRNG Advances: %d", advances))
-  gui.text(2, -11, string.format("MT Advances: %d", mtAdvances))
+  gui.box(1, 0, 182, 44, "#0000007F", "#0000007F")
+  gui.text(2, 2, string.format("Initial Seed: %08X%08X", initialSeedHigh, initialSeedLow))
+  gui.text(2, 13, string.format("Current Seed: %08X%08X", currentSeedHigh, currentSeedLow))
+  gui.text(2, 24, string.format("LCRNG Advances: %d", advances))
+  gui.text(2, 35, string.format("MT Advances: %d", mtAdvances))
 
   showDateTime()
  end
@@ -956,11 +956,11 @@ function getInfoInput()
  end
 
  prevKeyInfo = key
- gui.box(1, 12, 164, 33, "#0000007F", "#0000007F")
- gui.text(2, 13, "Info Mode: "..infoMode[infoIndex])
- drawArrowLeft(2, 24, leftInfoArrowColor)
- gui.text(10, 24, "3 - 4")
- drawArrowRight(48, 24, rightInfoArrowColor)
+ gui.box(1, 67, 164, 88, "#0000007F", "#0000007F")
+ gui.text(2, 68, "Info Mode: "..infoMode[infoIndex])
+ drawArrowLeft(2, 79, leftInfoArrowColor)
+ gui.text(10, 79, "3 - 4")
+ drawArrowRight(48, 79, rightInfoArrowColor)
 end
 
 function showPokemonInfo()
@@ -1003,7 +1003,7 @@ function createStateFile(statesFileName, stateSlot)
   end
 
   statesFile:close()
-  gui.text(2, 112, string.format("Saved state on slot %s", stateSlot))
+  gui.text(2, 156, string.format("Saved state on slot %s", stateSlot))
  end
 end
 
@@ -1025,7 +1025,7 @@ function writeStateFile(statesFileName, stateSlot)
  statesFile = io.open(statesFileName, "w")
  statesFile:write(lines)
  statesFile:close()
- gui.text(2, 112, string.format("Saved state on slot %s", stateSlot))
+ gui.text(2, 156, string.format("Saved state on slot %s", stateSlot))
 end
 
 function writeSaveStateValues(statesFileName, stateSlot)
@@ -1071,7 +1071,7 @@ function setSaveStateValues(statesFileName, stateSlot)
    print(string.format("Initial Seed: %08X%08X", initialSeedHigh, initialSeedLow))
   end
 
-  gui.text(2, 112, string.format("Loaded State %s", stateSlot))
+  gui.text(2, 156, string.format("Loaded State %s", stateSlot))
  end
 end
 
