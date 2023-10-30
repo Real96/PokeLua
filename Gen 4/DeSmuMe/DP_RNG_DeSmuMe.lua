@@ -1050,8 +1050,8 @@ function getRoamerInfo(roamerAddr)
 end
 
 function showRoamerInfo(roamerAddr)
- local isRoamerActive, roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerNatureIndex,
-       roamerIVsValue, roamerLevel, roamerHP, roamerStatus, roamerMapIndex, playerMapIndex = getRoamerInfo(roamerAddr)
+ local isRoamerActive, roamerMapIndex, roamerIVsValue, roamerPID, roamerShinyTypeTextColor, roamerShinyType,
+       roamerSpeciesIndex, roamerHP, roamerLevel, roamerStatus, roamerNatureIndex, playerMapIndex = getRoamerInfo(roamerAddr)
 
  if isRoamerActive then
   gui.text(2, -189, "Active Roamer? Yes")
