@@ -402,6 +402,8 @@ local locationNamesList = {"Black City", "Black City", "Black City", "Black City
 "Undella Town", "Undella Town", "Undella Town", "Undella Town", "Undella Town", "Anville Town", "Anville Town", "Anville Town", "Anville Town", "－－－－－－－－－－", "Route 17",
 "White Forest", "White Forest", "White Forest"}
 
+local statusConditionNamesList = {"None", "PAR", "SLP", "FRZ", "BRN", "PSN"}
+
 emu.reset()
 
 local gameCode = read32Bit(0x02FFFE0C)
@@ -579,7 +581,7 @@ function setBackgroundBoxes()  -- Set transparent black boxes
  if mode[index] == "Capture" or mode[index] == "Breeding" or mode[index] == "C-Gear" or mode[index] == "Pokemon Info" then
   gui.box(1, -191, 156, -59, "#0000007F", "#0000007F")
  elseif mode[index] == "Roamer" then
-  gui.box(1, -191, 156, -81, "#0000007F", "#0000007F")
+  gui.box(1, -191, 156, -72, "#0000007F", "#0000007F")
  end
 
  gui.box(1, 0, 164, 11, "#0000007F", "#0000007F")
@@ -1141,35 +1143,53 @@ function getRoamerInfo(roamerAddr)
 
  if isRoamerActive then
   local roamerMapIndex = read16Bit(roamerAddr)
+  local roamerNatureIndex = read8Bit(roamerAddr + 0x2) + 1
   local roamerIVsValue = read32Bit(roamerAddr + 0x4)
   local roamerPID = read32Bit(roamerAddr + 0x8)
   local roamerShinyTypeTextColor, roamerShinyType = shinyCheck(roamerPID)
   local roamerSpeciesIndex = read16Bit(roamerAddr + 0xC)
   local roamerHP = read16Bit(roamerAddr + 0xE)
   local roamerLevel = read8Bit(roamerAddr + 0x10)
+  local roamerStatusIndex = read8Bit(roamerAddr + 0x11)
+  local roamerStatus = statusConditionNamesList[1]  -- No altered status condition by default
   local playerMapIndex = read16Bit(playerMapIndexAddr)
 
-  return isRoamerActive, roamerPID, (roamerSpeciesIndex > 649 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex,
-         roamerShinyType, roamerShinyTypeTextColor, roamerIVsValue, roamerLevel, roamerHP, roamerMapIndex, playerMapIndex
+  if roamerStatusIndex == 0x1 then  -- Paralized status condition
+   roamerStatus = statusConditionNamesList[2]
+  elseif roamerStatusIndex == 0x2 then  -- Sleeping status condition
+   roamerStatus = statusConditionNamesList[3]
+  elseif roamerStatusIndex == 0x3 then  -- Freezed status condition
+   roamerStatus = statusConditionNamesList[4]
+  elseif roamerStatusIndex == 0x4 then  -- Burned status condition
+   roamerStatus = statusConditionNamesList[5]
+  elseif roamerStatusIndex == 0x5 then  -- Poisoned status condition
+   roamerStatus = statusConditionNamesList[6]
+  end
+
+  return isRoamerActive, roamerMapIndex, (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex, roamerIVsValue,
+         roamerPID, roamerShinyTypeTextColor, roamerShinyType, (roamerSpeciesIndex > 649 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex,
+         roamerHP, roamerLevel, roamerStatus, playerMapIndex
  end
 
  return nil
 end
 
 function showRoamerInfo(roamerAddr)
- local isRoamerActive, roamerPID, roamerSpeciesIndex, roamerShinyType, roamerShinyTypeTextColor, roamerIVsValue, roamerLevel,
-       roamerHP, roamerMapIndex, playerMapIndex = getRoamerInfo(roamerAddr)
+ local isRoamerActive, roamerMapIndex, roamerNatureIndex, roamerIVsValue, roamerPID, roamerShinyTypeTextColor,
+       roamerShinyType, roamerSpeciesIndex, roamerHP, roamerLevel, roamerStatus, playerMapIndex = getRoamerInfo(roamerAddr)
 
  if isRoamerActive then
   gui.text(2, -189, "Active Roamer? Yes")
   gui.text(2, -178, "Species: "..speciesNamesList[roamerSpeciesIndex])
   gui.text(2, -167, "PID:")
   gui.text(32, -167, string.format("%08X%s", roamerPID, roamerShinyType), roamerShinyTypeTextColor)
+  gui.text(2, -156, "Nature: "..natureNamesList[roamerNatureIndex])
   showIVsAndHP(roamerIVsValue)
   gui.text(2, -123, "Level: "..roamerLevel)
   gui.text(2, -112, "HP: "..roamerHP)
-  gui.text(2, -101, "Current position:")
-  gui.text(2, -90, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
+  gui.text(2, -101, "Status condition: "..roamerStatus)
+  gui.text(2, -90, "Current position:")
+  gui.text(2, -81, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
                     roamerMapIndex == playerMapIndex and "green" or nil)
  else
   gui.text(2, -189, "Active Roamer? No")
