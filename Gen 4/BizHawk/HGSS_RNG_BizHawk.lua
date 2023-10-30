@@ -964,27 +964,27 @@ function getRoamerInfo(roamerAddr)
   local roamerStatusIndex = read8Bit(roamerAddr + 0x11)
   local roamerStatus = statusConditionNamesList[1]  -- No altered status condition by default
   local roamerNatureIndex = (roamerPID % 25) + 1
-
   local playerMapIndexAddr = read32Bit(trainerIDsPointerAddr) + 0x1244
   local playerMapIndex = read16Bit(playerMapIndexAddr)
 
-  if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then  -- Check altered status condition
+  if roamerStatusIndex > 0 and roamerStatusIndex < 0x8 then  -- Sleeping status condition
    roamerStatus = statusConditionNamesList[2]
-  elseif roamerStatusIndex == 0x8 then
+  elseif roamerStatusIndex == 0x8 then  -- Poisoned status condition
    roamerStatus = statusConditionNamesList[3]
-  elseif roamerStatusIndex == 0x10 then
+  elseif roamerStatusIndex == 0x10 then  -- Burned status condition
    roamerStatus = statusConditionNamesList[4]
-  elseif roamerStatusIndex == 0x20 then
+  elseif roamerStatusIndex == 0x20 then  -- Freezed status condition
    roamerStatus = statusConditionNamesList[5]
-  elseif roamerStatusIndex == 0x40 then
+  elseif roamerStatusIndex == 0x40 then  -- Paralyzed status condition
    roamerStatus = statusConditionNamesList[6]
-  elseif roamerStatusIndex == 0x80 then
+  elseif roamerStatusIndex == 0x80 then  -- Badly poisoned status condition
    roamerStatus = statusConditionNamesList[7]
   end
 
-  return isRoamerActive, roamerPID, (roamerSpeciesIndex > 493 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerShinyType,
-         roamerShinyTypeTextColor, (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex, roamerIVsValue, roamerLevel, roamerHP,
-         roamerStatus, roamerMapIndex, playerMapIndex
+  return isRoamerActive, roamerMapIndex, roamerIVsValue, roamerPID, roamerShinyTypeTextColor, roamerShinyType,
+         (roamerSpeciesIndex > 493 or roamerSpeciesIndex < 1) and 1 or roamerSpeciesIndex, roamerHP, roamerLevel, 
+         roamerStatus, (roamerNatureIndex > 25 or roamerNatureIndex == nil) and 1 or roamerNatureIndex,
+         playerMapIndex
  end
 
  return nil
