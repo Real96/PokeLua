@@ -1083,7 +1083,7 @@ function getSaveStateInput()
 
  for slotNumber = 1, table.getn(Fbuttons) do
   if (key[Fbuttons[slotNumber]] and not prevStateKey[Fbuttons[slotNumber]]) then
-   local statesFileName = string.format("%s_%s_states_values.txt", gameVersion, gameLanguage)
+   local statesFileName = string.format("states/%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
 
    if (key["shift"]) then  -- Check if a save state is being created
     writeSaveStateValues(statesFileName, slotNumber)
