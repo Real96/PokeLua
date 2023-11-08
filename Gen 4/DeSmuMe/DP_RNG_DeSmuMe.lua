@@ -412,12 +412,16 @@ elseif gameVersionCode == 0x4B5049 then
  gameVersion = "HeartGold"
 end
 
+function getGameAddrOffset(offset)
+ return gameVersion == "Pearl" and offset or 0
+end
+
 local mtIndexAddr, pidPointerAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr, tempCurrentSeedDuringBattleAddr
 local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- mtIndexAddr = 0x02105CE8
+ mtIndexAddr = 0x02105CE8 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x021070EC
  delayAddr = 0x021C4A24
  currentSeedAddr = 0x021C4E88
@@ -426,7 +430,7 @@ if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
- mtIndexAddr = 0x02105BA8
+ mtIndexAddr = 0x02105BA8 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x02106FAC
  delayAddr = 0x021C48E4
  currentSeedAddr = 0x021C4D48
@@ -435,7 +439,7 @@ elseif gameLanguageCode == 0x45 then
  tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- mtIndexAddr = 0x02105D28
+ mtIndexAddr = 0x02105D28 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x0210712C
  delayAddr = 0x021C4A64
  currentSeedAddr = 0x021C4EC8
@@ -444,7 +448,7 @@ elseif gameLanguageCode == 0x46 then
  tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- mtIndexAddr = 0x02105C88
+ mtIndexAddr = 0x02105C88 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x0210708C
  delayAddr = 0x021C49C4
  currentSeedAddr = 0x021C4E28
@@ -453,7 +457,7 @@ elseif gameLanguageCode == 0x49 then
  tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- mtIndexAddr = 0x021075A4
+ mtIndexAddr = 0x021075A4 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x02108944
  delayAddr = 0x021C6284
  currentSeedAddr = 0x021C66E8
@@ -463,7 +467,7 @@ elseif gameLanguageCode == 0x4A then
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
  koreanOffset = 0x44
- mtIndexAddr = 0x021030A8
+ mtIndexAddr = 0x021030A8 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x021045AC
  delayAddr = 0x021C1EE4
  currentSeedAddr = 0x021C2348
@@ -472,7 +476,7 @@ elseif gameLanguageCode == 0x4B then
  tempCurrentSeedDuringBattleAddr = 0x027E363C
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- mtIndexAddr = 0x02105D48
+ mtIndexAddr = 0x02105D48 + getGameAddrOffset(0x8)
  pidPointerAddr = 0x0210714C
  delayAddr = 0x021C4A84
  currentSeedAddr = 0x021C4EE8
