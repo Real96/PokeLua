@@ -31,7 +31,7 @@ function LCRNG(s, mul, sum)
  return b % 0x100000000
 end
 
- local tempCurrentSeed
+local tempCurrentSeed
  
 function LCRNGDistance(state0, state1)
  local mask = 1
@@ -138,8 +138,8 @@ function onScriptUpdate()
  local currentSeed = read32Bit(currentSeedAddr)
  advances = advances + LCRNGDistance(tempCurrentSeed, currentSeed)
  local jirachiInfo = getJirachiInfo(currentSeed)
-
- text = string.format("Initial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nJirachi Info:\n%s", initialSeed, currentSeed, advances, jirachiInfo)
+ local text = string.format("Initial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nJirachi Info:\n%s",
+                            initialSeed, currentSeed, advances, jirachiInfo)
  SetScreenText(text)
 end
 

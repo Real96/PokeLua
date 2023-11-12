@@ -24,7 +24,7 @@ local HPTypeNamesList = {
  "Fire", "Water", "Grass", "Electric",
  "Psychic", "Ice", "Dragon", "Dark"}
 
- local initialSeed, tempCurrentSeed, advances
+local initialSeed, tempCurrentSeed, advances
 
 function setInitialSeed(seed)
  initialSeed = seed
@@ -147,9 +147,8 @@ function onScriptUpdate()
  getInitialSeeding(currentSeed)
  advances = advances + LCRNGDistance(tempCurrentSeed, currentSeed)
  local celebiInfo = getCelebiInfo(currentSeed)
-
- text = string.format("Visual Advances: %d\n\nInitial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nCelebi Info:\n%s",
-                      GetFrameCount(), initialSeed, currentSeed, advances, celebiInfo)
+ local text = string.format("Visual Advances: %d\n\nInitial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d\n\nCelebi Info:\n%s",
+                            GetFrameCount(), initialSeed, currentSeed, advances, celebiInfo)
  SetScreenText(text)
 end
 
