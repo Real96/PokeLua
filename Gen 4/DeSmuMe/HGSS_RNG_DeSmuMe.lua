@@ -325,6 +325,24 @@ local locationNamesList = {
 
 local statusConditionNamesList = {"None", "SLP", "PSN", "BRN", "FRZ", "PAR", "PSN"}
 
+local mapAttributeData = {
+ 0, 0, 2, 2, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0,
+ 3, 1, 3, 1, 1, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 2, 1, 0, 0, 0, 2, 1, 0, 0, 2, 1, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
 emu.reset()
 
 local gameCode = read32Bit(0x02FFFE0C)
@@ -346,7 +364,8 @@ elseif gameVersionCode == 0x4B5049 then
  gameVersion = "HeartGold"
 end
 
-local boxSelectedSlotIndexOffset, mtIndexAddr, pidPointerAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr, tempCurrentSeedDuringBattleAddr
+local boxSelectedSlotIndexOffset, mtIndexAddr, pidPointerAddr, radioSoundValueAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr,
+      getRadioSoundValueFunctionBaseAddr, getMarchSoundValueFunctionAddr, getLullabySoundValueFunctionAddr, tempCurrentSeedDuringBattleAddr
 local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
@@ -354,50 +373,70 @@ if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  boxSelectedSlotIndexOffset = 0x975F1
  mtIndexAddr = 0x0210F6AC
  pidPointerAddr = 0x0211184C
+ radioSoundValueAddr = 0x021D05C0
  delayAddr = 0x021D1118
  currentSeedAddr = 0x021D1588
  mtSeedAddr = 0x021D158C
  trainerIDsPointerAddr = 0x021D2208
+ getRadioSoundValueFunctionBaseAddr = 0x022522C0
+ getMarchSoundValueFunctionAddr = 0x022522F0
+ getLullabySoundValueFunctionAddr = 0x022522F4
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
  boxSelectedSlotIndexOffset = 0x97339
  mtIndexAddr = 0x0210F6CC
  pidPointerAddr = 0x0211186C
+ radioSoundValueAddr = 0x021D05E0
  delayAddr = 0x021D1138
  currentSeedAddr = 0x021D15A8
  mtSeedAddr = 0x021D15AC
  trainerIDsPointerAddr = 0x021D2228
+ getRadioSoundValueFunctionBaseAddr = 0x022522E0
+ getMarchSoundValueFunctionAddr = 0x02252310
+ getLullabySoundValueFunctionAddr = 0x02252314
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
  boxSelectedSlotIndexOffset = 0x97611
  mtIndexAddr = 0x0210F6EC
  pidPointerAddr = 0x0211188C
+ radioSoundValueAddr = 0x021D0600
  delayAddr = 0x021D1158
  currentSeedAddr = 0x021D15C8
  mtSeedAddr = 0x021D15CC
  trainerIDsPointerAddr = 0x021D2248
+ getRadioSoundValueFunctionBaseAddr = 0x02252300
+ getMarchSoundValueFunctionAddr = 0x02252330
+ getLullabySoundValueFunctionAddr = 0x02252334
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
  boxSelectedSlotIndexOffset = 0x975F1
  mtIndexAddr = 0x0210F66C
  pidPointerAddr = 0x0211180C
+ radioSoundValueAddr = 0x021D0580
  delayAddr = 0x021D10D8
  currentSeedAddr = 0x021D1548
  mtSeedAddr = 0x021D154C
  trainerIDsPointerAddr = 0x021D21C8
+ getRadioSoundValueFunctionBaseAddr = 0x02252280
+ getMarchSoundValueFunctionAddr = 0x022522B0
+ getLullabySoundValueFunctionAddr = 0x022522B4
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
  boxSelectedSlotIndexOffset = 0x975C1
  mtIndexAddr = 0x0210EC00
  pidPointerAddr = 0x02110DAC
+ radioSoundValueAddr = 0x021CFB18
  delayAddr = 0x021D0678
  currentSeedAddr = 0x021D0AE8
  mtSeedAddr = 0x021D0AEC
  trainerIDsPointerAddr = 0x021D1768
+ getRadioSoundValueFunctionBaseAddr = 0x02251694
+ getMarchSoundValueFunctionAddr = 0x022516C4
+ getLullabySoundValueFunctionAddr = 0x022516C8
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
@@ -405,20 +444,28 @@ elseif gameLanguageCode == 0x4B then
  boxSelectedSlotIndexOffset = 0x971B5
  mtIndexAddr = 0x021100AC
  pidPointerAddr = 0x0211226C
+ radioSoundValueAddr = 0x021D0FE0
  delayAddr = 0x021D1B38
  currentSeedAddr = 0x021D1FA8
  mtSeedAddr = 0x021D1FAC
  trainerIDsPointerAddr = 0x021D2C28
+ getRadioSoundValueFunctionBaseAddr = 0x02252CE0
+ getMarchSoundValueFunctionAddr = 0x02252D10
+ getLullabySoundValueFunctionAddr = 0x02252D14
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
  boxSelectedSlotIndexOffset = 0x9760D
  mtIndexAddr =  gameVersion == "HeartGold" and 0x0210F6EC or 0x0210F70C
  pidPointerAddr = gameVersion == "HeartGold" and 0x0211188C or 0x021118AC
+ radioSoundValueAddr = gameVersion == "HeartGold" and 0x021D0600 or 0x021D0620
  delayAddr = gameVersion == "HeartGold" and 0x021D1158 or 0x021D1178
  currentSeedAddr = gameVersion == "HeartGold" and 0x021D15C8 or 0x021D15E8
  mtSeedAddr = gameVersion == "HeartGold" and 0x021D15CC or 0x021D15EC
  trainerIDsPointerAddr = gameVersion == "HeartGold" and 0x021D2248 or 0x021D2268
+ getRadioSoundValueFunctionBaseAddr = gameVersion == "HeartGold" and 0x02252300 or 0x02252320
+ getMarchSoundValueFunctionAddr = gameVersion == "HeartGold" and 0x02252330 or 0x02252350
+ getLullabySoundValueFunctionAddr = gameVersion == "HeartGold" and 0x02252334 or 0x02252354
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 end
 
@@ -912,6 +959,228 @@ function showInfo(pidAddr)
  end
 end
 
+function getRunningSurfingMod(currentVehicleIndex)
+ local playerMovementStateAddr = read32Bit(pidPointerAddr) + 0x37888 + koreanOffset
+ local playerMovementState = read8Bit(playerMovementStateAddr) - 0x58
+ local isPlayerRunning = playerMovementState >= 0 and playerMovementState <= 0x3
+ local isPlayerSurfing = currentVehicleIndex == 0x2
+
+ return (isPlayerRunning or isPlayerSurfing) and 20 or 0
+end
+
+function getBikeMod(currentVehicleIndex)
+ local isPlayerOnBike = currentVehicleIndex == 0x1
+
+ return isPlayerOnBike and 50 or 0
+end
+
+function getHighGrassMod(matr)
+ local isPlayerOnLongGrass = matr == 0x3
+
+ return isPlayerOnLongGrass and 40 or 0
+end
+
+function getOppositeTurningMod()
+ local oppositeTurningModAddr = read32Bit(pidPointerAddr) + 0x31044 + koreanOffset
+ local oppositeTurningMod = read8Bit(oppositeTurningModAddr)
+
+ return oppositeTurningMod == 2 and 30 or
+        oppositeTurningMod == 3 and 40 or
+        oppositeTurningMod >= 4 and 60 or 0 
+end
+
+function getRadioSoundMod()
+ local radioSoundValueBase = 0x492
+ local radioSoundValue = read16Bit(radioSoundValueAddr)
+
+ if radioSoundValueBase < radioSoundValue then
+  if radioSoundValueBase + 0x8E == radioSoundValue then
+   return 25
+  elseif radioSoundValueBase + 0x8D == radioSoundValue then
+   return -25
+  end
+ elseif radioSoundValueBase > radioSoundValue and radioSoundValueBase - 0x44 >= radioSoundValue then
+  local mul = radioSoundValue - (radioSoundValueBase - 0x47)
+  local getRadioSoundValueFunctionAddress = (getRadioSoundValueFunctionBaseAddr + 0x2) + read8Bit(getRadioSoundValueFunctionBaseAddr + (mul * 2))
+
+  if getRadioSoundValueFunctionAddress == getMarchSoundValueFunctionAddr then
+   return 25
+  elseif getRadioSoundValueFunctionAddress == getLullabySoundValueFunctionAddr then
+   return -25
+  end
+ end
+
+ return 0
+end
+
+function setMovementRate(matr)
+ local rate = 20  -- Base wild encounter rate is 40
+ local playerCurrentVehicleIndexAddr = read32Bit(pidPointerAddr) + 0xE294
+ local playerCurrentVehicleIndex = read8Bit(playerCurrentVehicleIndexAddr)
+ rate = rate + getRunningSurfingMod(playerCurrentVehicleIndex)
+ rate = rate + getBikeMod(playerCurrentVehicleIndex)
+ rate = rate + getHighGrassMod(matr)
+ rate = rate + getOppositeTurningMod()
+ rate = rate + getRadioSoundMod()
+
+ return (rate < 1 or rate > 100) and 100 or rate  -- movement rate value can't be lower than 1 or higher than 100
+end
+
+function getTileRate(matr)
+ local isWaterArea = band(mapAttributeData[matr + 1], 0x1) ~= 0
+ local isCaveArea = matr == 0x8
+
+ return (isWaterArea or isCaveArea) and 10 or 25
+end
+
+function getLeadAbility(pidAddr)
+ local pokemonPID = read32Bit(pidAddr)
+ local checksum = read16Bit(pidAddr + 0x6)
+ local orderIndex = (rshift(band(pokemonPID, 0x3E000), 0xD) % 24) + 1
+
+ local growthOffset = getOffset("growth", orderIndex) * 32
+ local prng = checksum
+
+ for i = 1, getOffset("growth", orderIndex) do
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
+ end
+
+ prng = LCRNG(prng, 0x9B355305, 0xAFC58AC9)  -- 7 cycles
+ local abilityIndex = bxor(read16Bit(pidAddr + growthOffset + 0x14), rshift(prng, 16))
+
+ return getBits(abilityIndex, 8, 8)
+end
+
+function getAbilityEffectType(pidAddr)
+ local partyLeadAbility = getLeadAbility(pidAddr)
+
+ if partyLeadAbility == 0x23 or partyLeadAbility == 0x47 or partyLeadAbility == 0x63 then  -- Illuminate / Arena Trap / No Guard
+  return 2
+ elseif partyLeadAbility == 0x51 then  -- Snow Cloak
+  local weatherIndexAddr = read32Bit(pidPointerAddr) + 0xE28A
+  local weatherIndex = read8Bit(weatherIndexAddr)
+
+  if weatherIndex == 0x5 then  -- Snow Cloak effect is active only during the snowing
+   return 1
+  end
+ elseif partyLeadAbility == 0x1 or partyLeadAbility == 0x49 or partyLeadAbility == 0x5F then  -- Stench / White Smoke / Quick Feet
+  return 1
+ end
+
+ return 0
+end
+
+function getAbilityEffectMod(rate, pidAddr)
+ local partyLeadAbilityEffectType = getAbilityEffectType(pidAddr)
+
+ return partyLeadAbilityEffectType == 1 and floor(rate / 2) or partyLeadAbilityEffectType == 2 and rate * 2 or rate
+end
+
+function getActiveFluteType()
+ local fluteFlagsAddr = read32Bit(pidPointerAddr) + 0x138FB
+ local fluteActiveEffectFlag = read8Bit(fluteFlagsAddr)
+
+ return fluteActiveEffectFlag
+end
+
+function getFluteEffectMod(rate)
+ local activeFluteType = getActiveFluteType()
+ local isBlackFluteActive = activeFluteType == 1
+ local isWhiteFluteActive = activeFluteType == 2
+
+ return isBlackFluteActive and floor(rate / 2) or isWhiteFluteActive and rate + floor(rate / 2) or rate
+end
+
+function getLeadHeldItem(pidAddr)
+ local pokemonPID = read32Bit(pidAddr)
+ local checksum = read16Bit(pidAddr + 0x6)
+ local orderIndex = (rshift(band(pokemonPID, 0x3E000), 0xD) % 24) + 1
+
+ local growthOffset = getOffset("growth", orderIndex) * 32
+ local prng = checksum
+
+ for i = 1, getOffset("growth", orderIndex) do
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
+ end
+
+ prng = LCRNG(prng, 0xC2A29A69, 0xE97E7B6A)  -- 2 cycles
+ return bxor(read16Bit(pidAddr + growthOffset + 0xA), rshift(prng, 16))
+end
+
+function getTagOrIncenseEffectMod(rate, pidAddr)
+ local partyLeadHeldItem = getLeadHeldItem(pidAddr)
+ local isPartyLeadHoldingCleanseTag = partyLeadHeldItem == 0xE0
+ local isPartyLeadHoldingPureIncense = partyLeadHeldItem == 0x140
+
+ return (isPartyLeadHoldingCleanseTag or isPartyLeadHoldingPureIncense) and floor((rate * 2) / 3) or rate
+end
+
+function setEncounterRate(matr, pidAddr)
+ local partyAddr = pidAddr + 0xD088
+ local rate = getTileRate(matr)
+ rate = getAbilityEffectMod(rate, partyAddr)
+ rate = getFluteEffectMod(rate)
+ rate = getTagOrIncenseEffectMod(rate, partyAddr)
+
+ return rate
+end
+
+function coolDownEndCheck(steps, currentSteps)
+ return steps + currentSteps >= 3 and true or false
+end
+
+function getEncounterCheckValue(seed)
+ return rshift(seed, 16) % 0x64
+end
+
+function getEncounterMissingSteps(movement, encounter)
+ local currentCoolDownStepsAddr = read32Bit(pidPointerAddr) + 0x31046 + koreanOffset
+ local currentCoolDownSteps = read8Bit(currentCoolDownStepsAddr)
+ local wildEncounterSeed = read32Bit(currentSeedAddr)
+ local missingSteps, coolDownSteps = 0, 0
+
+ while not battleStartJumpFlag do
+  local isCoolDownEnded = true
+
+  if not coolDownEndCheck(coolDownSteps, currentCoolDownSteps) then
+   coolDownSteps = coolDownSteps + 1
+   isCoolDownEnded = false
+  end
+
+  if isCoolDownEnded then
+   wildEncounterSeed = LCRNG(wildEncounterSeed, 0x41C64E6D, 0x6073)
+   missingSteps = missingSteps + 1
+
+   if getEncounterCheckValue(wildEncounterSeed) < movement then
+    wildEncounterSeed = LCRNG(wildEncounterSeed, 0x41C64E6D, 0x6073)
+
+    if getEncounterCheckValue(wildEncounterSeed) < encounter then
+     break
+    end
+   end
+  end
+ end
+
+ return missingSteps + coolDownSteps, coolDownSteps
+end
+
+function showEncounterMissingSteps(pidAddr)
+ local mapAttributeAddr = read32Bit(pidPointerAddr) + 0x32E0C + koreanOffset
+ local mapAttribute = read8Bit(mapAttributeAddr)
+ local isEncounterArea = band(mapAttributeData[mapAttribute + 1], 0x2) ~= 0
+ local encounterMissingSteps, coolDownSteps = 0, 0
+
+ if isEncounterArea then
+  local movementRate = setMovementRate(mapAttribute)
+  local encounterRate = setEncounterRate(mapAttribute, pidAddr)
+  encounterMissingSteps, coolDownSteps = getEncounterMissingSteps(movementRate, encounterRate)
+ end
+
+ gui.box(1, -48, 176, -26, "#0000007F", "#0000007F")
+ gui.text(2, -46, ("Encounters cooldown? "..(coolDownSteps == 0 and "No" or "Yes")))
+ gui.text(2, -35, ("Steps for wild encounter: "..encounterMissingSteps))
+end
+
 function showPartyEggInfo(pidAddr)
  local partyAddr = pidAddr + 0xD088
  local partySlotsCounterAddr = pidAddr + 0xD084
@@ -1203,6 +1472,7 @@ function main()
   if mode[index] == "Capture" then
    local enemyAddr = pidAddr + 0x5C048 + koreanOffset
    showInfo(enemyAddr + (0xEC * getSlotInput()))
+   showEncounterMissingSteps(pidAddr)
   elseif mode[index] == "Breeding" then
    showPartyEggInfo(pidAddr)
   elseif mode[index] == "Roamer" then

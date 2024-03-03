@@ -386,6 +386,24 @@ local locationNamesList = {
 
 local statusConditionNamesList = {"None", "SLP", "PSN", "BRN", "FRZ", "PAR", "PSN"}
 
+local mapAttributeData = {
+ 0, 0, 2, 2, 0, 2, 2, 0, 2, 0, 0, 2, 0, 0, 0, 0,
+ 3, 3, 3, 1, 1, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+ 0, 0, 3, 0, 2, 2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 2, 1, 0, 0, 0, 2, 1, 0, 0, 2, 1, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
 client.reboot_core()
 
 local gameCode = read32Bit(0x02FFFE0C)
@@ -984,6 +1002,192 @@ function showInfo(pidAddr)
  end
 end
 
+function getHighGrassMod(matr)
+ local isPlayerOnLongGrass = matr == 0x3
+
+ return isPlayerOnLongGrass and 30 or 0
+end
+
+function getBikeMod()
+ local isPlayerOnBike = read8Bit(read32Bit(pidPointerAddr) + 0xE4DC) == 0x1
+
+ return isPlayerOnBike and 30 or 0
+end
+
+function setMovementRate(matr)
+ local rate = 40  -- Base wild encounter rate is 40
+ rate = rate + getHighGrassMod(matr)
+ rate = rate + getBikeMod()
+
+ return rate
+end
+
+function getTileRate(matr)
+ local isWaterArea = mapAttributeData[matr + 1] & 0x1 ~= 0
+ local isCaveArea = matr == 0x8
+
+ return (isWaterArea or isCaveArea) and 10 or 30
+end
+
+function getLeadAbility(pidAddr)
+ local pokemonPID = read32Bit(pidAddr)
+ local checksum = read16Bit(pidAddr + 0x6)
+ local orderIndex = (((pokemonPID & 0x3E000) >> 0xD) % 24) + 1
+
+ local growthOffset = getOffset("growth", orderIndex) * 32
+ local prng = checksum
+
+ for i = 1, getOffset("growth", orderIndex) do
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
+ end
+
+ prng = LCRNG(prng, 0x9B355305, 0xAFC58AC9)  -- 7 cycles
+ local abilityIndex = read16Bit(pidAddr + growthOffset + 0x14) ~ (prng >> 16)
+
+ return getBits(abilityIndex, 8, 8)
+end
+
+function getAbilityEffectType(pidAddr)
+ local partyLeadAbility = getLeadAbility(pidAddr)
+
+ if partyLeadAbility == 0x23 or partyLeadAbility == 0x47 or partyLeadAbility == 0x63 then  -- Illuminate / Arena Trap / No Guard
+  return 2
+ elseif partyLeadAbility == 0x8 then  -- Sand Veil
+  local weatherIndex = read8Bit(read32Bit(pidPointerAddr) + 0xE4B2)
+
+  if weatherIndex == 0xA then  -- Sand Veil effect is active only during the sandstorm
+   return 1
+  end
+ elseif partyLeadAbility == 0x51 then  -- Snow Cloak
+  local weatherIndex = read8Bit(read32Bit(pidPointerAddr) + 0xE4B2)
+
+  if weatherIndex >= 0x5 and weatherIndex <= 0x7 then  -- Snow Cloak effect is active only during the snowing and the snowstorms
+   return 1
+  end
+ elseif partyLeadAbility == 0x1 or partyLeadAbility == 0x49 or partyLeadAbility == 0x5F then  -- Stench / White Smoke / Quick Feet
+  return 1
+ end
+
+ return 0
+end
+
+function getAbilityEffectMod(rate, pidAddr)
+ local partyLeadAbilityEffectType = getAbilityEffectType(pidAddr)
+
+ return partyLeadAbilityEffectType == 1 and floor(rate / 2) or partyLeadAbilityEffectType == 2 and rate * 2 or rate
+end
+
+function getActiveFluteType()
+ local fluteFlagsAddr = read32Bit(pidPointerAddr) + 0x145F6
+ local fluteActiveEffectFlag = read8Bit(fluteFlagsAddr)
+
+ return fluteActiveEffectFlag
+end
+
+function getFluteEffectMod(rate)
+ local activeFluteType = getActiveFluteType()
+ local isBlackFluteActive = activeFluteType == 1
+ local isWhiteFluteActive = activeFluteType == 2
+
+ return isBlackFluteActive and floor(rate / 2) or isWhiteFluteActive and rate + floor(rate / 2) or rate
+end
+
+function getLeadHeldItem(pidAddr)
+ local pokemonPID = read32Bit(pidAddr)
+ local checksum = read16Bit(pidAddr + 0x6)
+ local orderIndex = (((pokemonPID & 0x3E000) >> 0xD) % 24) + 1
+
+ local growthOffset = getOffset("growth", orderIndex) * 32
+ local prng = checksum
+
+ for i = 1, getOffset("growth", orderIndex) do
+  prng = LCRNG(prng, 0x5F748241, 0xCBA72510)  -- 16 cycles
+ end
+
+ prng = LCRNG(prng, 0xC2A29A69, 0xE97E7B6A)  -- 2 cycles
+ return read16Bit(pidAddr + growthOffset + 0xA) ~ (prng >> 16)
+end
+
+function getTagOrIncenseEffectMod(rate, pidAddr)
+ local partyLeadHeldItem = getLeadHeldItem(pidAddr)
+ local isPartyLeadHoldingCleanseTag = partyLeadHeldItem == 0xE0
+ local isPartyLeadHoldingPureIncense = partyLeadHeldItem == 0x140
+
+ return (isPartyLeadHoldingCleanseTag or isPartyLeadHoldingPureIncense) and floor((rate * 2) / 3) or rate
+end
+
+function setEncounterRate(matr, pidAddr)
+ local partyAddr = pidAddr + 0xD2AC
+ local rate = getTileRate(matr)
+ rate = getAbilityEffectMod(rate, partyAddr)
+ rate = getFluteEffectMod(rate)
+ rate = getTagOrIncenseEffectMod(rate, partyAddr)
+
+ return rate
+end
+
+function coolDownEndCheck(rate, steps, currentSteps)
+ local mapRate = 8 - (floor((rate << 8) / 10) >> 8)
+
+ return steps + currentSteps >= mapRate and true or false
+end
+
+function getEncounterCheckValue(seed)
+ return floor((seed >> 16) / 0x290)
+end
+
+function getEncounterMissingSteps(movement, encounter)
+ local currentCoolDownStepsAddr = read32Bit(pidPointerAddr) + 0x2FA40 + koreanOffset
+ local currentCoolDownSteps = read8Bit(currentCoolDownStepsAddr)
+ local wildEncounterSeed = read32Bit(currentSeedAddr)
+ local missingSteps, coolDownSteps = 0, 0
+
+ while not battleStartJumpFlag do
+  local isCoolDownEnded = true
+
+  if not coolDownEndCheck(encounter, coolDownSteps, currentCoolDownSteps) then
+   wildEncounterSeed = LCRNG(wildEncounterSeed, 0x41C64E6D, 0x6073)
+
+   if getEncounterCheckValue(wildEncounterSeed) >= 5 then
+    coolDownSteps = coolDownSteps + 1
+    isCoolDownEnded = false
+   end
+  end
+
+  if isCoolDownEnded then
+   wildEncounterSeed = LCRNG(wildEncounterSeed, 0x41C64E6D, 0x6073)
+   missingSteps = missingSteps + 1
+
+   if getEncounterCheckValue(wildEncounterSeed) < movement then
+    wildEncounterSeed = LCRNG(wildEncounterSeed, 0x41C64E6D, 0x6073)
+
+    if getEncounterCheckValue(wildEncounterSeed) < encounter then
+     break
+    end
+   end
+  end
+ end
+
+ return missingSteps + coolDownSteps, coolDownSteps
+end
+
+function showEncounterMissingSteps(pidAddr)
+ local mapAttributeAddr = read32Bit(pidPointerAddr) + 0x31AE0 + koreanOffset
+ local mapAttribute = read8Bit(mapAttributeAddr)
+ local isEncounterArea = mapAttributeData[mapAttribute + 1] & 0x2 ~= 0
+ local encounterMissingSteps, coolDownSteps = 0, 0
+
+ if isEncounterArea then
+  local movementRate = setMovementRate(mapAttribute)
+  local encounterRate = setEncounterRate(mapAttribute, pidAddr)
+  encounterMissingSteps, coolDownSteps = getEncounterMissingSteps(movementRate, encounterRate)
+ end
+
+ gui.drawBox(1, 99, 113, 113, 0x7F000000, 0x7F000000)
+ gui.pixelText(1, 99, ("Encounters cooldown? "..(coolDownSteps == 0 and "No" or "Yes")))
+ gui.pixelText(1, 106, ("Steps for wild encounter: "..encounterMissingSteps))
+end
+
 function showPartyEggInfo(pidAddr)
  local partyAddr = pidAddr + 0xD2AC
  local partySlotsCounterAddr = pidAddr + 0xD2A8
@@ -1182,6 +1386,7 @@ while not wrongGameVersion do
  if mode[index] == "Capture" then
   local enemyAddr = pidAddr + 0x59D88 + koreanOffset
   showInfo(enemyAddr + (0xEC * getSlotInput()))
+  showEncounterMissingSteps(pidAddr)
  elseif mode[index] == "Breeding" then
   showPartyEggInfo(pidAddr)
  elseif mode[index] == "Roamer" then
