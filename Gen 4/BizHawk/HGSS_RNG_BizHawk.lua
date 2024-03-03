@@ -1180,9 +1180,9 @@ function showEncounterMissingSteps(pidAddr)
   encounterMissingSteps, coolDownSteps = getEncounterMissingSteps(movementRate, encounterRate)
  end
 
- gui.box(1, -48, 176, -26, "#0000007F", "#0000007F")
- gui.text(2, -46, ("Encounters cooldown? "..(coolDownSteps == 0 and "No" or "Yes")))
- gui.text(2, -35, ("Steps for wild encounter: "..encounterMissingSteps))
+ gui.drawBox(1, 99, 113, 113, 0x7F000000, 0x7F000000)
+ gui.pixelText(1, 99, ("Encounters cooldown? "..(coolDownSteps == 0 and "No" or "Yes")))
+ gui.pixelText(1, 106, ("Steps for wild encounter: "..encounterMissingSteps))
 end
 
 function showPartyEggInfo(pidAddr)
