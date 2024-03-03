@@ -452,12 +452,13 @@ elseif gameLanguageCode == 0x49 then
  tempCurrentSeedDuringBattleAddr = 0x027E3A3C
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- mtIndexAddr = 0x021075A4 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x02108944
- delayAddr = 0x021C6284
- currentSeedAddr = 0x021C66E8
- mtSeedAddr = 0x021C66EC
- trainerIDsPointerAddr = 0x021C7374
+ isBaseVersion = read8Bit(0x02FFFE6C) & 0xF == 0xC
+ mtIndexAddr = (isBaseVersion and 0x02107464 or 0x021075A4) + getGameAddrOffset(0x8)
+ pidPointerAddr = isBaseVersion and 0x02108804 or 0x02108944
+ delayAddr = isBaseVersion and 0x021C6144 or 0x021C6284
+ currentSeedAddr = isBaseVersion and 0x021C65A8 or 0x021C66E8
+ mtSeedAddr = isBaseVersion and 0x021C65AC or 0x021C66EC
+ trainerIDsPointerAddr = isBaseVersion and 0x021C7232 or 0x021C7374
  tempCurrentSeedDuringBattleAddr = 0x027E39F0
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
