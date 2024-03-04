@@ -476,7 +476,7 @@ elseif gameLanguageCode == 0x4A then
  delayAddr = isBaseVersion and 0x021C6144 or 0x021C6284
  currentSeedAddr = isBaseVersion and 0x021C65A8 or 0x021C66E8
  mtSeedAddr = isBaseVersion and 0x021C65AC or 0x021C66EC
- trainerIDsPointerAddr = isBaseVersion and 0x021C7232 or 0x021C7374
+ trainerIDsPointerAddr = isBaseVersion and 0x021C7234 or 0x021C7374
  tempCurrentSeedDuringBattleAddr = 0x027E39F0
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
