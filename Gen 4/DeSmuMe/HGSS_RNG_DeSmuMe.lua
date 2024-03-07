@@ -366,6 +366,7 @@ end
 
 local boxSelectedSlotIndexOffset, mtIndexAddr, pidPointerAddr, radioSoundValueAddr, delayAddr, currentSeedAddr, mtSeedAddr, trainerIDsPointerAddr,
       getRadioSoundValueFunctionBaseAddr, getMarchSoundValueFunctionAddr, getLullabySoundValueFunctionAddr, tempCurrentSeedDuringBattleAddr
+local japanOffset = 0
 local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
@@ -426,6 +427,7 @@ elseif gameLanguageCode == 0x49 then
  tempCurrentSeedDuringBattleAddr = 0x027E3618
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
+ japanOffset = 0x4
  boxSelectedSlotIndexOffset = 0x975C1
  mtIndexAddr = 0x0210EC00
  pidPointerAddr = 0x02110DAC
@@ -1318,7 +1320,7 @@ function showPokemonInfo(pidAddr)
 
   showInfo(partySelectedPokemonAddr)
  elseif infoMode[infoIndex] == "Party Stats" then
-  local partyStatsSelectedSlotIndexAddr = pidAddr + 0x37CE8 + koreanOffset
+  local partyStatsSelectedSlotIndexAddr = pidAddr + 0x37CE8 + koreanOffset + japanOffset
   local partyStatsSelectedSlotIndex = read8Bit(partyStatsSelectedSlotIndexAddr)
   local pokemonPartyStatsAddr = partyAddr + (partyStatsSelectedSlotIndex * 0xEC)
 
