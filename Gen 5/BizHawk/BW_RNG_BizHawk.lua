@@ -506,7 +506,7 @@ elseif gameLanguageCode == 0x4B then
  partySlotsCounterAddr = 0x022350B0
  partyAddr = 0x022350B4
  trainerIDsAddr = 0x022356C0
- roamerAddr = 0x0223DDB0
+ roamerAddr = 0x0223DDB0 + getGameAddrOffset("Black", 0x14)
  playerMapIndexAddr = 0x0225000C
  cgearEnemyAddr = 0x0225D610
  currBoxIndexAddr = 0x02269E80
