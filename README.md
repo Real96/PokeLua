@@ -18,8 +18,15 @@ Join [PokemonRNG](https://www.pokemonrng.com) or [Devon Studios](https://devonst
 ## Gen 2 - _soon_
 ### GS/C
 
-## Gen 3 - _soon_
+## Gen 3
 ### RS/FRLG/E
+* Rng info checking
+* Wild Pokemon info checking
+* Breeding info checking
+* Roamer Pokemon info checking
+* Trainer info checking
+* Party Pokemon info checking
+* Box Pokemon info checking
 
 ## Gen 4
 ### DP/Pt/HGSS
