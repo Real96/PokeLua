@@ -640,7 +640,7 @@ function showDayCareInfo(buffer)
  end
 
  if isEggReady then
-  buffer:print(string.format("Egg generated, go get it!\nEgg PID: %08X%s\n\n", eggPID, eggShinyType))
+  buffer:print(string.format("Egg generated, go get it!\nEgg PID: %08X%s\nNature: %s\n\n", eggPID, eggShinyType, natureNamesList[eggNatureIndex + 1]))
  elseif eggStepsCounter == 1 then
   buffer:print("Next step might generate an egg!\n\n")
  elseif eggStepsCounter == 0 then
@@ -901,7 +901,7 @@ function getSaveStateInput()
   lastKey2 = key2
   local slotNumber, savingState, loadingState = nil, false, false
 
-  if key1..key2 == "338388658" then  -- check if Shift + F(n) is being pressed
+  if key1..key2 == "338388658" then  -- check if Shift + (n) is being pressed
    slotNumber = 1
   elseif key1..key2 == "838865834" then
    slotNumber = 2
@@ -925,7 +925,7 @@ function getSaveStateInput()
    savingState = true
   end
 
-  if key1..key2 == "490" then  -- check if F(n) is being pressed
+  if key1..key2 == "490" then  -- check if (n) is being pressed
    slotNumber = 1
   elseif key1..key2 == "500" then
    slotNumber = 2
