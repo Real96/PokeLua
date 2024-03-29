@@ -286,15 +286,32 @@ local locationNamesList = {
 
 local statusConditionNamesList = {"None", "SLP", "PSN", "BRN", "FRZ", "PAR", "PSN"}
 
-local gameVersion = ""
-local gameLanguage = ""
-local wrongGameVersion = true
-
 local initialSeedAddr = 0x2020000
 local pokemonStatsScreen2Addr, pokemonStatsScreenAddr, pokemonBattleStatsScreenAddr, speciesDexIndexAddr, wildTypeAddr, partySlotsCounterAddr,
       enemyAddr, partyAddr, safariCatchFactorPointerAddr, playerWalkRunStateAddr, wildEncounterDataAddr, boxSelectedSlotIndexAddr, eggLowPIDPointerAddr,
       safariZoneStepsCounterAddr, selectedItemAddr, partySelectedSlotIndexAddr, roamerMapGroupAndNumAddr, battleTurnsCounterAddr, currentSeedAddr,
       saveBlock1PointerAddr, saveBlock2PointerAddr, currBoxIndexPointerAddr
+
+local GameInfo, CaptureInfo, RoamerInfo, BreedingInfo, PandoraInfo, PokemonInfo
+
+function initializeBuffers()
+ GameInfo = console:createBuffer("Game Info")
+ GameInfo:setSize(100, 100)
+ CaptureInfo = console:createBuffer("Capture")
+ CaptureInfo:setSize(100, 100)
+ RoamerInfo = console:createBuffer("Roamer")
+ RoamerInfo:setSize(100, 100)
+ BreedingInfo = console:createBuffer("Breeding")
+ BreedingInfo:setSize(100, 100)
+ PandoraInfo = console:createBuffer("Pandora")
+ PandoraInfo:setSize(100, 100)
+ PokemonInfo = console:createBuffer("Pokemon Info")
+ PokemonInfo:setSize(100, 100)
+end
+
+local gameVersion = ""
+local gameLanguage = ""
+local wrongGameVersion
 
 function setGameVersion()
  local gameVersionCode = emu:read8(0x80000AE)
@@ -388,26 +405,10 @@ function setGameVersion()
  end
 end
 
-local GameInfo, CaptureInfo, RoamerInfo, BreedingInfo, PandoraInfo, PokemonInfo
-
-function initializeBuffers()
- GameInfo = console:createBuffer("Game Info")
- GameInfo:setSize(100, 100)
- CaptureInfo = console:createBuffer("Capture")
- CaptureInfo:setSize(100, 100)
- RoamerInfo = console:createBuffer("Roamer")
- RoamerInfo:setSize(100, 100)
- BreedingInfo = console:createBuffer("Breeding")
- BreedingInfo:setSize(100, 100)
- PandoraInfo = console:createBuffer("Pandora")
- PandoraInfo:setSize(100, 100)
- PokemonInfo = console:createBuffer("Pokemon Info")
- PokemonInfo:setSize(100, 100)
-end
-
 function printGameInfo()
  setGameVersion()
- initializeBuffers()
+ wrongGameVersion = true
+ GameInfo:clear()
 
  if gameVersion == "" then  -- Print game info
   GameInfo:print("Version: Unknown game")
@@ -826,7 +827,7 @@ function getInfoInput(buffer)
  end
 
  prevKeyInfo = key
- buffer:print(string.format("Mode: %s(Change mode pressing R+Right/R+Left)\n\n", strPadding(infoMode[infoIndex], 19)))
+ buffer:print(string.format("Mode: %s(Change mode pressing R+Right/R+Left)\n\n", strPadding(infoMode[infoIndex], 20)))
 end
 
 function showPokemonIDs(addr, buffer)
@@ -902,6 +903,153 @@ function updatePokemonInfoBuffer()
  showPokemonInfo(PokemonInfo)
 end
 
+function createStateFile(statesFileName, stateSlot)
+ os.execute("mkdir states")
+ local statesFile = io.open(statesFileName, "w")
+
+ if statesFile then  -- Check if the state file has been created correctly
+  for slotNumber = 1, 9 do
+   if slotNumber == stateSlot then  -- Write only in the line of the saved slot
+    statesFile:write(string.format("%08X %08X %d\n", tempInitialSeed, tempCurrentSeed, advances))
+   else  -- Fill with empty data the lines of not saved state
+    statesFile:write("00000000 00000000 0\n")
+   end
+  end
+
+  statesFile:close()
+ end
+end
+
+function writeStateFile(statesFileName, stateSlot)
+ local statesFile = io.open(statesFileName, "r")
+ local line_num = 1
+ local lines = ""
+
+ for line in statesFile:lines() do
+  if line_num == stateSlot then  -- Overwrite only the line of the saved slot
+   line = string.format("%08X %08X %d", tempInitialSeed, tempCurrentSeed, advances)
+  end
+
+  lines = lines..line.."\n"
+  line_num = line_num + 1
+ end
+
+ statesFile:close()
+ statesFile = io.open(statesFileName, "w")
+ statesFile:write(lines)
+ statesFile:close()
+end
+
+function writeSaveStateValues(statesFileName, stateSlot)
+ local statesFileCheck = io.open(statesFileName, "r")
+
+ if not statesFileCheck then  -- Check if the states file does not exist
+  createStateFile(statesFileName, stateSlot)
+ else  -- States file already exists
+  statesFileCheck:close()
+  writeStateFile(statesFileName, stateSlot)
+ end
+end
+
+function setSaveStateValues(statesFileName, stateSlot)
+ local statesFile = io.open(statesFileName, "r")
+
+ if statesFile then
+  local line_num = 1
+  local values = {}
+
+  for line in statesFile:lines() do
+   if line_num == stateSlot then  -- Load values from the line of the loaded slot only
+    for value in line:gmatch("%S+") do
+     table.insert(values, value)
+    end
+
+    break
+   end
+
+   line_num = line_num + 1
+  end
+
+  statesFile:close()
+  tempInitialSeed = tonumber(values[1], 16)
+  tempCurrentSeed = tonumber(values[2], 16)
+  advances = tonumber(values[3])
+ end
+end
+
+local lastKey1, lastKey2 = nil, nil
+
+function getSaveStateInput()
+ local key1 = string.format("%s", input:activeKeys()[1] == nil and 0 or input:activeKeys()[1])
+ local key2 = string.format("%s", input:activeKeys()[2] == nil and 0 or input:activeKeys()[2])
+
+ if key1 ~= "0" then
+  lastKey1 = key1
+  lastKey2 = key2
+  local slotNumber, savingState, loadingState = nil, false, false
+
+  if key1..key2 == "338388658" then  -- check if Shift + F(n) is being pressed
+   slotNumber = 1
+  elseif key1..key2 == "838865834" then
+   slotNumber = 2
+  elseif key1..key2 == "8388658163" then
+   slotNumber = 3
+  elseif key1..key2 == "838865836" then
+   slotNumber = 4
+  elseif key1..key2 == "838865837" then
+   slotNumber = 5
+  elseif key1..key2 == "838865838" then
+   slotNumber = 6
+  elseif key1..key2 == "838865847" then
+   slotNumber = 7
+  elseif key1..key2 == "408388658" then
+   slotNumber = 8
+  elseif key1..key2 == "418388658" then
+   slotNumber = 9
+  end
+
+  if slotNumber ~= nil then
+   savingState = true
+  end
+
+  if key1..key2 == "490" then  -- check if F(n) is being pressed
+   slotNumber = 1
+  elseif key1..key2 == "500" then
+   slotNumber = 2
+  elseif key1..key2 == "510" then
+   slotNumber = 3
+  elseif key1..key2 == "520" then
+   slotNumber = 4
+  elseif key1..key2 == "530" then
+   slotNumber = 5
+  elseif key1..key2 == "540" then
+   slotNumber = 6
+  elseif key1..key2 == "550" then
+   slotNumber = 7
+  elseif key1..key2 == "560" then
+   slotNumber = 8
+  elseif key1..key2 == "570" then
+   slotNumber = 9
+  end
+
+  if not savingState and slotNumber ~= nil then
+   loadingState = true
+  end
+
+  if slotNumber ~= nil then
+   local statesFileName = string.format("states/%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
+
+   if savingState then  -- Check if a save state is being created
+    emu:saveStateSlot(slotNumber)
+    writeSaveStateValues(statesFileName, slotNumber)
+   else  -- Loading a state
+    emu:loadStateSlot(slotNumber)
+    setSaveStateValues(statesFileName, slotNumber)
+   end
+  end
+ end
+end
+
 function updateBuffers()
  if (not wrongGameVersion) then
   updateCaptureBuffer()
@@ -909,9 +1057,12 @@ function updateBuffers()
   updateBreedingBuffer()
   updatePandoraBuffer()
   updatePokemonInfoBuffer()
+  getSaveStateInput()
  end
 end
 
 emu:reset()
+initializeBuffers()
 printGameInfo()
 callbacks:add("frame", updateBuffers)
+callbacks:add("reset", printGameInfo)
