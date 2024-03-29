@@ -618,6 +618,54 @@ function showTrainerIDs(buffer)
  buffer:print(string.format("TID: %d\nSID: %d", trainerTID, trainerSID))
 end
 
+function getDayCareInfo()
+ local timer = emu:read32(timerAddr)
+ local calibration = (emu:read32(advancesAddr) - adjustAdvances) - timer
+ local eggPIDAddr = emu:read32(eggPIDPointerAddr) + 0x988
+ local eggPID = emu:read32(eggPIDAddr)
+ local eggShinyType = shinyCheck(eggPID)
+ local eggNatureIndex = eggPID % 25
+ local eggStepsCounter = 255 - emu:read8(eggPIDAddr - 0x4)
+ local eggFlagAddr = emu:read32(saveBlock1PointerAddr) + 0x1280
+ local isEggReady = (emu:read8(eggFlagAddr) >> 6) & 0x1 == 1
+
+ return isEggReady, eggStepsCounter, eggPID, eggShinyType, eggNatureIndex, timer, calibration
+end
+
+function showDayCareInfo(buffer)
+ local isEggReady, eggStepsCounter, eggPID, eggShinyType, eggNatureIndex, timer, calibration = getDayCareInfo()
+
+ if not isEggReady then
+  buffer:print(string.format("Steps Counter: %d\nEgg is not ready\n", eggStepsCounter))
+ end
+
+ if isEggReady then
+  buffer:print(string.format("Egg generated, go get it!\nEgg PID: %08X%s\n\n", eggPID, eggShinyType))
+ elseif eggStepsCounter == 1 then
+  buffer:print("Next step might generate an egg!\n\n")
+ elseif eggStepsCounter == 0 then
+  buffer:print("255th step taken\n\n")
+ else
+  buffer:print("Keep on steppin'\n\n")
+ end
+
+ buffer:print(string.format("Timer: %d\n", timer))
+ buffer:print(string.format("Calibration: %d\n\n\n", calibration + 1))
+end
+
+function isEgg(addr)
+ return emu:read16(addr + 0x12) == 0x601
+end
+
+function showPartyEggInfo(buffer)
+ local partySlotsCounter = emu:read8(partySlotsCounterAddr) - 1
+ local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0x64)
+
+ if isEgg(lastPartySlotAddr) then
+  showInfo(lastPartySlotAddr, buffer)
+ end
+end
+
 function getRoamerInfo()
  local roamerAddr = emu:read32(saveBlock1PointerAddr) + 0x31DC
  local roamerIVsValue = emu:read32(roamerAddr)
@@ -674,54 +722,6 @@ function showRoamerInfo(buffer)
                               roamerMapGroupAndNum == playerMapGroupAndNum and " (!!!)" or ""))
  else
   buffer:print("Active Roamer? No\n\n\n")
- end
-end
-
-function getDayCareInfo()
- local timer = emu:read32(timerAddr)
- local calibration = (emu:read32(advancesAddr) - adjustAdvances) - timer
- local eggPIDAddr = emu:read32(eggPIDPointerAddr) + 0x988
- local eggPID = emu:read32(eggPIDAddr)
- local eggShinyType = shinyCheck(eggPID)
- local eggNatureIndex = eggPID % 25
- local eggStepsCounter = 255 - emu:read8(eggPIDAddr - 0x4)
- local eggFlagAddr = emu:read32(saveBlock1PointerAddr) + 0x1280
- local isEggReady = (emu:read8(eggFlagAddr) >> 6) & 0x1 == 1
-
- return isEggReady, eggStepsCounter, eggPID, eggShinyType, eggNatureIndex, timer, calibration
-end
-
-function showDayCareInfo(buffer)
- local isEggReady, eggStepsCounter, eggPID, eggShinyType, eggNatureIndex, timer, calibration = getDayCareInfo()
-
- if not isEggReady then
-  buffer:print(string.format("Steps Counter: %d\nEgg is not ready\n", eggStepsCounter))
- end
-
- if isEggReady then
-  buffer:print(string.format("Egg generated, go get it!\nEgg PID: %08X%s\n\n", eggPID, eggShinyType))
- elseif eggStepsCounter == 1 then
-  buffer:print("Next step might generate an egg!\n\n")
- elseif eggStepsCounter == 0 then
-  buffer:print("255th step taken\n\n")
- else
-  buffer:print("Keep on steppin'\n\n")
- end
-
- buffer:print(string.format("Timer: %d\n", timer))
- buffer:print(string.format("Calibration: %d\n\n\n", calibration + 1))
-end
-
-function isEgg(addr)
- return emu:read16(addr + 0x12) == 0x601
-end
-
-function showPartyEggInfo(buffer)
- local partySlotsCounter = emu:read8(partySlotsCounterAddr) - 1
- local lastPartySlotAddr = partyAddr + (partySlotsCounter * 0x64)
-
- if isEgg(lastPartySlotAddr) then
-  showInfo(lastPartySlotAddr, buffer)
  end
 end
 
