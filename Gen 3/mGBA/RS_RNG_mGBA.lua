@@ -292,10 +292,10 @@ function initializeBuffers()
  GameInfo:setSize(100, 100)
  CaptureInfo = console:createBuffer("Capture")
  CaptureInfo:setSize(100, 100)
- RoamerInfo = console:createBuffer("Roamer")
- RoamerInfo:setSize(100, 100)
  BreedingInfo = console:createBuffer("Breeding")
  BreedingInfo:setSize(100, 100)
+ RoamerInfo = console:createBuffer("Roamer")
+ RoamerInfo:setSize(100, 100)
  PandoraInfo = console:createBuffer("Pandora")
  PandoraInfo:setSize(100, 100)
  PokemonInfo = console:createBuffer("Pokemon Info")
@@ -768,17 +768,17 @@ function updateCaptureBuffer()
  showTrainerIDs(CaptureInfo)
 end
 
-function updateRoamerBuffer()
- showRngInfo(RoamerInfo)
- showRoamerInfo(RoamerInfo)
- showTrainerIDs(RoamerInfo)
-end
-
 function updateBreedingBuffer()
  showRngInfo(BreedingInfo)
  showDayCareInfo(BreedingInfo)
  showPartyEggInfo(BreedingInfo)
  showTrainerIDs(BreedingInfo)
+end
+
+function updateRoamerBuffer()
+ showRngInfo(RoamerInfo)
+ showRoamerInfo(RoamerInfo)
+ showTrainerIDs(RoamerInfo)
 end
 
 function updatePandoraBuffer()
@@ -941,8 +941,8 @@ end
 function updateBuffers()
  if (not wrongGameVersion) then
   updateCaptureBuffer()
-  updateRoamerBuffer()
   updateBreedingBuffer()
+  updateRoamerBuffer()
   updatePandoraBuffer()
   updatePokemonInfoBuffer()
   getSaveStateInput()
