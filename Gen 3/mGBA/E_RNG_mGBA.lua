@@ -307,8 +307,7 @@ function initializeBuffers()
  PokemonInfo:setSize(100, 100)
 end
 
-local gameVersion = ""
-local gameLanguage = ""
+local gameVersion, gameLanguage = "", ""
 local wrongGameVersion
 
 function setGameVersion()
@@ -844,7 +843,7 @@ function TIDFoundCheck(TID)
 end
 
 local currentEmuFrame, insertionNameState
-local botStartedFlag, TIDFoundFlag = false, false
+local TIDBotStartedFlag, TIDFoundFlag = false, false
 
 function TIDBotLoop()
  if currentEmuFrame == emu:currentFrame() - 1 then  -- Save a temporary state and press A one frame after the starting one
@@ -860,7 +859,7 @@ function TIDBotLoop()
   local tempTID = emu:read16(initialSeedAddr)
 
   if TIDFoundCheck(tempTID) then
-   botStartedFlag = false
+   TIDBotStartedFlag = false
    TIDFoundFlag = true
   else
    initialSeedWrittenFlag = false
@@ -874,18 +873,18 @@ function TIDBotLoop()
 end
 
 function updateTIDBotBuffer()
- if not botStartedFlag then
+ if not TIDBotStartedFlag then
   printTIDBotInstructions()
  end
 
- if emu:getKey(C.GBA_KEY.START) == 1 and not botStartedFlag then
-  botStartedFlag = true
+ if emu:getKey(C.GBA_KEY.START) == 1 and not TIDBotStartedFlag then
+  TIDBotStartedFlag = true
   TIDFoundFlag = false
   initialSeedWrittenFlag = false
   currentEmuFrame = emu:currentFrame()
  end
 
- if botStartedFlag then
+ if TIDBotStartedFlag then
   TIDBotLoop()
  end
 

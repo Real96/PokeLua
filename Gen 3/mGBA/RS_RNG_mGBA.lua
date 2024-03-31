@@ -302,8 +302,7 @@ function initializeBuffers()
  PokemonInfo:setSize(100, 100)
 end
 
-local gameVersion = ""
-local gameLanguage = ""
+local gameVersion, gameLanguage = "", ""
 local wrongGameVersion
 
 function setGameVersion()
