@@ -1,3 +1,5 @@
+local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
+
 local JUMP_DATA = {
  {0x41C64E6D, 0x6073}, {0xC2A29A69, 0xE97E7B6A}, {0xEE067F11, 0x31B0DDE4}, {0xCFDDDF21, 0x67DBB608},
  {0x5F748241, 0xCBA72510}, {0x8B2E1481, 0x1D29AE20}, {0x76006901, 0xBA84EC40}, {0x1711D201, 0x79F01880},
@@ -299,6 +301,8 @@ function initializeBuffers()
  RoamerInfo:setSize(100, 100)
  PandoraInfo = console:createBuffer("Pandora")
  PandoraInfo:setSize(100, 100)
+ TIDBotInfo = console:createBuffer("TID Bot")
+ TIDBotInfo:setSize(100, 100)
  PokemonInfo = console:createBuffer("Pokemon Info")
  PokemonInfo:setSize(100, 100)
 end
@@ -812,6 +816,84 @@ function updatePandoraBuffer()
  showTrainerIDs(PandoraInfo)
 end
 
+function printTIDBotInstructions()
+ TIDBotInfo:clear()
+ TIDBotInfo:print("1) Edit the first line of this script\n")
+ TIDBotInfo:print("2) Go to the name insertion screen\n")
+ TIDBotInfo:print("3) Input the name you like\n")
+ TIDBotInfo:print("4) Place the selection cursor on the OK button\n")
+ TIDBotInfo:print("5) Press START\n\n\n")
+end
+
+local initialSeedWrittenFlag = false
+
+function initialSeedWritten()
+ initialSeedWrittenFlag = true
+end
+
+local initialSeedAddrWatchpoint = emu:setWatchpoint(initialSeedWritten, initialSeedAddr, 1)
+
+function TIDFoundCheck(TID)
+ for _, targetTID in ipairs(botTargetTIDs) do
+  if TID == targetTID then
+   return true
+  end
+ end
+
+ return false
+end
+
+local currentEmuFrame, insertionNameState
+local botStartedFlag, TIDFoundFlag = false, false
+
+function TIDBotLoop()
+ if currentEmuFrame == emu:currentFrame() - 1 then  -- Save a temporary state and press A one frame after the starting one
+  insertionNameState = emu:saveStateBuffer()
+  emu:addKey(C.GBA_KEY.A)
+ end
+
+ if emu:getKey(C.GBA_KEY.A) == 1 and currentEmuFrame == emu:currentFrame() - 2 then  -- Clear the A button press one frame after the button press
+  emu:clearKey(C.GBA_KEY.A)
+ end
+
+ if initialSeedWrittenFlag then
+  local tempTID = emu:read16(initialSeedAddr)
+
+  if TIDFoundCheck(tempTID) then
+   botStartedFlag = false
+   TIDFoundFlag = true
+  else
+   initialSeedWrittenFlag = false
+   emu:loadStateBuffer(insertionNameState)
+   currentEmuFrame = emu:currentFrame()
+  end
+
+  TIDBotInfo:clear()
+  TIDBotInfo:print(string.format("TID: %d", tempTID))
+ end
+end
+
+function updateTIDBotBuffer()
+ if not botStartedFlag then
+  printTIDBotInstructions()
+ end
+
+ if emu:getKey(C.GBA_KEY.START) == 1 and not botStartedFlag then
+  botStartedFlag = true
+  TIDFoundFlag = false
+  initialSeedWrittenFlag = false
+  currentEmuFrame = emu:currentFrame()
+ end
+
+ if botStartedFlag then
+  TIDBotLoop()
+ end
+
+ if TIDFoundFlag then
+  TIDBotInfo:print(string.format("TID found!\nTID: %d", emu:read16(initialSeedAddr)))
+ end
+end
+
 function updatePokemonInfoBuffer()
  showRngInfo(PokemonInfo)
  showPokemonInfo(PokemonInfo)
@@ -969,6 +1051,7 @@ function updateBuffers()
   updateBreedingBuffer()
   updateRoamerBuffer()
   updatePandoraBuffer()
+  updateTIDBotBuffer()
   updatePokemonInfoBuffer()
   getSaveStateInput()
  end
