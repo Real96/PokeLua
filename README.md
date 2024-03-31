@@ -25,6 +25,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * Breeding info checking
 * Roamer Pokemon info checking
 * Trainer info checking
+* TID Bot (FRLG/E only)
 * Party Pokemon info checking
 * Box Pokemon info checking
 
