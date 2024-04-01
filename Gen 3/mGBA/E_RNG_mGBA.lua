@@ -821,7 +821,7 @@ function printTIDBotInstructions()
  TIDBotInfo:print("2) Go to the name insertion screen\n")
  TIDBotInfo:print("3) Input the name you like\n")
  TIDBotInfo:print("4) Place the selection cursor on the OK button\n")
- TIDBotInfo:print("5) Press START\n\n\n")
+ TIDBotInfo:print("5) Press Shift + START\n\n\n")
 end
 
 local initialSeedWrittenFlag = false
@@ -877,7 +877,10 @@ function updateTIDBotBuffer()
   printTIDBotInstructions()
  end
 
- if emu:getKey(C.GBA_KEY.START) == 1 and not TIDBotStartedFlag then
+ local key1 = string.format("%s", input:activeKeys()[1] == nil and 0 or input:activeKeys()[1])
+ local key2 = string.format("%s", input:activeKeys()[2] == nil and 0 or input:activeKeys()[2])
+
+ if key1..key2 == "838865810" and not TIDBotStartedFlag then  -- Check Shift + START press
   TIDBotStartedFlag = true
   TIDFoundFlag = false
   initialSeedWrittenFlag = false
