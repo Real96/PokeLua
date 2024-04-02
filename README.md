@@ -6,7 +6,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 [![PokemonRNG](https://discordapp.com/assets/07dca80a102d4149e9736d4b162cff6f.ico)](https://www.discord.gg/d8JuAvg)
 [![Devon Studios](https://discordapp.com/assets/07dca80a102d4149e9736d4b162cff6f.ico)](https://discord.gg/7gNVdkdBwA)
 
-## Gen 1
+## Gen 1 features
 ### RBG/Y
 * Gift Bot
 * Stationary Bot
@@ -15,10 +15,10 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * TID Bot
 * Party Pokemon Info checking
 
-## Gen 2 - _soon_
+## Gen 2 features - _soon_
 ### GS/C
 
-## Gen 3
+## Gen 3 features
 ### RS/FRLG/E
 * Rng info checking
 * Wild Pokemon info checking
@@ -29,7 +29,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * Party Pokemon info checking
 * Box Pokemon info checking
 
-## Gen 4
+## Gen 4 features
 ### DP/Pt/HGSS
 * Rng info checking
 * Wild Pokemon info checking
@@ -39,7 +39,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * Party Pokemon info checking
 * Box Pokemon info checking
 
-## Gen 5
+## Gen 5 features
 ### BW/B2W2
 * Rng info checking
 * Wild Pokemon info checking
@@ -62,7 +62,7 @@ Use this build which supports lua core: [link](https://github.com/Real96/Dolphin
 ### DeSmuMe
 Use version `0.9.11_x86_dev+`: [link](https://sourceforge.net/projects/desmume/files/desmume/0.9.11/desmume-0.9.11-win32-dev.zip/download)
 
-1) Download the file `lua5.1.dll`: [link](https://sourceforge.net/projects/luabinaries/files/5.1.5/Windows%20Libraries/Dynamic/lua-5.1.5_Win32_dll17_lib.zip/download)
+1) Download the file [lua5.1.dll](https://sourceforge.net/projects/luabinaries/files/5.1.5/Windows%20Libraries/Dynamic/lua-5.1.5_Win32_dll17_lib.zip/download)
 2) Move it in DeSmuMe folder
 3) Rename it as `lua51.dll`
 
