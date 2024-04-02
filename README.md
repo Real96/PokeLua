@@ -50,6 +50,28 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * Party Pokemon info checking
 * Box Pokemon info checking
 
+## Supported emulators
+### mGBA
+Use development vesion of date `19/03/2024`: [link](https://s3.amazonaws.com/mgba/build/mGBA-build-2024-03-19-win64-8335-c80f3afd7708e2e7d2f0f5175ba21fa2b70a424c.7z)
+
+Latest dev version has a [bug](https://github.com/mgba-emu/mgba/issues/3178) bug which causes the app to crash. Once the error is fixed, you'll be able to use latest development build.
+
+### Dolphin
+Use this build which supports lua core: [link](https://github.com/Real96/Dolphin-Lua-Core/releases)
+
+### DeSmuMe
+Use version `0.9.11_x86_dev+`: [link](https://sourceforge.net/projects/desmume/files/desmume/0.9.11/desmume-0.9.11-win32-dev.zip/download)
+
+1) Download the file `lua5.1.dll`: [link](https://sourceforge.net/projects/luabinaries/files/5.1.5/Windows%20Libraries/Dynamic/lua-5.1.5_Win32_dll17_lib.zip/download)
+2) Move it in DeSmuMe folder
+3) Rename it as `lua51.dll`
+
+#### Final folder:
+![image](https://github.com/Real96/PokeLua/assets/20956021/e6a21f63-ba96-4cc6-82fa-e9fba93537c6)
+
+### BizHawk
+Use latest release: [link](https://github.com/TASEmulators/BizHawk/releases)
+
 ## Notes for mGBA scripts
 * Be sure to enlarge enough the lua window to avoid text flickering or emulation lagging
 * Every time you need to save or load a state, hold `Shift` + `(n)`/`(n)` (ex. `Shift` + `1` to save a state in slot 1 or `1` to load the state in slot 1) with game unpaused
