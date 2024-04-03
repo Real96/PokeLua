@@ -897,6 +897,7 @@ end
 
 function updatePandoraBuffer()
  showRngInfo(PandoraInfo)
+ PandoraInfo:print(string.format("Temporary TID: %d\n\n\n", emu:read16(initialSeedAddr)))
  showTrainerIDs(PandoraInfo)
 end
 
