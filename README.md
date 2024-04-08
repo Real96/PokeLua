@@ -28,6 +28,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * TID Bot (FRLG/E only)
 * Party Pokemon info checking
 * Box Pokemon info checking
+* Checksums info checking (USA RS only)
 
 ## Gen 4 features
 ### DP/Pt/HGSS
