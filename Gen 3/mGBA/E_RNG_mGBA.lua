@@ -975,15 +975,11 @@ function setSaveStateValues(statesFileName, stateSlot)
  end
 end
 
-local lastKey1, lastKey2 = nil, nil
-
 function getSaveStateInput()
  local key1 = string.format("%s", input:activeKeys()[1] == nil and 0 or input:activeKeys()[1])
  local key2 = string.format("%s", input:activeKeys()[2] == nil and 0 or input:activeKeys()[2])
 
  if key1 ~= "0" then
-  lastKey1 = key1
-  lastKey2 = key2
   local slotNumber, savingState, loadingState = nil, false, false
 
   if key1..key2 == "338388658" then  -- check if Shift + (n) is being pressed
