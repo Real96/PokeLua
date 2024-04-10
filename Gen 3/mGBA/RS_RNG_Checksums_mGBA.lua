@@ -167,7 +167,7 @@ function getChecksumsList()
  local checksumsList = {}
  saveFile:close()
 
- for i = 0, 0x1F do
+ for i = 0, 0x1B do
   local segmentChecksumAddr = startingChecksumBlockSaveAddr + (i * 0x1000)
   local checksum = string.format("%02X%02X\n", bytes:byte(segmentChecksumAddr + 1), bytes:byte(segmentChecksumAddr))
   table.insert(checksumsList, checksum)
