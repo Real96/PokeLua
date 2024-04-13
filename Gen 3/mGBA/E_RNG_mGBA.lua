@@ -878,10 +878,7 @@ function updateTIDBotBuffer()
   printTIDBotInstructions()
  end
 
- local key1 = string.format("%s", input:activeKeys()[1] == nil and 0 or input:activeKeys()[1])
- local key2 = string.format("%s", input:activeKeys()[2] == nil and 0 or input:activeKeys()[2])
-
- if key1..key2 == "838865810" and not TIDBotStartedFlag then  -- Check Shift + START press
+ if input:isKeyActive(8388658) and input:isKeyActive(10) and not TIDBotStartedFlag then  -- Check if Shift + START is being pressed
   TIDBotStartedFlag = true
   TIDFoundFlag = false
   initialSeedWrittenFlag = false
