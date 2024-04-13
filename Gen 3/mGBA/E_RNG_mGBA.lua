@@ -977,7 +977,6 @@ end
 
 function getSaveStateInput()
  local slotNumber = nil
- local savingStateFlag = input:isKeyActive(8388658) -- Check if Shift is being pressed
 
  if input:isKeyActive(49) or input:isKeyActive(33) then  -- Check if (n) is being pressed
   slotNumber = 1
@@ -1000,6 +999,7 @@ function getSaveStateInput()
  end
 
  if slotNumber ~= nil then
+  local savingStateFlag = input:isKeyActive(8388658) -- Check if Shift is being pressed
   local statesFileName = string.format("states/%s_%s_states_values.txt", gameVersion, string.gsub(gameLanguage, "/", "_"))
 
   if savingStateFlag then  -- Saving a state
