@@ -851,10 +851,10 @@ function getIVs(ivsValue)
 end
 
 function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
- local hpType = floor(((hpIV % 2) + 2 * (atkIV % 2) + 4 * (defIV % 2) + 8 * (spdIV % 2) + 16 * (spAtkIV % 2)
-                + 32 * (spDefIV % 2)) * 15 / 63)
- local hpPower = 30 + floor(((rshift(hpIV, 1) % 2) + 2 * (rshift(atkIV, 1) % 2) + 4 * (rshift(defIV, 1) % 2) + 8 * (rshift(spdIV, 1) % 2)
-                 + 16 * (rshift(spAtkIV, 1) % 2) + 32 * (rshift(spDefIV, 1) % 2)) * 40 / 63)
+ local hpType = floor(((band(hpIV, 1) + (2 * band(atkIV, 1)) + (4 * band(defIV, 1)) + (8 * band(spdIV, 1)) + (16 * band(spAtkIV, 1))
+                + (32 * band(spDefIV, 1))) * 15) / 63)
+ local hpPower = floor((((band(rshift(hpIV, 1), 1) + (2 * band(rshift(atkIV, 1), 1)) + (4 * band(rshift(defIV, 1), 1)) + (8 * band(rshift(spdIV, 1), 1))
+                 + (16 * band(rshift(spAtkIV, 1), 1)) + (32 * band(rshift(spDefIV, 1), 1))) * 40) / 63)) + 30
 
  return hpType, hpPower
 end
