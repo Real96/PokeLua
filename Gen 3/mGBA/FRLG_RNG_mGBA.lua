@@ -618,10 +618,10 @@ function getIVs(ivsValue)
 end
 
 function getHPTypeAndPower(hp, atk, def, spAtk, spDef, spd)
- local hpType = (((hp % 2) + (2 * (atk % 2)) + (4 * (def % 2)) + (8 * (spd % 2)) + (16 * (spAtk % 2))
-                 + (32 * (spDef % 2))) * 15) // 63
- local hpPower = ((((hp & 2) / 2 + (atk & 2) + 2 * (def & 2) + 4 * (spd & 2) + 8 * (spAtk & 2)
-                  + 16 * (spDef & 2)) * 40) // 63) + 30
+ local hpType = (((hp & 1) + (2 * (atk & 1)) + (4 * (def & 1)) + (8 * (spd & 1)) + (16 * (spAtk & 1))
+                + (32 * (spDef & 1))) * 15) // 63
+ local hpPower = (((((hp >> 1) & 1) + (2 * ((atk >> 1) & 1)) + (4 * ((def >> 1) & 1)) + (8 * ((spd >> 1) & 1))
+                 + (16 * ((spAtk >> 1) & 1)) + (32 * ((spDef >> 1) & 1))) * 40) // 63) + 30
 
  return hpType, hpPower
 end
