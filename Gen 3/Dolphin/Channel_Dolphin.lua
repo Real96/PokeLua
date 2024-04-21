@@ -82,8 +82,8 @@ function shinyCheck(highPID, lowPID, trainerID, trainerSID)
 end
 
 function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
- local hpType = (((hpIV % 2) + 2 * (atkIV % 2) + 4 * (defIV % 2) + 8 * (spdIV % 2) + 16 * (spAtkIV % 2)
-                + 32 * (spDefIV % 2)) * 15) // 63
+ local hpType = (((hpIV % 2) + (2 * (atkIV % 2)) + (4 * (defIV % 2)) + (8 * (spdIV % 2)) + (16 * (spAtkIV % 2))
+                + (32 * (spDefIV % 2))) * 15) // 63
  local hpPower = (((((hpIV >> 1) % 2) + (2 * ((atkIV >> 1) % 2)) + (4 * ((defIV >> 1) % 2)) + (8 * ((spdIV >> 1) % 2))
                  + (16 * ((spAtkIV >> 1) % 2)) + (32 * ((spDefIV >> 1) % 2))) * 40) // 63) + 30
 
