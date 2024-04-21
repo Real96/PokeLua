@@ -607,21 +607,21 @@ function getOffset(offsetType, orderIndex)
 end
 
 function getIVs(ivsValue)
- local hp = ivsValue & 0x1F
- local atk = (ivsValue & (0x1F * 0x20)) / 0x20
- local def = (ivsValue & (0x1F * 0x400)) / 0x400
- local spAtk = (ivsValue & (0x1F * 0x100000)) / 0x100000
- local spDef = (ivsValue & (0x1F * 0x2000000)) / 0x2000000
- local spd = (ivsValue & (0x1F * 0x8000)) / 0x8000
+ local hpIV = ivsValue & 0x1F
+ local atkIV = (ivsValue & (0x1F * 0x20)) / 0x20
+ local defIV = (ivsValue & (0x1F * 0x400)) / 0x400
+ local spAtkIV = (ivsValue & (0x1F * 0x100000)) / 0x100000
+ local spDefIV = (ivsValue & (0x1F * 0x2000000)) / 0x2000000
+ local spdIV = (ivsValue & (0x1F * 0x8000)) / 0x8000
 
- return hp, atk, def, spAtk, spDef, spd
+ return hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV
 end
 
-function getHPTypeAndPower(hp, atk, def, spAtk, spDef, spd)
- local hpType = (((hp & 1) + (2 * (atk & 1)) + (4 * (def & 1)) + (8 * (spd & 1)) + (16 * (spAtk & 1))
-                + (32 * (spDef & 1))) * 15) // 63
- local hpPower = (((((hp >> 1) & 1) + (2 * ((atk >> 1) & 1)) + (4 * ((def >> 1) & 1)) + (8 * ((spd >> 1) & 1))
-                 + (16 * ((spAtk >> 1) & 1)) + (32 * ((spDef >> 1) & 1))) * 40) // 63) + 30
+function getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
+ local hpType = (((hpIV & 1) + (2 * (atkIV & 1)) + (4 * (defIV & 1)) + (8 * (spdIV & 1)) + (16 * (spAtkIV & 1))
+                + (32 * (spDefIV & 1))) * 15) // 63
+ local hpPower = (((((hpIV >> 1) & 1) + (2 * ((atkIV >> 1) & 1)) + (4 * ((defIV >> 1) & 1)) + (8 * ((spdIV >> 1) & 1))
+                 + (16 * ((spAtkIV >> 1) & 1)) + (32 * ((spDefIV >> 1) & 1))) * 40) // 63) + 30
 
  return hpType, hpPower
 end
