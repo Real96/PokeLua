@@ -1,9 +1,9 @@
-local targetSeed = 0xD517  -- Input the target seed
-local targetHour = 0  -- Input the target hours
-local targetMinute = 9  -- Input the target minutes
-local targetSecond = 24  -- Input the target seconds
-local targetSixtiethSecond = 22  -- Input the target sixtieth seconds
-local savePath = "D:\\Desktop\\mGBA\\battery\\Pokemon - Ruby Version (USA, Europe) (Rev 2).sav"
+local targetSeed = 0xD517  -- Write here the target seed
+local targetHour = 0  -- Write here the target hours
+local targetMinute = 9  -- Write here the target minutes
+local targetSecond = 24  -- Write here the target seconds
+local targetSixtiethSecond = 22  -- Write here the target sixtieth seconds
+local savePath = "D:\\Desktop\\mGBA\\battery\\Pokemon - Ruby Version (USA, Europe) (Rev 2).sav"  -- Write here the path of your Ruby/Sapphire save file
 
 local charMap = {
  " ", "À", "Á", "Â", "Ç", "È", "É", "Ê", "Ë", "Ì", "こ", "Î", "Ï", "Ò", "Ó", "Ô",
