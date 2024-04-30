@@ -27,7 +27,7 @@ local HPTypeNamesList = {
 
 local speciesNamesList = {
  -- Gen 1
- "BULBASAUR", "IVYSAUR", "VENUSAUR", "CHARMANDER", "CHARMELEON", "CHARIZARD", "SQUIRTLE", "WARTORTLE", "BLASTOISE",
+ "NONE", "BULBASAUR", "IVYSAUR", "VENUSAUR", "CHARMANDER", "CHARMELEON", "CHARIZARD", "SQUIRTLE", "WARTORTLE", "BLASTOISE",
  "CATERPIE", "METAPOD", "BUTTERFREE", "WEEDLE", "KAKUNA", "BEEDRILL", "PIDGEY", "PIDGEOTTO", "PIDGEOT", "RATTATA", "RATICATE",
  "SPEAROW", "FEAROW", "EKANS", "ARBOK", "PIKACHU", "RAICHU", "SANDSHREW", "SANDSLASH", "NIDORAN♀", "NIDORINA", "NIDOQUEEN",
  "NIDORAN♂", "NIDORINO", "NIDOKING", "CLEFAIRY", "CLEFABLE", "VULPIX", "NINETALES", "JIGGLYPUFF", "WIGGLYTUFF", "ZUBAT", "GOLBAT",
@@ -234,7 +234,7 @@ function getPokemonInfo(addr, trainerTID, trainerSID)
  local spDefIV = read8Bit(ivsAddr + 0x8)
  local spdIV = read8Bit(ivsAddr + 0xA)
 
- local speciesDexNumber = nationalDexList[((speciesDexIndex > 411 or speciesDexIndex < 1) and 1 or speciesDexIndex) + 1]
+ local speciesDexNumber = nationalDexList[((speciesDexIndex > 411 or speciesDexIndex < 1) and 0 or speciesDexIndex) + 1] + 1
  local speciesName = speciesNamesList[speciesDexNumber]
  speciesName = speciesName..setPadding(10, 5, speciesName)
  local natureName = natureNamesList[(pokemonPID % 25) + 1]
