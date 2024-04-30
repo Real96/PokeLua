@@ -84,7 +84,7 @@ Use latest release: [link](https://github.com/TASEmulators/BizHawk/releases)
 
 ## Notes for DeSmuMe scripts
 * Everytime you need to restart the game, press the button `Restart` in the lua window
-* Every time you need to save or load a state, pause the game and hold `Shift` + `F(n)`/`F(n)` (ex. `Shift` + `F1` to save a state in slot 1 or `F1` to load the state in slot 1) for some seconds, until you see the message `Saved State (n)`/`Loaded State (n)` appearing on the screen for less than a second
+* Every time you need to save or load a state, pause the game and hold `Shift` + `F(n)`/`F(n)` (ex. `Shift` + `F1` to save a state in slot 1 or `F1` to load the state in slot 1) for some seconds, until you see the message `Saved State (n)`/`Loaded State (n)` appearing on the lower screen for less than a second
 
 
 ## Credits:
