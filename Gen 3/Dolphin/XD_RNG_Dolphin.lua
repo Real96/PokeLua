@@ -203,7 +203,6 @@ function getBoxSelectedPokemonAddr(pointer, partyAddr)
 
  if isBoxOpened() then
   local boxSelectedSlotIndex = read8Bit(boxSelectedSlotIndexAddr)
-  local boxSelectedSlotIndexOffset = 10  -- Box slot index value starts from 10 in box selection
 
   if boxSelectedSlotIndex < 4 then  -- Index value is lower than 4 when you don't select a Pokémon slot
    return boxAddr
@@ -213,7 +212,8 @@ function getBoxSelectedPokemonAddr(pointer, partyAddr)
 
   local currentBoxIndex = read8Bit(currentBoxIndexAddr)
 
-  return boxAddr + (0xC4 * (boxSelectedSlotIndex - boxSelectedSlotIndexOffset)) + (0x14 * currentBoxIndex) + (0xC4 * currentBoxIndex * 0x1E)
+  return boxAddr + (0xC4 * (boxSelectedSlotIndex - 10)) + (0x14 * currentBoxIndex) + (0xC4 * currentBoxIndex * 0x1E)  -- Box slot index value starts from 10 in box selection
+
  end
 
  return boxAddr
