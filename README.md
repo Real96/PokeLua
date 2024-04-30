@@ -13,7 +13,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * Fishing Bot
 * In-Game Trade Bot
 * TID Bot
-* Party Pokemon Info checking
+* Party Pokémon Info checking
 
 ## Gen 2 features - _soon_
 ### GS/C
@@ -21,35 +21,42 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 ## Gen 3 features
 ### RS/FRLG/E
 * Rng info checking
-* Wild Pokemon info checking
+* Wild Pokémon info checking
 * Breeding info checking
-* Roamer Pokemon info checking
+* Roamer Pokémon info checking
 * Trainer info checking
 * TID Bot (FRLG/E only)
-* Party Pokemon info checking
-* Box Pokemon info checking
+* Party Pokémon info checking
+* Box Pokémon info checking
 * Checksums info checking (USA RS only)
+  
+### C/XD
+* Rng info checking
+* Enemy Pokémon info checking
+* Trainer info checking
+* Party Pokémon info checking
+* Box Pokémon info checking
 
 ## Gen 4 features
 ### DP/Pt/HGSS
 * Rng info checking
-* Wild Pokemon info checking
+* Wild Pokémon info checking
 * Breeding info checking
-* Roamer Pokemon info checking
+* Roamer Pokémon info checking
 * Trainer info checking
-* Party Pokemon info checking
-* Box Pokemon info checking
+* Party Pokémon info checking
+* Box Pokémon info checking
 
 ## Gen 5 features
 ### BW/B2W2
 * Rng info checking
-* Wild Pokemon info checking
+* Wild Pokémon info checking
 * Breeding info checking
-* Roamer Pokemon info checking (BW)
-* C-Gear Pokemon info checking
+* Roamer Pokémon info checking (BW)
+* C-Gear Pokémon info checking
 * Trainer info checking
-* Party Pokemon info checking
-* Box Pokemon info checking
+* Party Pokémon info checking
+* Box Pokémon info checking
 
 ## Supported emulators
 ### mGBA
