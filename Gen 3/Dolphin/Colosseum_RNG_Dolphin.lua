@@ -150,7 +150,7 @@ function LCRNGDistance(state0, state1)
  return dist > 1000000 and dist - 0x100000000 or dist
 end
 
-local currentSeedAddr, initialSeed, advances
+local boxSelectedPokemonAddr, enemyAddr, boxFlagAddr, currentSeedAddr, boxPointerAddr, pointerAddr, initialSeed, advances
 
 function onScriptStart()
  local gameLang = read8Bit(0x3)

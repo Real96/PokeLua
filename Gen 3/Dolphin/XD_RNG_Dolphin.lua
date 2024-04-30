@@ -151,14 +151,13 @@ function LCRNGDistance(state0, state1)
 end
 
 local offset = 0x10
-local currentSeedAddr, initialSeed, advances
+local boxSelectedSlotIndexAddr, enemyAddr, currentSeedAddr, currentBoxIndexAddr, pointerAddr, boxFlagAddr, initialSeed, advances
 
 function onScriptStart()
  local gameLang = read8Bit(0x3)
 
  if gameLang == 0x45 then -- U
   boxSelectedSlotIndexAddr = 0x4355FB
-  boxPointerAddr = 0x47ADB8
   enemyAddr = 0x4A86F4
   currentSeedAddr = 0x4E8610
   currentBoxIndexAddr = 0x4EB2E8
@@ -167,7 +166,6 @@ function onScriptStart()
  elseif gameLang == 0x4A then -- J
   offset = 0
   boxSelectedSlotIndexAddr = 0x412B4B
-  boxPointerAddr = 0x466468
   enemyAddr = 0x485c14
   currentSeedAddr = 0x4C5B28
   currentBoxIndexAddr = 0x4C87D8
@@ -175,7 +173,6 @@ function onScriptStart()
   boxFlagAddr = 0x7EBB16
  else -- E
   boxSelectedSlotIndexAddr = 0x46FBD3
-  boxPointerAddr = 0x4C8268
   enemyAddr = 0x4E2CD4
   currentSeedAddr = 0x522BF0
   currentBoxIndexAddr = 0x5258D0
@@ -206,12 +203,12 @@ function getBoxSelectedPokemonAddr(pointer, partyAddr)
 
  if isBoxOpened() then
   local boxSelectedSlotIndex = read8Bit(boxSelectedSlotIndexAddr)
-  local boxSelectedSlotIndexOffset = 10  -- box slot index value starts from 10 in box selection
+  local boxSelectedSlotIndexOffset = 10  -- Box slot index value starts from 10 in box selection
 
   if boxSelectedSlotIndex < 4 then  -- Index value is lower than 4 when you don't select a Pokémon slot
    return boxAddr
   elseif boxSelectedSlotIndex >= 4 and boxSelectedSlotIndex <= 9 then
-   return partyAddr + (0xC4 * (boxSelectedSlotIndex - 4))  -- box slot index value starts from 4 in party selection
+   return partyAddr + (0xC4 * (boxSelectedSlotIndex - 4))  -- Box slot index value starts from 4 in party selection
   end
 
   local currentBoxIndex = read8Bit(currentBoxIndexAddr)
