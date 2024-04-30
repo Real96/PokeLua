@@ -33,9 +33,9 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 ### C/XD
 * Rng info checking
 * Enemy Pokémon info checking
-* Trainer info checking
 * Party Pokémon info checking
 * Box Pokémon info checking
+* Trainer info checking
 
 ## Gen 4 features
 ### DP/Pt/HGSS
