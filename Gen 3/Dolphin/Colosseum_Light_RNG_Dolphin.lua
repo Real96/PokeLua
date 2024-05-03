@@ -226,9 +226,7 @@ function getPokemonInfo(addr, trainerTID, trainerSID)
 
  local speciesDexNumber = nationalDexList[((speciesDexIndex > 411 or speciesDexIndex < 1) and 0 or speciesDexIndex) + 1] + 1
  local speciesName = speciesNamesList[speciesDexNumber]
- speciesName = speciesName
  local natureName = natureNamesList[(pokemonPID % 25) + 1]
- natureName = natureName
 
  local hpType = (((hpIV & 1) + (2 * (atkIV & 1)) + (4 * (defIV & 1)) + (8 * (spdIV & 1)) + (16 * (spAtkIV & 1))
                 + (32 * (spDefIV & 1))) * 15) // 63
