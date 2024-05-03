@@ -309,6 +309,8 @@ function onScriptUpdate()
  advances = advances + LCRNGDistance(tempCurrentSeed, currentSeed)
  local pointer = read32Bit(pointerAddr)
  local trainerTID, trainerSID = 0, 0
+
+ local RNGInfoText = string.format("Initial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d", initialSeed, currentSeed, advances)
  local infoText = ""
 
  if pointer ~= 0 then
@@ -316,7 +318,6 @@ function onScriptUpdate()
   infoText = getPokemonInfoText(pointer, trainerTID, trainerSID)
  end
 
- local RNGInfoText = string.format("Initial Seed: %08X\nCurrent Seed: %08X\nAdvances: %d", initialSeed, currentSeed, advances)
  local IDsInfoText = string.format("\n\n\nTID: %05d\nSID: %05d", trainerTID, trainerSID)
 
  SetScreenText(RNGInfoText..infoText..IDsInfoText)
