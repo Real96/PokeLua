@@ -300,7 +300,7 @@ function getPokemonInfoText(pointer, trainerTID, trainerSID)
  for i = 0, 5 do
   local enemyPID, enemyOTID, enemyOTSID, enemySpeciesName, enemyNatureName, enemyHpIV, enemyAtkIV, enemyDefIV, enemySpAtkIV, enemySpDefIV,
         enemySpdIV, enemyHpType, enemyHpPower, enemyCatchRateValue = getPokemonInfo(enemyAddr + (0xC4 * i), trainerTID, trainerSID)
-  local HPTypeName = HPTypeNamesList[enemyHpType + 1]
+  local enemyHPTypeName = HPTypeNamesList[enemyHpType + 1]
 
   local partyPID, partyOTID, partyOTSID, partySpeciesName, partyNatureName, partyHpIV, partyAtkIV, partyDefIV, partySpAtkIV, partySpDefIV,
         partySpdIV, partyHpType, partyHpPower, partyCatchRateValue = getPokemonInfo(partyAddr + (0xC4 * i))
@@ -313,7 +313,7 @@ function getPokemonInfoText(pointer, trainerTID, trainerSID)
   local ivsText = string.format("\nIVs: %02d/%02d/%02d/%02d/%02d/%02d   IVs: %02d/%02d/%02d/%02d/%02d/%02d",
                                 enemyHpIV, enemyAtkIV, enemyDefIV, enemySpAtkIV, enemySpDefIV, enemySpdIV, partyHpIV, partyAtkIV, partyDefIV, partySpAtkIV, partySpDefIV, partySpdIV)..
                                 (i == 0 and string.format("   IVs: %02d/%02d/%02d/%02d/%02d/%02d", boxHpIV, boxAtkIV, boxDefIV, boxSpAtkIV, boxSpDefIV, boxSpdIV) or "")
-  local HPText = string.format("\nHPower: %s %02d", HPTypeName, enemyHpPower)..setPadding(11, 5, string.format("%s %02d", HPTypeName, enemyHpPower))..
+  local HPText = string.format("\nHPower: %s %02d", enemyHPTypeName, enemyHpPower)..setPadding(11, 5, string.format("%s %02d", enemyHPTypeName, enemyHpPower))..
                  string.format("HPower: %s %02d", partyHPpTypeName, partyHpPower)..setPadding(11, 5, string.format("%s %02d", partyHPpTypeName, partyHpPower))..
                  (i == 0 and string.format("HPower: %s %02d", boxHPpTypeName, boxHpPower)..setPadding(11, 5, string.format("%s %02d", boxHPpTypeName, boxHpPower)) or "")
   local catchRngText = string.format("\nCatch Rate Value: %d\n\n", enemyCatchRateValue)
