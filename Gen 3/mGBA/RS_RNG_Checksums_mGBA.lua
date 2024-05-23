@@ -44,7 +44,11 @@ function initializeBuffers()
 end
 
 local gameVersion, gameRegion = "", ""
-local wrongGameVersion, wrongGameRegion, saveBlock2Addr, saveBlock1Addr, starterPokemonIndexAddr, currentSeedAddr, startingChecksumBlockAddr
+local wrongGameVersion, wrongGameRegion, currentSeedAddr
+local saveBlock2Addr = 0x2024EA4
+local saveBlock1Addr = 0x2025734
+local starterPokemonIndexAddr = 0x2026ABA
+local startingChecksumBlockAddr = 0xE000FF4
 
 function setGameVersion()
  local gameVersionCode = emu:read8(0x80000AE)
@@ -64,15 +68,12 @@ function setGameVersion()
 
  if gameRegionCode == 0x45 then  -- Check game region and set addresses
   gameRegion = "USA"
-  saveBlock2Addr = 0x2024EA4
-  saveBlock1Addr = 0x2025734
-  starterPokemonIndexAddr = 0x2026ABA
   currentSeedAddr = 0x3004818
-  startingChecksumBlockAddr = 0xE000FF4
  elseif gameRegionCode == 0x4A then
   gameRegion = "JPN"
  elseif gameRegionCode == 0x44 or gameRegionCode == 0x46 or gameRegionCode == 0x49 or gameRegionCode == 0x53 then
   gameRegion = "EUR"
+  currentSeedAddr = 0x3004828
  end
 end
 
@@ -86,8 +87,8 @@ function printGameInfo()
   GameInfo:print("Version: Unknown game")
  elseif gameVersion ~= "Ruby" and gameVersion ~= "Sapphire" then
   GameInfo:print(string.format("Version: %s - Wrong game version! Use Ruby/Sapphire instead\n", gameVersion))
- elseif gameRegion ~= "USA" then
-  GameInfo:print(string.format("Region: %s - Wrong game region! Use USA instead\n", gameRegion))
+ elseif gameRegion == "JPN" then
+  GameInfo:print(string.format("Region: %s - Wrong game region! Use USA/EUR instead\n", gameRegion))
  elseif gameRegion == "" then
   GameInfo:print("Version: "..gameVersion.."\n".."Region: Unknown region\n")
  else
