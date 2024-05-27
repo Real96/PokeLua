@@ -28,7 +28,7 @@ Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devons
 * TID Bot (FRLG/E only)
 * Party Pokémon info checking
 * Box Pokémon info checking
-* Checksums info checking (USA RS only)
+* Checksums info checking (USA/EUR RS only)
   
 ### C/XD
 * Rng info checking
