@@ -93,7 +93,7 @@ Use latest release: [link](https://github.com/TASEmulators/BizHawk/releases)
 * [zep715](https://github.com/zep715) for his [gen1](https://github.com/zep715/rbylua) scripts
 * [wwwwwwzx](https://github.com/wwwwwwzx) for his [gen2](https://github.com/wwwwwwzx/gsclua) scripts
 * [zaksabeast](https://github.com/zaksabeast) for his Jirachi Wishmaker [script](https://www.reddit.com/r/pokemonrng/comments/5ny1el/scripts_and_guide_to_help_automate_rnging_a_shiny) and for his [wishmaker calculator](https://gist.github.com/zaksabeast/600fdd9579aaa4dde5b93f7207ea6550) 
-* [SciresM](https://github.com/SciresM), Zari, [amab](https://github.com/AskMeAboutBirds), [OmegaDonut](https://github.com/OmegaDonut), [Bond697](https://github.com/Bond697), [Lincoln-LM](https://github.com/Lincoln-LM), [StarfBerry](https://github.com/StarfBerry) and all the other Pokémon researchers!
+* [SciresM](https://github.com/SciresM), Zari, [amab](https://github.com/AskMeAboutBirds), [OmegaDonut](https://github.com/OmegaDonut), [Bond697](https://github.com/Bond697), [Lincoln-LM](https://github.com/Lincoln-LM), [StarfBerry](https://github.com/StarfBerry), [Shao](https://github.com/c-poole) and all the other Pokémon researchers!
 * [MKDasher](https://github.com/mkdasher) for his [gen4/gen5](https://www.dropbox.com/s/qx2fo1zc44p1jr7/Pokemon%20Gen%204-5%20Lua%20script.rar) scripts
 * [BizHawk](https://github.com/TASEmulators/BizHawk), [DeSmuMe](https://github.com/TASEmulators/desmume), [mGBA](https://github.com/mgba-emu/mgba), [VBA-ReRecording](https://github.com/TASEmulators/vba-rerecording) devs
 * [SwareJonge](https://github.com/SwareJonge) for his [Dolphin version](https://github.com/SwareJonge/Dolphin-Lua-Core) with lua scripts support
