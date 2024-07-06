@@ -1,5 +1,5 @@
 # PokeLua
-Lua scripts useful for RNG abusing in Pokémon games.
+Useful lua scripts for RNG abusing in Pokémon games.
 
 Join [Pokemon RNG](https://www.pokemonrng.com) or [Devon Studios](https://devonstudios.it) discord servers to talk about RNG or for assistance!
 
