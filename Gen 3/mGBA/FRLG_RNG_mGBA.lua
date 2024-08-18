@@ -1,4 +1,5 @@
-local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
+local botTargetInitialSeeds = {}  -- Write the bot target Initial Seeds you prefer inside the brackets preceding this text (e.g. {0, 0xBAD, 0xDEAD, 0xBEEF, 0xDAD, 0x1EE7, 0xDEAF, 0xB0B, 0xFEE, 0xFADE})
+local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets preceding this text (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
 
 local JUMP_DATA = {
  {0x41C64E6D, 0x6073}, {0xC2A29A69, 0xE97E7B6A}, {0xEE067F11, 0x31B0DDE4}, {0xCFDDDF21, 0x67DBB608},
@@ -293,7 +294,7 @@ local pokemonStatsScreen2Addr, pokemonStatsScreenAddr, pokemonBattleStatsScreenA
       safariZoneStepsCounterAddr, selectedItemAddr, partySelectedSlotIndexAddr, roamerMapGroupAndNumAddr, battleTurnsCounterAddr, currentSeedAddr,
       saveBlock1PointerAddr, saveBlock2PointerAddr, currBoxIndexPointerAddr
 
-local GameInfo, CaptureInfo, RoamerInfo, BreedingInfo, PandoraInfo, PokemonInfo
+local GameInfo, CaptureInfo, RoamerInfo, BreedingInfo, PandoraInfo, InitialSeedBotInfo, PokemonInfo
 
 function initializeBuffers()
  GameInfo = console:createBuffer("Game Info")
@@ -306,6 +307,8 @@ function initializeBuffers()
  RoamerInfo:setSize(100, 100)
  PandoraInfo = console:createBuffer("Pandora")
  PandoraInfo:setSize(100, 100)
+ InitialSeedBotInfo = console:createBuffer("Initial Seed Bot")
+ InitialSeedBotInfo:setSize(100, 100)
  TIDBotInfo = console:createBuffer("TID Bot")
  TIDBotInfo:setSize(100, 100)
  PokemonInfo = console:createBuffer("Pokemon Info")
@@ -901,13 +904,11 @@ function updatePandoraBuffer()
  showTrainerIDs(PandoraInfo)
 end
 
-function printTIDBotInstructions()
- TIDBotInfo:clear()
- TIDBotInfo:print("1) Edit the first line of this script\n")
- TIDBotInfo:print("2) Go to the name insertion screen\n")
- TIDBotInfo:print("3) Input the name you like\n")
- TIDBotInfo:print("4) Place the selection cursor on the OK button\n")
- TIDBotInfo:print("5) Press Shift + START\n\n\n")
+function printInitialSeedBotInstructions()
+ InitialSeedBotInfo:clear()
+ InitialSeedBotInfo:print("1) Edit the first line of this script\n")
+ InitialSeedBotInfo:print("2) Go to the continue screen\n")
+ InitialSeedBotInfo:print("3) Press Shift + SELECT\n\n\n")
 end
 
 local initialSeedWrittenFlag = false
@@ -917,6 +918,89 @@ function initialSeedWritten()
 end
 
 local initialSeedAddrWatchpoint = emu:setWatchpoint(initialSeedWritten, initialSeedAddr, 1)
+
+function initialSeedFoundCheck(initialSeed)
+ for _, targetInitialSeed in ipairs(botTargetInitialSeeds) do
+  if initialSeed == targetInitialSeed then
+   return true
+  end
+ end
+
+ return false
+end
+
+local currentEmuFrame, continueScreen
+local initialSeedBotStartedFlag, initialSeedFoundFlag = false, false
+
+function initialSeedBotLoop()
+ if currentEmuFrame == emu:currentFrame() - 1 then  -- Save a temporary state and press B one frame after the starting one
+  continueScreen = emu:saveStateBuffer()
+  emu:addKey(C.GBA_KEY.B)
+ end
+
+ if currentEmuFrame == emu:currentFrame() - 35 then  -- Press A 35 frame after the starting one
+  emu:addKey(C.GBA_KEY.A)
+ end
+
+ if emu:getKey(C.GBA_KEY.A) == 1 and currentEmuFrame == emu:currentFrame() - 36 then  -- Clear the A button press one frame after the button press
+  emu:clearKey(C.GBA_KEY.A)
+ end
+
+ if currentEmuFrame == emu:currentFrame() - 40 then  -- Press A 40 frame after the starting one
+  emu:addKey(C.GBA_KEY.A)
+ end
+
+ if emu:getKey(C.GBA_KEY.A) == 1 and currentEmuFrame == emu:currentFrame() - 41 then  -- Clear the A button press one frame after the button press
+  emu:clearKey(C.GBA_KEY.A)
+ end
+
+ if initialSeedWrittenFlag then
+  local tempInitialSeed = emu:read16(initialSeedAddr)
+
+  if initialSeedFoundCheck(tempInitialSeed) then
+   initialSeedBotStartedFlag = false
+   initialSeedFoundFlag = true
+   emu:clearKey(C.GBA_KEY.B)
+  else
+   initialSeedWrittenFlag = false
+   emu:loadStateBuffer(continueScreen)
+   currentEmuFrame = emu:currentFrame()
+  end
+
+  InitialSeedBotInfo:clear()
+  InitialSeedBotInfo:print(string.format("Initial Seed: %04X", tempInitialSeed))
+ end
+end
+
+function updateInitialSeedBotBuffer()
+ if not initialSeedBotStartedFlag then
+  printInitialSeedBotInstructions()
+ end
+
+ if input:isKeyActive(8388658) and emu:getKey(C.GBA_KEY.SELECT) == 1 and not initialSeedBotStartedFlag then  -- Check if Shift + SELECT is being pressed
+  initialSeedBotStartedFlag = true
+  initialSeedFoundFlag = false
+  initialSeedWrittenFlag = false
+  currentEmuFrame = emu:currentFrame()
+ end
+
+ if initialSeedBotStartedFlag then
+  initialSeedBotLoop()
+ end
+
+ if initialSeedFoundFlag then
+  InitialSeedBotInfo:print(string.format("Initial Seed found!\nInitial Seed: %04X", emu:read16(initialSeedAddr)))
+ end
+end
+
+function printTIDBotInstructions()
+ TIDBotInfo:clear()
+ TIDBotInfo:print("1) Edit the second line of this script\n")
+ TIDBotInfo:print("2) Go to the name insertion screen\n")
+ TIDBotInfo:print("3) Input the name you like\n")
+ TIDBotInfo:print("4) Place the selection cursor on the OK button\n")
+ TIDBotInfo:print("5) Press Shift + START\n\n\n")
+end
 
 function TIDFoundCheck(TID)
  for _, targetTID in ipairs(botTargetTIDs) do
@@ -928,7 +1012,7 @@ function TIDFoundCheck(TID)
  return false
 end
 
-local currentEmuFrame, insertionNameState
+local insertionNameState
 local TIDBotStartedFlag, TIDFoundFlag = false, false
 
 function TIDBotLoop()
@@ -963,7 +1047,7 @@ function updateTIDBotBuffer()
   printTIDBotInstructions()
  end
 
- if input:isKeyActive(8388658) and input:isKeyActive(10) and not TIDBotStartedFlag then  -- Check if Shift + START is being pressed
+ if input:isKeyActive(8388658) and emu:getKey(C.GBA_KEY.START) == 1 and not TIDBotStartedFlag then  -- Check if Shift + START is being pressed
   TIDBotStartedFlag = true
   TIDFoundFlag = false
   initialSeedWrittenFlag = false
@@ -1101,6 +1185,7 @@ function updateBuffers()
   updateBreedingBuffer()
   updateRoamerBuffer()
   updatePandoraBuffer()
+  updateInitialSeedBotBuffer()
   updateTIDBotBuffer()
   updatePokemonInfoBuffer()
   getSaveStateInput()

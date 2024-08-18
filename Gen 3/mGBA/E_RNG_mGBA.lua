@@ -1,4 +1,4 @@
-local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
+local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets preceding this text (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
 
 local JUMP_DATA = {
  {0x41C64E6D, 0x6073}, {0xC2A29A69, 0xE97E7B6A}, {0xEE067F11, 0x31B0DDE4}, {0xCFDDDF21, 0x67DBB608},
@@ -878,7 +878,7 @@ function updateTIDBotBuffer()
   printTIDBotInstructions()
  end
 
- if input:isKeyActive(8388658) and input:isKeyActive(10) and not TIDBotStartedFlag then  -- Check if Shift + START is being pressed
+ if input:isKeyActive(8388658) and emu:getKey(C.GBA_KEY.START) == 1 and not TIDBotStartedFlag then  -- Check if Shift + START is being pressed
   TIDBotStartedFlag = true
   TIDFoundFlag = false
   initialSeedWrittenFlag = false
