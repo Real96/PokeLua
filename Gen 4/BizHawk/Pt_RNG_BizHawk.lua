@@ -843,13 +843,13 @@ function getBits(a, b, d)
  return (a >> b) % (1 << d)
 end
 
-function getIVs(ivsValue)
+function getIVs(ivsValue, isRoamer)
  local hpIV  = getBits(ivsValue, 0, 5)
  local atkIV = getBits(ivsValue, 5, 5)
  local defIV = getBits(ivsValue, 10, 5)
- local spdIV = getBits(ivsValue, 15, 5)
- local spAtkIV = getBits(ivsValue, 20, 5)
- local spDefIV = getBits(ivsValue, 25, 5)
+ local spdIV = isRoamer and getBits(ivsValue, 25, 5) or getBits(ivsValue, 15, 5)
+ local spAtkIV = isRoamer and getBits(ivsValue, 15, 5) or getBits(ivsValue, 20, 5)
+ local spDefIV = isRoamer and getBits(ivsValue, 20, 5) or getBits(ivsValue, 25, 5)
 
  return hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV
 end
@@ -875,8 +875,10 @@ function getIVColor(value)
  return nil  -- IV value from 6 to 29
 end
 
-function showIVsAndHP(ivsValue)
- local hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV = getIVs(ivsValue)
+function showIVsAndHP(ivsValue, isRoamer)
+ isRoamer = isRoamer or nil
+
+ local hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV = getIVs(ivsValue, isRoamer)
  local hpType, hpPower = getHPTypeAndPower(hpIV, atkIV, defIV, spAtkIV, spDefIV, spdIV)
 
  gui.pixelText(0, 36, "IVs:")
@@ -1277,7 +1279,7 @@ function showRoamerInfo(roamerAddr)
   gui.pixelText(1, 22, "PID:")
   gui.pixelText(21, 22, string.format("%08X%s", roamerPID, roamerShinyType), roamerShinyTypeTextColor)
   gui.pixelText(1, 29, "Nature: "..natureNamesList[roamerNatureIndex])
-  showIVsAndHP(roamerIVsValue)
+  showIVsAndHP(roamerIVsValue, true)
   gui.pixelText(1, 50, "Level: "..roamerLevel)
   gui.pixelText(1, 57, "HP: "..roamerHP)
   gui.pixelText(1, 64, "Status condition: "..roamerStatus)
