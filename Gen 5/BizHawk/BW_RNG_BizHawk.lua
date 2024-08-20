@@ -1188,7 +1188,7 @@ function showRoamerInfo(roamerAddr)
   gui.pixelText(1, 57, "HP: "..roamerHP)
   gui.pixelText(1, 64, "Status condition: "..roamerStatus)
   gui.pixelText(1, 71, "Current position:")
-  gui.pixelText(1, 79, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
+  gui.pixelText(1, 78, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
                         roamerMapIndex == playerMapIndex and "limegreen" or nil)
  else
   gui.pixelText(1, 8, "Active Roamer? No")

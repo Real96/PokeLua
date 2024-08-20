@@ -581,7 +581,7 @@ function setBackgroundBoxes()  -- Set transparent black boxes
  if mode[index] == "Capture" or mode[index] == "Breeding" or mode[index] == "C-Gear" or mode[index] == "Pokemon Info" then
   gui.box(1, -191, 156, -59, "#0000007F", "#0000007F")
  elseif mode[index] == "Roamer" then
-  gui.box(1, -191, 156, -72, "#0000007F", "#0000007F")
+  gui.box(1, -191, 156, -70, "#0000007F", "#0000007F")
  end
 
  gui.box(1, 55, 164, 66, "#0000007F", "#0000007F")
@@ -1191,7 +1191,7 @@ function showRoamerInfo(roamerAddr)
   gui.text(2, -112, "HP: "..roamerHP)
   gui.text(2, -101, "Status condition: "..roamerStatus)
   gui.text(2, -90, "Current position:")
-  gui.text(2, -81, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
+  gui.text(2, -79, (roamerMapIndex > 427 or roamerMapIndex < 1) and "" or locationNamesList[roamerMapIndex + 1],
                     roamerMapIndex == playerMapIndex and "green" or nil)
  else
   gui.text(2, -189, "Active Roamer? No")
