@@ -4,14 +4,14 @@ read8Bit = memory.readbyte
 floor = math.floor
 
 local JUMP_DATA = {
- {0X6C078965, 0X269EC3}, {0X54341D9, 0X55AE9CB2}, {0X285E9F1, 0XC910A194}, {0XAE3294E1, 0X4EAC71E8},
- {0X5A78EDC1, 0X1566AED0}, {0X75BEEB81, 0X592709A0}, {0X56221701, 0X6068C340}, {0XCA552E01, 0X98DC4680},
- {0X28EE5C01, 0X2EE38D00}, {0X82ECB801, 0X3A731A00}, {0XCA197001, 0X27963400}, {0XA532E001, 0X19EC6800},
- {0X8E65C001, 0X5ED8D000}, {0X2CCB8001, 0X69B1A000}, {0X99970001, 0X83634000}, {0X332E0001, 0XC6C68000},
- {0X665C0001, 0X8D8D0000}, {0XCCB80001, 0X1B1A0000}, {0X99700001, 0X36340000}, {0X32E00001, 0X6C680000},
- {0X65C00001, 0XD8D00000}, {0XCB800001, 0XB1A00000}, {0X97000001, 0X63400000}, {0X2E000001, 0XC6800000},
- {0X5C000001, 0X8D000000}, {0XB8000001, 0X1A000000}, {0X70000001, 0X34000000}, {0XE0000001, 0X68000000},
- {0XC0000001, 0XD0000000}, {0X80000001, 0XA0000000}, {0x1, 0X40000000}, {0x1, 0X80000000}}
+ {0x6C078965, 0x269EC3}, {0x54341D9, 0x55AE9CB2}, {0x285E9F1, 0xC910A194}, {0xAE3294E1, 0x4EAC71E8},
+ {0x5A78EDC1, 0x1566AED0}, {0x75BEEB81, 0x592709A0}, {0x56221701, 0x6068C340}, {0xCA552E01, 0x98DC4680},
+ {0x28EE5C01, 0x2EE38D00}, {0x82ECB801, 0x3A731A00}, {0xCA197001, 0x27963400}, {0xA532E001, 0x19EC6800},
+ {0x8E65C001, 0x5ED8D000}, {0x2CCB8001, 0x69B1A000}, {0x99970001, 0x83634000}, {0x332E0001, 0xC6C68000},
+ {0x665C0001, 0x8D8D0000}, {0xCCB80001, 0x1B1A0000}, {0x99700001, 0x36340000}, {0x32E00001, 0x6C680000},
+ {0x65C00001, 0xD8D00000}, {0xCB800001, 0xB1A00000}, {0x97000001, 0x63400000}, {0x2E000001, 0xC6800000},
+ {0x5C000001, 0x8D000000}, {0xB8000001, 0x1A000000}, {0x70000001, 0x34000000}, {0xE0000001, 0x68000000},
+ {0xC0000001, 0xD0000000}, {0x80000001, 0xA0000000}, {0x1, 0x40000000}, {0x1, 0x80000000}}
 
 local natureNamesList = {
  "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -357,7 +357,7 @@ local itemNamesList = {
 
 client.reboot_core()
 
-local gameCode = read32Bit(0x02FFFE0C)
+local gameCode = read32Bit(0x2FFFE0C)
 local gameVersionCode = (gameCode >> 16) & 0xFF
 local gameVersion = ""
 local gameLanguageCode = gameCode >> 24
@@ -383,116 +383,116 @@ local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, 
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- mtSeedAddr = 0x021FEC68 + getGameAddrOffset(0x20)
- mtIndexAddr = 0x021FF628 + getGameAddrOffset(0x20)
- currentSeedAddr = 0x021FFB58 + getGameAddrOffset(0x20)
- boxAddr = 0x02205924 + getGameAddrOffset(0x20)
- partySlotsCounterAddr = 0x0221E328 + getGameAddrOffset(0x20)
- partyAddr = 0x0221E32C + getGameAddrOffset(0x20)
- trainerIDsAddr = 0x0221E938 + getGameAddrOffset(0x20)
- cgearEnemyAddr = 0x0224A998 + getGameAddrOffset(0x20)
- currBoxIndexAddr = 0x022571F4 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02257210 + getGameAddrOffset(0x20)
- partyStatsSelectedSlotIndexAddr = 0x022571F8 + getGameAddrOffset(0x20)
- enemyAddr = 0x02258774 + getGameAddrOffset(0x20)
- pokemonBoxStatsAddr = 0x02267480 + getGameAddrOffset(0x20)
- boxSelectedSlotIndexAddr = 0x02271738 + getGameAddrOffset(0x20)
+ mtSeedAddr = 0x21FEC68 + getGameAddrOffset(0x20)
+ mtIndexAddr = 0x21FF628 + getGameAddrOffset(0x20)
+ currentSeedAddr = 0x21FFB58 + getGameAddrOffset(0x20)
+ boxAddr = 0x2205924 + getGameAddrOffset(0x20)
+ partySlotsCounterAddr = 0x221E328 + getGameAddrOffset(0x20)
+ partyAddr = 0x221E32C + getGameAddrOffset(0x20)
+ trainerIDsAddr = 0x221E938 + getGameAddrOffset(0x20)
+ cgearEnemyAddr = 0x224A998 + getGameAddrOffset(0x20)
+ currBoxIndexAddr = 0x22571F4 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x2257210 + getGameAddrOffset(0x20)
+ partyStatsSelectedSlotIndexAddr = 0x22571F8 + getGameAddrOffset(0x20)
+ enemyAddr = 0x2258774 + getGameAddrOffset(0x20)
+ pokemonBoxStatsAddr = 0x2267480 + getGameAddrOffset(0x20)
+ boxSelectedSlotIndexAddr = 0x2271738 + getGameAddrOffset(0x20)
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- mtSeedAddr = 0x021FED48 + getGameAddrOffset(0x20)
- mtIndexAddr = 0x021FF708 + getGameAddrOffset(0x20)
- currentSeedAddr = 0x021FFC38 + getGameAddrOffset(0x20)
- boxAddr = 0x02205A04 + getGameAddrOffset(0x20)
- partySlotsCounterAddr = 0x0221E408 + getGameAddrOffset(0x20)
- partyAddr = 0x0221E40C + getGameAddrOffset(0x20)
- trainerIDsAddr = 0x0221EA18 + getGameAddrOffset(0x20)
- cgearEnemyAddr = 0x0224AA78 + getGameAddrOffset(0x20)
- currBoxIndexAddr = 0x022572D4 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x022572F0 + getGameAddrOffset(0x20)
- partyStatsSelectedSlotIndexAddr = 0x022572D8 + getGameAddrOffset(0x20)
- enemyAddr = 0x02258854 + getGameAddrOffset(0x20)
- pokemonBoxStatsAddr = 0x02267560 + getGameAddrOffset(0x20)
- boxSelectedSlotIndexAddr = 0x02271818 + getGameAddrOffset(0x20)
+ mtSeedAddr = 0x21FED48 + getGameAddrOffset(0x20)
+ mtIndexAddr = 0x21FF708 + getGameAddrOffset(0x20)
+ currentSeedAddr = 0x21FFC38 + getGameAddrOffset(0x20)
+ boxAddr = 0x2205A04 + getGameAddrOffset(0x20)
+ partySlotsCounterAddr = 0x221E408 + getGameAddrOffset(0x20)
+ partyAddr = 0x221E40C + getGameAddrOffset(0x20)
+ trainerIDsAddr = 0x221EA18 + getGameAddrOffset(0x20)
+ cgearEnemyAddr = 0x224AA78 + getGameAddrOffset(0x20)
+ currBoxIndexAddr = 0x22572D4 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x22572F0 + getGameAddrOffset(0x20)
+ partyStatsSelectedSlotIndexAddr = 0x22572D8 + getGameAddrOffset(0x20)
+ enemyAddr = 0x2258854 + getGameAddrOffset(0x20)
+ pokemonBoxStatsAddr = 0x2267560 + getGameAddrOffset(0x20)
+ boxSelectedSlotIndexAddr = 0x2271818 + getGameAddrOffset(0x20)
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- mtSeedAddr = 0x021FEC28 + getGameAddrOffset(0x40)
- mtIndexAddr = 0x021FF5E8 + getGameAddrOffset(0x40)
- currentSeedAddr = 0x021FFB18 + getGameAddrOffset(0x40)
- boxAddr = 0x022058E4 + getGameAddrOffset(0x40)
- partySlotsCounterAddr = 0x0221E2E8 + getGameAddrOffset(0x40)
- partyAddr = 0x0221E2EC + getGameAddrOffset(0x40)
- trainerIDsAddr = 0x0221E8F8 + getGameAddrOffset(0x40)
- cgearEnemyAddr = 0x0224A958 + getGameAddrOffset(0x40)
- currBoxIndexAddr = 0x022571B4 + getGameAddrOffset(0x40)
- partySelectedSlotIndexAddr = 0x022571D0 + getGameAddrOffset(0x40)
- partyStatsSelectedSlotIndexAddr = 0x022571B8 + getGameAddrOffset(0x40)
- enemyAddr = 0x02258734 + getGameAddrOffset(0x40)
- pokemonBoxStatsAddr = 0x02267440 + getGameAddrOffset(0x40)
- boxSelectedSlotIndexAddr = 0x022716F8 + getGameAddrOffset(0x40)
+ mtSeedAddr = 0x21FEC28 + getGameAddrOffset(0x40)
+ mtIndexAddr = 0x21FF5E8 + getGameAddrOffset(0x40)
+ currentSeedAddr = 0x21FFB18 + getGameAddrOffset(0x40)
+ boxAddr = 0x22058E4 + getGameAddrOffset(0x40)
+ partySlotsCounterAddr = 0x221E2E8 + getGameAddrOffset(0x40)
+ partyAddr = 0x221E2EC + getGameAddrOffset(0x40)
+ trainerIDsAddr = 0x221E8F8 + getGameAddrOffset(0x40)
+ cgearEnemyAddr = 0x224A958 + getGameAddrOffset(0x40)
+ currBoxIndexAddr = 0x22571B4 + getGameAddrOffset(0x40)
+ partySelectedSlotIndexAddr = 0x22571D0 + getGameAddrOffset(0x40)
+ partyStatsSelectedSlotIndexAddr = 0x22571B8 + getGameAddrOffset(0x40)
+ enemyAddr = 0x2258734 + getGameAddrOffset(0x40)
+ pokemonBoxStatsAddr = 0x2267440 + getGameAddrOffset(0x40)
+ boxSelectedSlotIndexAddr = 0x22716F8 + getGameAddrOffset(0x40)
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- mtSeedAddr = 0x021FE6C8 + getGameAddrOffset(0x20)
- mtIndexAddr = 0x021FF088 + getGameAddrOffset(0x20)
- currentSeedAddr = 0x021FF5B8 + getGameAddrOffset(0x20)
- boxAddr = 0x02205384 + getGameAddrOffset(0x20)
- partySlotsCounterAddr = 0x0221DD88 + getGameAddrOffset(0x20)
- partyAddr = 0x0221DD8C + getGameAddrOffset(0x20)
- trainerIDsAddr = 0x0221E398 + getGameAddrOffset(0x20)
- cgearEnemyAddr = 0x0224A50C + getGameAddrOffset(0x20)
- currBoxIndexAddr = 0x02256C54 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02256C70 + getGameAddrOffset(0x20)
- partyStatsSelectedSlotIndexAddr = 0x02256C58 + getGameAddrOffset(0x20)
- enemyAddr = 0x02258734 + getGameAddrOffset(0x20)
- pokemonBoxStatsAddr = 0x02266EE0 + getGameAddrOffset(0x20)
- boxSelectedSlotIndexAddr = 0x02271198 + getGameAddrOffset(0x20)
+ mtSeedAddr = 0x21FE6C8 + getGameAddrOffset(0x20)
+ mtIndexAddr = 0x21FF088 + getGameAddrOffset(0x20)
+ currentSeedAddr = 0x21FF5B8 + getGameAddrOffset(0x20)
+ boxAddr = 0x2205384 + getGameAddrOffset(0x20)
+ partySlotsCounterAddr = 0x221DD88 + getGameAddrOffset(0x20)
+ partyAddr = 0x221DD8C + getGameAddrOffset(0x20)
+ trainerIDsAddr = 0x221E398 + getGameAddrOffset(0x20)
+ cgearEnemyAddr = 0x224A50C + getGameAddrOffset(0x20)
+ currBoxIndexAddr = 0x2256C54 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x2256C70 + getGameAddrOffset(0x20)
+ partyStatsSelectedSlotIndexAddr = 0x2256C58 + getGameAddrOffset(0x20)
+ enemyAddr = 0x2258734 + getGameAddrOffset(0x20)
+ pokemonBoxStatsAddr = 0x2266EE0 + getGameAddrOffset(0x20)
+ boxSelectedSlotIndexAddr = 0x2271198 + getGameAddrOffset(0x20)
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
- mtSeedAddr = 0x021FF468 + getGameAddrOffset(0x20)
- mtIndexAddr = 0x021FFE28 + getGameAddrOffset(0x20)
- currentSeedAddr = 0x02200358 + getGameAddrOffset(0x20)
- boxAddr = 0x02206124 + getGameAddrOffset(0x20)
- partySlotsCounterAddr = 0x0221EB28 + getGameAddrOffset(0x20)
- partyAddr = 0x0221EB2C + getGameAddrOffset(0x20)
- trainerIDsAddr = 0x0221F138 + getGameAddrOffset(0x20)
- cgearEnemyAddr = 0x0224B198 + getGameAddrOffset(0x20)
- currBoxIndexAddr = 0x022579F4 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02257A10 + getGameAddrOffset(0x20)
- partyStatsSelectedSlotIndexAddr = 0x022579F8 + getGameAddrOffset(0x20)
- enemyAddr = 0x02258F74 + getGameAddrOffset(0x20)
- pokemonBoxStatsAddr = 0x02267C80 + getGameAddrOffset(0x20)
- boxSelectedSlotIndexAddr = 0x02271F38 + getGameAddrOffset(0x20)
+ mtSeedAddr = 0x21FF468 + getGameAddrOffset(0x20)
+ mtIndexAddr = 0x21FFE28 + getGameAddrOffset(0x20)
+ currentSeedAddr = 0x2200358 + getGameAddrOffset(0x20)
+ boxAddr = 0x2206124 + getGameAddrOffset(0x20)
+ partySlotsCounterAddr = 0x221EB28 + getGameAddrOffset(0x20)
+ partyAddr = 0x221EB2C + getGameAddrOffset(0x20)
+ trainerIDsAddr = 0x221F138 + getGameAddrOffset(0x20)
+ cgearEnemyAddr = 0x224B198 + getGameAddrOffset(0x20)
+ currBoxIndexAddr = 0x22579F4 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x2257A10 + getGameAddrOffset(0x20)
+ partyStatsSelectedSlotIndexAddr = 0x22579F8 + getGameAddrOffset(0x20)
+ enemyAddr = 0x2258F74 + getGameAddrOffset(0x20)
+ pokemonBoxStatsAddr = 0x2267C80 + getGameAddrOffset(0x20)
+ boxSelectedSlotIndexAddr = 0x2271F38 + getGameAddrOffset(0x20)
 elseif gameLanguageCode == 0x4F then
  gameLanguage = "USA"
- mtSeedAddr = 0x021FED28 + getGameAddrOffset(0x40)
- mtIndexAddr = 0x021FF6E8 + getGameAddrOffset(0x40)
- currentSeedAddr = 0x021FFC18 + getGameAddrOffset(0x40)
- boxAddr = 0x022059E4 + getGameAddrOffset(0x40)
- partySlotsCounterAddr = 0x0221E3E8 + getGameAddrOffset(0x40)
- partyAddr = 0x0221E3EC + getGameAddrOffset(0x40)
- trainerIDsAddr = 0x0221E9F8 + getGameAddrOffset(0x40)
- cgearEnemyAddr = 0x0224AA58 + getGameAddrOffset(0x40)
- currBoxIndexAddr = 0x022572B4 + getGameAddrOffset(0x40)
- partySelectedSlotIndexAddr = 0x022572D0 + getGameAddrOffset(0x40)
- partyStatsSelectedSlotIndexAddr = 0x022572B8 + getGameAddrOffset(0x40)
- enemyAddr = 0x02258834 + getGameAddrOffset(0x40)
- pokemonBoxStatsAddr = 0x02267540 + getGameAddrOffset(0x40)
- boxSelectedSlotIndexAddr = 0x022717F8 + getGameAddrOffset(0x40)
+ mtSeedAddr = 0x21FED28 + getGameAddrOffset(0x40)
+ mtIndexAddr = 0x21FF6E8 + getGameAddrOffset(0x40)
+ currentSeedAddr = 0x21FFC18 + getGameAddrOffset(0x40)
+ boxAddr = 0x22059E4 + getGameAddrOffset(0x40)
+ partySlotsCounterAddr = 0x221E3E8 + getGameAddrOffset(0x40)
+ partyAddr = 0x221E3EC + getGameAddrOffset(0x40)
+ trainerIDsAddr = 0x221E9F8 + getGameAddrOffset(0x40)
+ cgearEnemyAddr = 0x224AA58 + getGameAddrOffset(0x40)
+ currBoxIndexAddr = 0x22572B4 + getGameAddrOffset(0x40)
+ partySelectedSlotIndexAddr = 0x22572D0 + getGameAddrOffset(0x40)
+ partyStatsSelectedSlotIndexAddr = 0x22572B8 + getGameAddrOffset(0x40)
+ enemyAddr = 0x2258834 + getGameAddrOffset(0x40)
+ pokemonBoxStatsAddr = 0x2267540 + getGameAddrOffset(0x40)
+ boxSelectedSlotIndexAddr = 0x22717F8 + getGameAddrOffset(0x40)
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- mtSeedAddr = 0x021FECE8 + getGameAddrOffset(0x20)
- mtIndexAddr = 0x021FF6A8 + getGameAddrOffset(0x20)
- currentSeedAddr = 0x021FFBD8 + getGameAddrOffset(0x20)
- boxAddr = 0x022059A4 + getGameAddrOffset(0x20)
- partySlotsCounterAddr = 0x0221E3A8 + getGameAddrOffset(0x20)
- partyAddr = 0x0221E3AC + getGameAddrOffset(0x20)
- trainerIDsAddr = 0x0221E9B8 + getGameAddrOffset(0x20)
- cgearEnemyAddr = 0x0224AA18 + getGameAddrOffset(0x20)
- currBoxIndexAddr = 0x02257274 + getGameAddrOffset(0x20)
- partySelectedSlotIndexAddr = 0x02257290 + getGameAddrOffset(0x20)
- partyStatsSelectedSlotIndexAddr = 0x02257278 + getGameAddrOffset(0x20)
- enemyAddr = 0x022587F4 + getGameAddrOffset(0x20)
- pokemonBoxStatsAddr = 0x02267500 + getGameAddrOffset(0x20)
- boxSelectedSlotIndexAddr = 0x022717B8 + getGameAddrOffset(0x20)
+ mtSeedAddr = 0x21FECE8 + getGameAddrOffset(0x20)
+ mtIndexAddr = 0x21FF6A8 + getGameAddrOffset(0x20)
+ currentSeedAddr = 0x21FFBD8 + getGameAddrOffset(0x20)
+ boxAddr = 0x22059A4 + getGameAddrOffset(0x20)
+ partySlotsCounterAddr = 0x221E3A8 + getGameAddrOffset(0x20)
+ partyAddr = 0x221E3AC + getGameAddrOffset(0x20)
+ trainerIDsAddr = 0x221E9B8 + getGameAddrOffset(0x20)
+ cgearEnemyAddr = 0x224AA18 + getGameAddrOffset(0x20)
+ currBoxIndexAddr = 0x2257274 + getGameAddrOffset(0x20)
+ partySelectedSlotIndexAddr = 0x2257290 + getGameAddrOffset(0x20)
+ partyStatsSelectedSlotIndexAddr = 0x2257278 + getGameAddrOffset(0x20)
+ enemyAddr = 0x22587F4 + getGameAddrOffset(0x20)
+ pokemonBoxStatsAddr = 0x2267500 + getGameAddrOffset(0x20)
+ boxSelectedSlotIndexAddr = 0x22717B8 + getGameAddrOffset(0x20)
 end
 
 function printGameInfo()
@@ -535,7 +535,7 @@ end
 local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function setDateTime()
- local dateTimeAddr = 0x023FFDE8
+ local dateTimeAddr = 0x23FFDE8
 
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))
@@ -635,7 +635,7 @@ function getRngInfo()
  local currentHigh = read32Bit(currentSeedAddr + 0x4)
  local currentLow = read32Bit(currentSeedAddr)
  local mtIndex = read32Bit(mtIndexAddr)
- local delay = read32Bit(0x02FFFC3C)
+ local delay = read32Bit(0x2FFFC3C)
 
  checkInitialSeedGeneration(mtSeed, currentHigh, currentLow)
 

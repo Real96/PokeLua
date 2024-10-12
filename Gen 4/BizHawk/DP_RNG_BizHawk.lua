@@ -406,7 +406,7 @@ local mapAttributeData = {
 
 client.reboot_core()
 
-local gameCode = read32Bit(0x02FFFE0C)
+local gameCode = read32Bit(0x2FFFE0C)
 local gameVersionCode = gameCode & 0xFFFFFF
 local gameVersion = ""
 local gameLanguageCode = gameCode >> 24
@@ -434,69 +434,69 @@ local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- mtIndexAddr = 0x02105CE8 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x021070EC
- delayAddr = 0x021C4A24
- currentSeedAddr = 0x021C4E88
- mtSeedAddr = 0x021C4E8C
- trainerIDsPointerAddr = 0x021C5B08
- tempCurrentSeedDuringBattleAddr = 0x027E3A3C
+ mtIndexAddr = 0x2105CE8 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x21070EC
+ delayAddr = 0x21C4A24
+ currentSeedAddr = 0x21C4E88
+ mtSeedAddr = 0x21C4E8C
+ trainerIDsPointerAddr = 0x21C5B08
+ tempCurrentSeedDuringBattleAddr = 0x27E3A3C
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
- mtIndexAddr = 0x02105BA8 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x02106FAC
- delayAddr = 0x021C48E4
- currentSeedAddr = 0x021C4D48
- mtSeedAddr = 0x021C4D4C
- trainerIDsPointerAddr = 0x021C59C8
- tempCurrentSeedDuringBattleAddr = 0x027E3A3C
+ mtIndexAddr = 0x2105BA8 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x2106FAC
+ delayAddr = 0x21C48E4
+ currentSeedAddr = 0x21C4D48
+ mtSeedAddr = 0x21C4D4C
+ trainerIDsPointerAddr = 0x21C59C8
+ tempCurrentSeedDuringBattleAddr = 0x27E3A3C
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- mtIndexAddr = 0x02105D28 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x0210712C
- delayAddr = 0x021C4A64
- currentSeedAddr = 0x021C4EC8
- mtSeedAddr = 0x021C4ECC
- trainerIDsPointerAddr = 0x021C5B48
- tempCurrentSeedDuringBattleAddr = 0x027E3A3C
+ mtIndexAddr = 0x2105D28 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x210712C
+ delayAddr = 0x21C4A64
+ currentSeedAddr = 0x21C4EC8
+ mtSeedAddr = 0x21C4ECC
+ trainerIDsPointerAddr = 0x21C5B48
+ tempCurrentSeedDuringBattleAddr = 0x27E3A3C
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- mtIndexAddr = 0x02105C88 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x0210708C
- delayAddr = 0x021C49C4
- currentSeedAddr = 0x021C4E28
- mtSeedAddr = 0x021C4E2C
- trainerIDsPointerAddr = 0x021C5AA8
- tempCurrentSeedDuringBattleAddr = 0x027E3A3C
+ mtIndexAddr = 0x2105C88 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x210708C
+ delayAddr = 0x21C49C4
+ currentSeedAddr = 0x21C4E28
+ mtSeedAddr = 0x21C4E2C
+ trainerIDsPointerAddr = 0x21C5AA8
+ tempCurrentSeedDuringBattleAddr = 0x27E3A3C
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- isBaseVersion = read8Bit(0x02FFFE6C) & 0xF == 0xC
- mtIndexAddr = (isBaseVersion and 0x02107464 or 0x021075A4) + getGameAddrOffset(0x8)
- pidPointerAddr = isBaseVersion and 0x02108804 or 0x02108944
- delayAddr = isBaseVersion and 0x021C6144 or 0x021C6284
- currentSeedAddr = isBaseVersion and 0x021C65A8 or 0x021C66E8
- mtSeedAddr = isBaseVersion and 0x021C65AC or 0x021C66EC
- trainerIDsPointerAddr = isBaseVersion and 0x021C7234 or 0x021C7374
- tempCurrentSeedDuringBattleAddr = 0x027E39F0
+ isBaseVersion = read8Bit(0x2FFFE6C) & 0xF == 0xC
+ mtIndexAddr = (isBaseVersion and 0x2107464 or 0x21075A4) + getGameAddrOffset(0x8)
+ pidPointerAddr = isBaseVersion and 0x2108804 or 0x2108944
+ delayAddr = isBaseVersion and 0x21C6144 or 0x21C6284
+ currentSeedAddr = isBaseVersion and 0x21C65A8 or 0x21C66E8
+ mtSeedAddr = isBaseVersion and 0x21C65AC or 0x21C66EC
+ trainerIDsPointerAddr = isBaseVersion and 0x21C7234 or 0x21C7374
+ tempCurrentSeedDuringBattleAddr = 0x27E39F0
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
  koreanOffset = 0x44
- mtIndexAddr = 0x021030A8 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x021045AC
- delayAddr = 0x021C1EE4
- currentSeedAddr = 0x021C2348
- mtSeedAddr = 0x021C234C
- trainerIDsPointerAddr = 0x021C2FC8
- tempCurrentSeedDuringBattleAddr = 0x027E363C
+ mtIndexAddr = 0x21030A8 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x21045AC
+ delayAddr = 0x21C1EE4
+ currentSeedAddr = 0x21C2348
+ mtSeedAddr = 0x21C234C
+ trainerIDsPointerAddr = 0x21C2FC8
+ tempCurrentSeedDuringBattleAddr = 0x27E363C
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- mtIndexAddr = 0x02105D48 + getGameAddrOffset(0x8)
- pidPointerAddr = 0x0210714C
- delayAddr = 0x021C4A84
- currentSeedAddr = 0x021C4EE8
- mtSeedAddr = 0x021C4EEC
- trainerIDsPointerAddr = 0x021C5B68
- tempCurrentSeedDuringBattleAddr = 0x027E3A3C
+ mtIndexAddr = 0x2105D48 + getGameAddrOffset(0x8)
+ pidPointerAddr = 0x210714C
+ delayAddr = 0x21C4A84
+ currentSeedAddr = 0x21C4EE8
+ mtSeedAddr = 0x21C4EEC
+ trainerIDsPointerAddr = 0x21C5B68
+ tempCurrentSeedDuringBattleAddr = 0x27E3A3C
 end
 
 function printGameInfo()
@@ -541,7 +541,7 @@ end
 local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function setDateTime()
- local dateTimeAddr = 0x023FFDE8
+ local dateTimeAddr = 0x23FFDE8
 
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))

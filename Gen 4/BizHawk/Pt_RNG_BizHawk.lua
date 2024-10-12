@@ -420,7 +420,7 @@ local mapAttributeData = {
 
 client.reboot_core()
 
-local gameCode = read32Bit(0x02FFFE0C)
+local gameCode = read32Bit(0x2FFFE0C)
 local gameVersionCode = gameCode & 0xFFFFFF
 local gameVersion = ""
 local gameLanguageCode = gameCode >> 24
@@ -444,68 +444,68 @@ local koreanOffset = 0
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- mtIndexAddr = 0x021009D0
- pidPointerAddr = 0x02101ECC
- delayAddr = 0x021BF848
- currentSeedAddr = 0x021BFCB4
- mtSeedAddr = 0x021BFCB8
- trainerIDsPointerAddr = 0x021C0934
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x21009D0
+ pidPointerAddr = 0x2101ECC
+ delayAddr = 0x21BF848
+ currentSeedAddr = 0x21BFCB4
+ mtSeedAddr = 0x21BFCB8
+ trainerIDsPointerAddr = 0x21C0934
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
- mtIndexAddr = 0x02100834
- pidPointerAddr = 0x02101D2C
- delayAddr = 0x021BF6A8
- currentSeedAddr = 0x021BFB14
- mtSeedAddr = 0x021BFB18
- trainerIDsPointerAddr = 0x021C0794
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x2100834
+ pidPointerAddr = 0x2101D2C
+ delayAddr = 0x21BF6A8
+ currentSeedAddr = 0x21BFB14
+ mtSeedAddr = 0x21BFB18
+ trainerIDsPointerAddr = 0x21C0794
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- mtIndexAddr = 0x02100A10
- pidPointerAddr = 0x02101F0C
- delayAddr = 0x021BF888
- currentSeedAddr = 0x021BFCF4
- mtSeedAddr = 0x021BFCF8
- trainerIDsPointerAddr = 0x021C0974
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x2100A10
+ pidPointerAddr = 0x2101F0C
+ delayAddr = 0x21BF888
+ currentSeedAddr = 0x21BFCF4
+ mtSeedAddr = 0x21BFCF8
+ trainerIDsPointerAddr = 0x21C0974
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- mtIndexAddr = 0x02100990
- pidPointerAddr = 0x02101E8C
- delayAddr = 0x021BF808
- currentSeedAddr = 0x021BFC74
- mtSeedAddr = 0x021BFC78
- trainerIDsPointerAddr = 0x021C08F4
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x2100990
+ pidPointerAddr = 0x2101E8C
+ delayAddr = 0x21BF808
+ currentSeedAddr = 0x21BFC74
+ mtSeedAddr = 0x21BFC78
+ trainerIDsPointerAddr = 0x21C08F4
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- mtIndexAddr = 0x020FFC28
- pidPointerAddr = 0x0210112C
- delayAddr = 0x021BEAA8
- currentSeedAddr = 0x021BEF14
- mtSeedAddr = 0x021BEF18
- trainerIDsPointerAddr = 0x021BFB94
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x20FFC28
+ pidPointerAddr = 0x210112C
+ delayAddr = 0x21BEAA8
+ currentSeedAddr = 0x21BEF14
+ mtSeedAddr = 0x21BEF18
+ trainerIDsPointerAddr = 0x21BFB94
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
  koreanOffset = 0x44
- mtIndexAddr = 0x02101710
- pidPointerAddr = 0x02102C2C
- delayAddr = 0x021C05A8
- currentSeedAddr = 0x021C0A14
- mtSeedAddr = 0x021C0A18
- trainerIDsPointerAddr = 0x021C1694
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x2101710
+ pidPointerAddr = 0x2102C2C
+ delayAddr = 0x21C05A8
+ currentSeedAddr = 0x21C0A14
+ mtSeedAddr = 0x21C0A18
+ trainerIDsPointerAddr = 0x21C1694
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- mtIndexAddr = 0x02100A30
- pidPointerAddr = 0x02101F2C
- delayAddr = 0x021BF8A8
- currentSeedAddr = 0x021BFD14
- mtSeedAddr = 0x021BFD18
- trainerIDsPointerAddr = 0x021C0994
- tempCurrentSeedDuringBattleAddr = 0x027E3634
+ mtIndexAddr = 0x2100A30
+ pidPointerAddr = 0x2101F2C
+ delayAddr = 0x21BF8A8
+ currentSeedAddr = 0x21BFD14
+ mtSeedAddr = 0x21BFD18
+ trainerIDsPointerAddr = 0x21C0994
+ tempCurrentSeedDuringBattleAddr = 0x27E3634
 end
 
 function printGameInfo()
@@ -550,7 +550,7 @@ end
 local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function setDateTime()
- local dateTimeAddr = 0x023FFDE8
+ local dateTimeAddr = 0x23FFDE8
 
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))

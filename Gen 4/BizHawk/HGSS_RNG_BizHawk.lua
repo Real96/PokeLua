@@ -340,7 +340,7 @@ local mapAttributeData = {
 
 client.reboot_core()
 
-local gameCode = read32Bit(0x02FFFE0C)
+local gameCode = read32Bit(0x2FFFE0C)
 local gameVersionCode = gameCode & 0xFFFFFF
 local gameVersion = ""
 local gameLanguageCode = gameCode >> 24
@@ -367,103 +367,103 @@ local koreanOffset = 0
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
  boxSelectedSlotIndexOffset = 0x975F1
- mtIndexAddr = 0x0210F6AC
- pidPointerAddr = 0x0211184C
- radioSoundValueAddr = 0x021D05C0
- delayAddr = 0x021D1118
- currentSeedAddr = 0x021D1588
- mtSeedAddr = 0x021D158C
- trainerIDsPointerAddr = 0x021D2208
- getRadioSoundValueFunctionBaseAddr = 0x022522C0
- getMarchSoundValueFunctionAddr = 0x022522F0
- getLullabySoundValueFunctionAddr = 0x022522F4
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x210F6AC
+ pidPointerAddr = 0x211184C
+ radioSoundValueAddr = 0x21D05C0
+ delayAddr = 0x21D1118
+ currentSeedAddr = 0x21D1588
+ mtSeedAddr = 0x21D158C
+ trainerIDsPointerAddr = 0x21D2208
+ getRadioSoundValueFunctionBaseAddr = 0x22522C0
+ getMarchSoundValueFunctionAddr = 0x22522F0
+ getLullabySoundValueFunctionAddr = 0x22522F4
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x45 then
  gameLanguage = "EUR/USA"
  boxSelectedSlotIndexOffset = 0x97339
- mtIndexAddr = 0x0210F6CC
- pidPointerAddr = 0x0211186C
- radioSoundValueAddr = 0x021D05E0
- delayAddr = 0x021D1138
- currentSeedAddr = 0x021D15A8
- mtSeedAddr = 0x021D15AC
- trainerIDsPointerAddr = 0x021D2228
- getRadioSoundValueFunctionBaseAddr = 0x022522E0
- getMarchSoundValueFunctionAddr = 0x02252310
- getLullabySoundValueFunctionAddr = 0x02252314
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x210F6CC
+ pidPointerAddr = 0x211186C
+ radioSoundValueAddr = 0x21D05E0
+ delayAddr = 0x21D1138
+ currentSeedAddr = 0x21D15A8
+ mtSeedAddr = 0x21D15AC
+ trainerIDsPointerAddr = 0x21D2228
+ getRadioSoundValueFunctionBaseAddr = 0x22522E0
+ getMarchSoundValueFunctionAddr = 0x2252310
+ getLullabySoundValueFunctionAddr = 0x2252314
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
  boxSelectedSlotIndexOffset = 0x97611
- mtIndexAddr = 0x0210F6EC
- pidPointerAddr = 0x0211188C
- radioSoundValueAddr = 0x021D0600
- delayAddr = 0x021D1158
- currentSeedAddr = 0x021D15C8
- mtSeedAddr = 0x021D15CC
- trainerIDsPointerAddr = 0x021D2248
- getRadioSoundValueFunctionBaseAddr = 0x02252300
- getMarchSoundValueFunctionAddr = 0x02252330
- getLullabySoundValueFunctionAddr = 0x02252334
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x210F6EC
+ pidPointerAddr = 0x211188C
+ radioSoundValueAddr = 0x21D0600
+ delayAddr = 0x21D1158
+ currentSeedAddr = 0x21D15C8
+ mtSeedAddr = 0x21D15CC
+ trainerIDsPointerAddr = 0x21D2248
+ getRadioSoundValueFunctionBaseAddr = 0x2252300
+ getMarchSoundValueFunctionAddr = 0x2252330
+ getLullabySoundValueFunctionAddr = 0x2252334
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
  boxSelectedSlotIndexOffset = 0x975F1
- mtIndexAddr = 0x0210F66C
- pidPointerAddr = 0x0211180C
- radioSoundValueAddr = 0x021D0580
- delayAddr = 0x021D10D8
- currentSeedAddr = 0x021D1548
- mtSeedAddr = 0x021D154C
- trainerIDsPointerAddr = 0x021D21C8
- getRadioSoundValueFunctionBaseAddr = 0x02252280
- getMarchSoundValueFunctionAddr = 0x022522B0
- getLullabySoundValueFunctionAddr = 0x022522B4
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x210F66C
+ pidPointerAddr = 0x211180C
+ radioSoundValueAddr = 0x21D0580
+ delayAddr = 0x21D10D8
+ currentSeedAddr = 0x21D1548
+ mtSeedAddr = 0x21D154C
+ trainerIDsPointerAddr = 0x21D21C8
+ getRadioSoundValueFunctionBaseAddr = 0x2252280
+ getMarchSoundValueFunctionAddr = 0x22522B0
+ getLullabySoundValueFunctionAddr = 0x22522B4
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
  japanOffset = 0x4
  boxSelectedSlotIndexOffset = 0x975C1
- mtIndexAddr = 0x0210EC00
- pidPointerAddr = 0x02110DAC
- radioSoundValueAddr = 0x021CFB18
- delayAddr = 0x021D0678
- currentSeedAddr = 0x021D0AE8
- mtSeedAddr = 0x021D0AEC
- trainerIDsPointerAddr = 0x021D1768
- getRadioSoundValueFunctionBaseAddr = 0x02251694
- getMarchSoundValueFunctionAddr = 0x022516C4
- getLullabySoundValueFunctionAddr = 0x022516C8
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x210EC00
+ pidPointerAddr = 0x2110DAC
+ radioSoundValueAddr = 0x21CFB18
+ delayAddr = 0x21D0678
+ currentSeedAddr = 0x21D0AE8
+ mtSeedAddr = 0x21D0AEC
+ trainerIDsPointerAddr = 0x21D1768
+ getRadioSoundValueFunctionBaseAddr = 0x2251694
+ getMarchSoundValueFunctionAddr = 0x22516C4
+ getLullabySoundValueFunctionAddr = 0x22516C8
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
  koreanOffset = 0x44
  boxSelectedSlotIndexOffset = 0x971B5
- mtIndexAddr = 0x021100AC
- pidPointerAddr = 0x0211226C
- radioSoundValueAddr = 0x021D0FE0
- delayAddr = 0x021D1B38
- currentSeedAddr = 0x021D1FA8
- mtSeedAddr = 0x021D1FAC
- trainerIDsPointerAddr = 0x021D2C28
- getRadioSoundValueFunctionBaseAddr = 0x02252CE0
- getMarchSoundValueFunctionAddr = 0x02252D10
- getLullabySoundValueFunctionAddr = 0x02252D14
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr = 0x21100AC
+ pidPointerAddr = 0x211226C
+ radioSoundValueAddr = 0x21D0FE0
+ delayAddr = 0x21D1B38
+ currentSeedAddr = 0x21D1FA8
+ mtSeedAddr = 0x21D1FAC
+ trainerIDsPointerAddr = 0x21D2C28
+ getRadioSoundValueFunctionBaseAddr = 0x2252CE0
+ getMarchSoundValueFunctionAddr = 0x2252D10
+ getLullabySoundValueFunctionAddr = 0x2252D14
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
  boxSelectedSlotIndexOffset = 0x9760D
- mtIndexAddr =  gameVersion == "HeartGold" and 0x0210F6EC or 0x0210F70C
- pidPointerAddr = gameVersion == "HeartGold" and 0x0211188C or 0x021118AC
- radioSoundValueAddr = gameVersion == "HeartGold" and 0x021D0600 or 0x021D0620
- delayAddr = gameVersion == "HeartGold" and 0x021D1158 or 0x021D1178
- currentSeedAddr = gameVersion == "HeartGold" and 0x021D15C8 or 0x021D15E8
- mtSeedAddr = gameVersion == "HeartGold" and 0x021D15CC or 0x021D15EC
- trainerIDsPointerAddr = gameVersion == "HeartGold" and 0x021D2248 or 0x021D2268
- getRadioSoundValueFunctionBaseAddr = gameVersion == "HeartGold" and 0x02252300 or 0x02252320
- getMarchSoundValueFunctionAddr = gameVersion == "HeartGold" and 0x02252330 or 0x02252350
- getLullabySoundValueFunctionAddr = gameVersion == "HeartGold" and 0x02252334 or 0x02252354
- tempCurrentSeedDuringBattleAddr = 0x027E3618
+ mtIndexAddr =  gameVersion == "HeartGold" and 0x210F6EC or 0x210F70C
+ pidPointerAddr = gameVersion == "HeartGold" and 0x211188C or 0x21118AC
+ radioSoundValueAddr = gameVersion == "HeartGold" and 0x21D0600 or 0x21D0620
+ delayAddr = gameVersion == "HeartGold" and 0x21D1158 or 0x21D1178
+ currentSeedAddr = gameVersion == "HeartGold" and 0x21D15C8 or 0x21D15E8
+ mtSeedAddr = gameVersion == "HeartGold" and 0x21D15CC or 0x21D15EC
+ trainerIDsPointerAddr = gameVersion == "HeartGold" and 0x21D2248 or 0x21D2268
+ getRadioSoundValueFunctionBaseAddr = gameVersion == "HeartGold" and 0x2252300 or 0x2252320
+ getMarchSoundValueFunctionAddr = gameVersion == "HeartGold" and 0x2252330 or 0x2252350
+ getLullabySoundValueFunctionAddr = gameVersion == "HeartGold" and 0x2252334 or 0x2252354
+ tempCurrentSeedDuringBattleAddr = 0x27E3618
 end
 
 function printGameInfo()
@@ -508,7 +508,7 @@ end
 local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function setDateTime()
- local dateTimeAddr = 0x023FFDE8
+ local dateTimeAddr = 0x23FFDE8
 
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))

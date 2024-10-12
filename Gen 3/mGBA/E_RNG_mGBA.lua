@@ -774,7 +774,7 @@ function showPokemonInfo(buffer)
   showInfo(boxSelectedPokemonAddr, buffer)
   showPokemonIDs(boxSelectedPokemonAddr, buffer)
  elseif infoMode[infoIndex] == "Battle Party Stats" then
-  local pokemonBattleStatsScreenAddr = 0x0200E808
+  local pokemonBattleStatsScreenAddr = 0x200E808
 
   showInfo(pokemonBattleStatsScreenAddr, buffer)
   showPokemonIDs(pokemonBattleStatsScreenAddr, buffer)
@@ -784,7 +784,7 @@ function showPokemonInfo(buffer)
  elseif infoMode[infoIndex] == "Party Stats" or infoMode[infoIndex] == "2nd Floor Box Stats"
         or infoMode[infoIndex] == "DayCare Box Stats"
  then
-  local pokemonStatsScreen2Addr = 0x0200001C
+  local pokemonStatsScreen2Addr = 0x200001C
 
   showInfo(pokemonStatsScreen2Addr, buffer)
   showPokemonIDs(pokemonStatsScreen2Addr, buffer)

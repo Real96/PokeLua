@@ -9,14 +9,14 @@ bor = bit.bor
 floor = math.floor
 
 local JUMP_DATA = {
- {0X6C078965, 0X269EC3}, {0X54341D9, 0X55AE9CB2}, {0X285E9F1, 0XC910A194}, {0XAE3294E1, 0X4EAC71E8},
- {0X5A78EDC1, 0X1566AED0}, {0X75BEEB81, 0X592709A0}, {0X56221701, 0X6068C340}, {0XCA552E01, 0X98DC4680},
- {0X28EE5C01, 0X2EE38D00}, {0X82ECB801, 0X3A731A00}, {0XCA197001, 0X27963400}, {0XA532E001, 0X19EC6800},
- {0X8E65C001, 0X5ED8D000}, {0X2CCB8001, 0X69B1A000}, {0X99970001, 0X83634000}, {0X332E0001, 0XC6C68000},
- {0X665C0001, 0X8D8D0000}, {0XCCB80001, 0X1B1A0000}, {0X99700001, 0X36340000}, {0X32E00001, 0X6C680000},
- {0X65C00001, 0XD8D00000}, {0XCB800001, 0XB1A00000}, {0X97000001, 0X63400000}, {0X2E000001, 0XC6800000},
- {0X5C000001, 0X8D000000}, {0XB8000001, 0X1A000000}, {0X70000001, 0X34000000}, {0XE0000001, 0X68000000},
- {0XC0000001, 0XD0000000}, {0X80000001, 0XA0000000}, {0x1, 0X40000000}, {0x1, 0X80000000}}
+ {0x6C078965, 0x269EC3}, {0x54341D9, 0x55AE9CB2}, {0x285E9F1, 0xC910A194}, {0xAE3294E1, 0x4EAC71E8},
+ {0x5A78EDC1, 0x1566AED0}, {0x75BEEB81, 0x592709A0}, {0x56221701, 0x6068C340}, {0xCA552E01, 0x98DC4680},
+ {0x28EE5C01, 0x2EE38D00}, {0x82ECB801, 0x3A731A00}, {0xCA197001, 0x27963400}, {0xA532E001, 0x19EC6800},
+ {0x8E65C001, 0x5ED8D000}, {0x2CCB8001, 0x69B1A000}, {0x99970001, 0x83634000}, {0x332E0001, 0xC6C68000},
+ {0x665C0001, 0x8D8D0000}, {0xCCB80001, 0x1B1A0000}, {0x99700001, 0x36340000}, {0x32E00001, 0x6C680000},
+ {0x65C00001, 0xD8D00000}, {0xCB800001, 0xB1A00000}, {0x97000001, 0x63400000}, {0x2E000001, 0xC6800000},
+ {0x5C000001, 0x8D000000}, {0xB8000001, 0x1A000000}, {0x70000001, 0x34000000}, {0xE0000001, 0x68000000},
+ {0xC0000001, 0xD0000000}, {0x80000001, 0xA0000000}, {0x1, 0x40000000}, {0x1, 0x80000000}}
 
 local natureNamesList = {
  "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
@@ -406,7 +406,7 @@ local statusConditionNamesList = {"None", "PAR", "SLP", "FRZ", "BRN", "PSN"}
 
 emu.reset()
 
-local gameCode = read32Bit(0x02FFFE0C)
+local gameCode = read32Bit(0x2FFFE0C)
 local gameVersionCode = band(rshift(gameCode, 16), 0xFF)
 local gameVersion = ""
 local gameLanguageCode = rshift(gameCode, 24)
@@ -432,130 +432,130 @@ local mtSeedAddr, mtIndexAddr, currentSeedAddr, boxAddr, partySlotsCounterAddr, 
 
 if gameLanguageCode == 0x44 then  -- Check game language and set addresses
  gameLanguage = "GER"
- mtSeedAddr = 0x02215294 + getGameAddrOffset("White", 0x20)
- mtIndexAddr = 0x02215C54 + getGameAddrOffset("White", 0x20)
- currentSeedAddr = 0x02216164 + getGameAddrOffset("White", 0x20)
- boxAddr = 0x0221BEEC + getGameAddrOffset("White", 0x20)
- partySlotsCounterAddr = 0x022348F0 + getGameAddrOffset("White", 0x20)
- partyAddr = 0x022348F4 + getGameAddrOffset("White", 0x20)
- trainerIDsAddr = 0x02234F00 + getGameAddrOffset("White", 0x20)
- roamerAddr = 0x0223D604 + getGameAddrOffset("White", 0xC)
- playerMapIndexAddr = 0x0224F84C + getGameAddrOffset("White", 0x20)
- cgearEnemyAddr = 0x0225CE50 + getGameAddrOffset("White", 0x20)
- currBoxIndexAddr = 0x022696C0 + getGameAddrOffset("White", 0x20)
- partyStatsSelectedSlotIndexAddr = 0x022696C4 + getGameAddrOffset("White", 0x20)
- partySelectedSlotIndexAddr = 0x022696D8 + getGameAddrOffset("White", 0x20)
- enemyAddr = 0x0226AC34 + getGameAddrOffset("White", 0x20)
- pokemonBoxStatsAddr = 0x0227994C + getGameAddrOffset("White", 0x20)
- boxSelectedSlotIndexAddr = 0x022EB81D + getGameAddrOffset("White", 0x20)
+ mtSeedAddr = 0x2215294 + getGameAddrOffset("White", 0x20)
+ mtIndexAddr = 0x2215C54 + getGameAddrOffset("White", 0x20)
+ currentSeedAddr = 0x2216164 + getGameAddrOffset("White", 0x20)
+ boxAddr = 0x221BEEC + getGameAddrOffset("White", 0x20)
+ partySlotsCounterAddr = 0x22348F0 + getGameAddrOffset("White", 0x20)
+ partyAddr = 0x22348F4 + getGameAddrOffset("White", 0x20)
+ trainerIDsAddr = 0x2234F00 + getGameAddrOffset("White", 0x20)
+ roamerAddr = 0x223D604 + getGameAddrOffset("White", 0xC)
+ playerMapIndexAddr = 0x224F84C + getGameAddrOffset("White", 0x20)
+ cgearEnemyAddr = 0x225CE50 + getGameAddrOffset("White", 0x20)
+ currBoxIndexAddr = 0x22696C0 + getGameAddrOffset("White", 0x20)
+ partyStatsSelectedSlotIndexAddr = 0x22696C4 + getGameAddrOffset("White", 0x20)
+ partySelectedSlotIndexAddr = 0x22696D8 + getGameAddrOffset("White", 0x20)
+ enemyAddr = 0x226AC34 + getGameAddrOffset("White", 0x20)
+ pokemonBoxStatsAddr = 0x227994C + getGameAddrOffset("White", 0x20)
+ boxSelectedSlotIndexAddr = 0x22EB81D + getGameAddrOffset("White", 0x20)
 elseif gameLanguageCode == 0x46 then
  gameLanguage = "FRE"
- mtSeedAddr = 0x022152D4 + getGameAddrOffset("White", 0x20)
- mtIndexAddr = 0x02215C94 + getGameAddrOffset("White", 0x20)
- currentSeedAddr = 0x022161A4 + getGameAddrOffset("White", 0x20)
- boxAddr = 0x0221BF2C + getGameAddrOffset("White", 0x20)
- partySlotsCounterAddr = 0x02234930 + getGameAddrOffset("White", 0x20)
- partyAddr = 0x02234934 + getGameAddrOffset("White", 0x20)
- trainerIDsAddr = 0x02234F40 + getGameAddrOffset("White", 0x20)
- roamerAddr = 0x0223D644 + getGameAddrOffset("White", 0xC)
- playerMapIndexAddr = 0x0224F88C + getGameAddrOffset("White", 0x20)
- cgearEnemyAddr = 0x0225CE90 + getGameAddrOffset("White", 0x20)
- currBoxIndexAddr = 0x02269700 + getGameAddrOffset("White", 0x20)
- partyStatsSelectedSlotIndexAddr = 0x02269704 + getGameAddrOffset("White", 0x20)
- partySelectedSlotIndexAddr = 0x02269718 + getGameAddrOffset("White", 0x20)
- enemyAddr = 0x0226AC74 + getGameAddrOffset("White", 0x20)
- pokemonBoxStatsAddr = 0x0227998C + getGameAddrOffset("White", 0x20)
- boxSelectedSlotIndexAddr = 0x022EB85D + getGameAddrOffset("White", 0x20)
+ mtSeedAddr = 0x22152D4 + getGameAddrOffset("White", 0x20)
+ mtIndexAddr = 0x2215C94 + getGameAddrOffset("White", 0x20)
+ currentSeedAddr = 0x22161A4 + getGameAddrOffset("White", 0x20)
+ boxAddr = 0x221BF2C + getGameAddrOffset("White", 0x20)
+ partySlotsCounterAddr = 0x2234930 + getGameAddrOffset("White", 0x20)
+ partyAddr = 0x2234934 + getGameAddrOffset("White", 0x20)
+ trainerIDsAddr = 0x2234F40 + getGameAddrOffset("White", 0x20)
+ roamerAddr = 0x223D644 + getGameAddrOffset("White", 0xC)
+ playerMapIndexAddr = 0x224F88C + getGameAddrOffset("White", 0x20)
+ cgearEnemyAddr = 0x225CE90 + getGameAddrOffset("White", 0x20)
+ currBoxIndexAddr = 0x2269700 + getGameAddrOffset("White", 0x20)
+ partyStatsSelectedSlotIndexAddr = 0x2269704 + getGameAddrOffset("White", 0x20)
+ partySelectedSlotIndexAddr = 0x2269718 + getGameAddrOffset("White", 0x20)
+ enemyAddr = 0x226AC74 + getGameAddrOffset("White", 0x20)
+ pokemonBoxStatsAddr = 0x227998C + getGameAddrOffset("White", 0x20)
+ boxSelectedSlotIndexAddr = 0x22EB85D + getGameAddrOffset("White", 0x20)
 elseif gameLanguageCode == 0x49 then
  gameLanguage = "ITA"
- mtSeedAddr = 0x02215254 + getGameAddrOffset("White", 0x20)
- mtIndexAddr = 0x02215C14 + getGameAddrOffset("White", 0x20)
- currentSeedAddr = 0x02216124 + getGameAddrOffset("White", 0x20)
- boxAddr = 0x0221BEAC + getGameAddrOffset("White", 0x20)
- partySlotsCounterAddr = 0x022348B0 + getGameAddrOffset("White", 0x20)
- partyAddr = 0x022348B4 + getGameAddrOffset("White", 0x20)
- trainerIDsAddr = 0x02234EC0 + getGameAddrOffset("White", 0x20)
- roamerAddr = 0x0223D5C4 + getGameAddrOffset("White", 0xC)
- playerMapIndexAddr = 0x0224F80C + getGameAddrOffset("White", 0x20)
- cgearEnemyAddr = 0x0225CE10 + getGameAddrOffset("White", 0x20)
- currBoxIndexAddr = 0x02269680 + getGameAddrOffset("White", 0x20)
- partyStatsSelectedSlotIndexAddr = 0x02269684 + getGameAddrOffset("White", 0x20)
- partySelectedSlotIndexAddr = 0x02269698 + getGameAddrOffset("White", 0x20)
- enemyAddr = 0x0226ABF4 + getGameAddrOffset("White", 0x20)
- pokemonBoxStatsAddr = 0x0227990C + getGameAddrOffset("White", 0x20)
- boxSelectedSlotIndexAddr = 0x022EB7DD + getGameAddrOffset("White", 0x20)
+ mtSeedAddr = 0x2215254 + getGameAddrOffset("White", 0x20)
+ mtIndexAddr = 0x2215C14 + getGameAddrOffset("White", 0x20)
+ currentSeedAddr = 0x2216124 + getGameAddrOffset("White", 0x20)
+ boxAddr = 0x221BEAC + getGameAddrOffset("White", 0x20)
+ partySlotsCounterAddr = 0x22348B0 + getGameAddrOffset("White", 0x20)
+ partyAddr = 0x22348B4 + getGameAddrOffset("White", 0x20)
+ trainerIDsAddr = 0x2234EC0 + getGameAddrOffset("White", 0x20)
+ roamerAddr = 0x223D5C4 + getGameAddrOffset("White", 0xC)
+ playerMapIndexAddr = 0x224F80C + getGameAddrOffset("White", 0x20)
+ cgearEnemyAddr = 0x225CE10 + getGameAddrOffset("White", 0x20)
+ currBoxIndexAddr = 0x2269680 + getGameAddrOffset("White", 0x20)
+ partyStatsSelectedSlotIndexAddr = 0x2269684 + getGameAddrOffset("White", 0x20)
+ partySelectedSlotIndexAddr = 0x2269698 + getGameAddrOffset("White", 0x20)
+ enemyAddr = 0x226ABF4 + getGameAddrOffset("White", 0x20)
+ pokemonBoxStatsAddr = 0x227990C + getGameAddrOffset("White", 0x20)
+ boxSelectedSlotIndexAddr = 0x22EB7DD + getGameAddrOffset("White", 0x20)
 elseif gameLanguageCode == 0x4A then
  gameLanguage = "JPN"
- mtSeedAddr = 0x022151B4 + getGameAddrOffset("White", 0x20)
- mtIndexAddr = 0x02215B74 + getGameAddrOffset("White", 0x20)
- currentSeedAddr = 0x02216084 + getGameAddrOffset("White", 0x20)
- boxAddr = 0x0221BE0C + getGameAddrOffset("White", 0x20)
- partySlotsCounterAddr = 0x02234810 + getGameAddrOffset("White", 0x20)
- partyAddr = 0x02234814 + getGameAddrOffset("White", 0x20)
- trainerIDsAddr = 0x02234E20 + getGameAddrOffset("White", 0x20)
- roamerAddr = 0x0223D524 + getGameAddrOffset("White", 0xC)
- playerMapIndexAddr = 0x0224F76C + getGameAddrOffset("White", 0x20)
- cgearEnemyAddr = 0x0225CC84 + getGameAddrOffset("White", 0x20)
- currBoxIndexAddr = 0x022695E0 + getGameAddrOffset("White", 0x20)
- partyStatsSelectedSlotIndexAddr = 0x022695E4 + getGameAddrOffset("White", 0x20)
- partySelectedSlotIndexAddr = 0x022695F8 + getGameAddrOffset("White", 0x20)
- enemyAddr = 0x0226AB54 + getGameAddrOffset("White", 0x20)
- pokemonBoxStatsAddr = 0x0227986C + getGameAddrOffset("White", 0x20)
- boxSelectedSlotIndexAddr = 0x022EB745 + getGameAddrOffset("White", 0x20)
+ mtSeedAddr = 0x22151B4 + getGameAddrOffset("White", 0x20)
+ mtIndexAddr = 0x2215B74 + getGameAddrOffset("White", 0x20)
+ currentSeedAddr = 0x2216084 + getGameAddrOffset("White", 0x20)
+ boxAddr = 0x221BE0C + getGameAddrOffset("White", 0x20)
+ partySlotsCounterAddr = 0x2234810 + getGameAddrOffset("White", 0x20)
+ partyAddr = 0x2234814 + getGameAddrOffset("White", 0x20)
+ trainerIDsAddr = 0x2234E20 + getGameAddrOffset("White", 0x20)
+ roamerAddr = 0x223D524 + getGameAddrOffset("White", 0xC)
+ playerMapIndexAddr = 0x224F76C + getGameAddrOffset("White", 0x20)
+ cgearEnemyAddr = 0x225CC84 + getGameAddrOffset("White", 0x20)
+ currBoxIndexAddr = 0x22695E0 + getGameAddrOffset("White", 0x20)
+ partyStatsSelectedSlotIndexAddr = 0x22695E4 + getGameAddrOffset("White", 0x20)
+ partySelectedSlotIndexAddr = 0x22695F8 + getGameAddrOffset("White", 0x20)
+ enemyAddr = 0x226AB54 + getGameAddrOffset("White", 0x20)
+ pokemonBoxStatsAddr = 0x227986C + getGameAddrOffset("White", 0x20)
+ boxSelectedSlotIndexAddr = 0x22EB745 + getGameAddrOffset("White", 0x20)
 elseif gameLanguageCode == 0x4B then
  gameLanguage = "KOR"
- mtSeedAddr = 0x02215A54
- mtIndexAddr = 0x02216414
- currentSeedAddr = 0x02216924
- boxAddr = 0x0221C6AC
- partySlotsCounterAddr = 0x022350B0
- partyAddr = 0x022350B4
- trainerIDsAddr = 0x022356C0
- roamerAddr = 0x0223DDB0 + getGameAddrOffset("Black", 0x14)
- playerMapIndexAddr = 0x0225000C
- cgearEnemyAddr = 0x0225D610
- currBoxIndexAddr = 0x02269E80
- partyStatsSelectedSlotIndexAddr = 0x02269E84
- partySelectedSlotIndexAddr = 0x02269E98
- enemyAddr = 0x0226B3F4
- pokemonBoxStatsAddr = 0x0227A10C
- boxSelectedSlotIndexAddr = 0x022EBFE1
+ mtSeedAddr = 0x2215A54
+ mtIndexAddr = 0x2216414
+ currentSeedAddr = 0x2216924
+ boxAddr = 0x221C6AC
+ partySlotsCounterAddr = 0x22350B0
+ partyAddr = 0x22350B4
+ trainerIDsAddr = 0x22356C0
+ roamerAddr = 0x223DDB0 + getGameAddrOffset("Black", 0x14)
+ playerMapIndexAddr = 0x225000C
+ cgearEnemyAddr = 0x225D610
+ currBoxIndexAddr = 0x2269E80
+ partyStatsSelectedSlotIndexAddr = 0x2269E84
+ partySelectedSlotIndexAddr = 0x2269E98
+ enemyAddr = 0x226B3F4
+ pokemonBoxStatsAddr = 0x227A10C
+ boxSelectedSlotIndexAddr = 0x22EBFE1
 elseif gameLanguageCode == 0x4F then
  gameLanguage = "USA"
- mtSeedAddr = 0x02215354 + getGameAddrOffset("White", 0x20)
- mtIndexAddr = 0x02215D14 + getGameAddrOffset("White", 0x20)
- currentSeedAddr = 0x02216224 + getGameAddrOffset("White", 0x20)
- boxAddr = 0x0221BFAC + getGameAddrOffset("White", 0x20)
- partySlotsCounterAddr = 0x022349B0 + getGameAddrOffset("White", 0x20)
- partyAddr = 0x022349B4 + getGameAddrOffset("White", 0x20)
- trainerIDsAddr = 0x02234FC0 + getGameAddrOffset("White", 0x20)
- roamerAddr = 0x0223D6C4 + getGameAddrOffset("White", 0xC)
- playerMapIndexAddr = 0x0224F90C + getGameAddrOffset("White", 0x20)
- cgearEnemyAddr = 0x0225CF10 + getGameAddrOffset("White", 0x20)
- currBoxIndexAddr = 0x02269780 + getGameAddrOffset("White", 0x20)
- partyStatsSelectedSlotIndexAddr = 0x02269784 + getGameAddrOffset("White", 0x20)
- partySelectedSlotIndexAddr = 0x02269798 + getGameAddrOffset("White", 0x20)
- enemyAddr = 0x0226ACF4 + getGameAddrOffset("White", 0x20)
- pokemonBoxStatsAddr = 0x02279A0C + getGameAddrOffset("White", 0x20)
- boxSelectedSlotIndexAddr = 0x022EB8E1 + getGameAddrOffset("White", 0x20)
+ mtSeedAddr = 0x2215354 + getGameAddrOffset("White", 0x20)
+ mtIndexAddr = 0x2215D14 + getGameAddrOffset("White", 0x20)
+ currentSeedAddr = 0x2216224 + getGameAddrOffset("White", 0x20)
+ boxAddr = 0x221BFAC + getGameAddrOffset("White", 0x20)
+ partySlotsCounterAddr = 0x22349B0 + getGameAddrOffset("White", 0x20)
+ partyAddr = 0x22349B4 + getGameAddrOffset("White", 0x20)
+ trainerIDsAddr = 0x2234FC0 + getGameAddrOffset("White", 0x20)
+ roamerAddr = 0x223D6C4 + getGameAddrOffset("White", 0xC)
+ playerMapIndexAddr = 0x224F90C + getGameAddrOffset("White", 0x20)
+ cgearEnemyAddr = 0x225CF10 + getGameAddrOffset("White", 0x20)
+ currBoxIndexAddr = 0x2269780 + getGameAddrOffset("White", 0x20)
+ partyStatsSelectedSlotIndexAddr = 0x2269784 + getGameAddrOffset("White", 0x20)
+ partySelectedSlotIndexAddr = 0x2269798 + getGameAddrOffset("White", 0x20)
+ enemyAddr = 0x226ACF4 + getGameAddrOffset("White", 0x20)
+ pokemonBoxStatsAddr = 0x2279A0C + getGameAddrOffset("White", 0x20)
+ boxSelectedSlotIndexAddr = 0x22EB8E1 + getGameAddrOffset("White", 0x20)
 elseif gameLanguageCode == 0x53 then
  gameLanguage = "SPA"
- mtSeedAddr = 0x02215314
- mtIndexAddr = 0x02215CD4
- currentSeedAddr = 0x022161E4
- boxAddr = 0x0221BF6C
- partySlotsCounterAddr = 0x02234970
- partyAddr = 0x02234974
- trainerIDsAddr = 0x02234F80
- roamerAddr = 0x0223D670 + getGameAddrOffset("Black", 0x14)
- playerMapIndexAddr = 0x0224F8CC
- cgearEnemyAddr = 0x0225CED0
- currBoxIndexAddr = 0x02269740
- partyStatsSelectedSlotIndexAddr = 0x02269744
- partySelectedSlotIndexAddr = 0x02269758
- enemyAddr = 0x0226ACB4
- pokemonBoxStatsAddr = 0x022799CC
- boxSelectedSlotIndexAddr = 0x022EB8A1
+ mtSeedAddr = 0x2215314
+ mtIndexAddr = 0x2215CD4
+ currentSeedAddr = 0x22161E4
+ boxAddr = 0x221BF6C
+ partySlotsCounterAddr = 0x2234970
+ partyAddr = 0x2234974
+ trainerIDsAddr = 0x2234F80
+ roamerAddr = 0x223D670 + getGameAddrOffset("Black", 0x14)
+ playerMapIndexAddr = 0x224F8CC
+ cgearEnemyAddr = 0x225CED0
+ currBoxIndexAddr = 0x2269740
+ partyStatsSelectedSlotIndexAddr = 0x2269744
+ partySelectedSlotIndexAddr = 0x2269758
+ enemyAddr = 0x226ACB4
+ pokemonBoxStatsAddr = 0x22799CC
+ boxSelectedSlotIndexAddr = 0x22EB8A1
 end
 
 function printGameInfo()
@@ -595,7 +595,7 @@ end
 local dateTime = {["month"] = 1, ["day"] = 1, ["year"] = 0, ["hour"] = 0, ["minute"] = 0, ["second"] = 0}
 
 function setDateTime()
- local dateTimeAddr = 0x023FFDE8
+ local dateTimeAddr = 0x23FFDE8
 
  dateTime["year"] = string.format("%02X", read8Bit(dateTimeAddr))
  dateTime["month"] = string.format("%02X", read8Bit(dateTimeAddr + 0x1))
@@ -678,8 +678,8 @@ function initializeMTArray(seed)
   seed = bxor(seed, rshift(seed, 30))
   local seedLow = band(seed, 0xFFFF)
   local seedHigh = rshift(seed, 16)
-  local seedLow2 = band((0X6C078965 * seedLow), 0xFFFFFFFF)
-  local seedHigh2 = band((0X6C078965 * seedHigh), 0xFFFF)
+  local seedLow2 = band((0x6C078965 * seedLow), 0xFFFFFFFF)
+  local seedHigh2 = band((0x6C078965 * seedHigh), 0xFFFF)
   seed = band(bor(lshift((rshift(seedLow2, 16) + seedHigh2), 16), band(seedLow2, 0xFFFF)), 0xFFFFFFFF)
   local seedLim = -tobit(seed)
   seed = (seedLim > 0 and seedLim <= i) and i - seedLim or seed + i
@@ -812,7 +812,7 @@ function getRngInfo()
  local currentHigh = read32Bit(currentSeedAddr + 0x4)
  local currentLow = read32Bit(currentSeedAddr)
  local mtIndex = read32Bit(mtIndexAddr)
- local delay = read32Bit(0x02FFFC3C)
+ local delay = read32Bit(0x2FFFC3C)
 
  checkInitialSeedGeneration(mtSeed, currentHigh, currentLow, delay)
  handleMTAdvances(mtSeed, delay)
