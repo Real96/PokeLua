@@ -321,7 +321,7 @@ local wrongGameVersion
 function setGameVersion()
  local gameVersionCode = emu:read8(0x80000AE)
  local gameLanguageCode = emu:read8(0x80000AF)
- local gameRev = emu:read8(0x80000BC) == 1
+ local gameRev = emu:read8(0x80000BC) == 0x1
 
  if gameVersionCode == 0x45 then  -- Check game version
   gameVersion = "Emerald"
