@@ -199,7 +199,7 @@ function shinyBotLoop(pokemonDVsAddr)
   elseif mode[index] == "Fishing Bot"  then
    frameLimit = 55
   elseif mode[index] == "In-Game Trade Bot" then
-   frameLimit = 2560
+   frameLimit = 2572
   end
 
   local atkDefDVs = read8Bit(pokemonDVsAddr)
