@@ -1,5 +1,11 @@
 local botTargetTIDs = {}  -- Write the bot target TIDs you prefer inside the brackets preceding this text (e.g. {0, 1, 1337, 8453, 8411, 11233, 11111, 22222, 33333, 12345})
 
+-- [saveSlot#] = advances-to-autosave-on
+local autosaveSlotAdvances = {
+ -- [1] = 10000,
+ -- [2] = 20000
+}
+
 local JUMP_DATA = {
  {0x41C64E6D, 0x6073}, {0xC2A29A69, 0xE97E7B6A}, {0xEE067F11, 0x31B0DDE4}, {0xCFDDDF21, 0x67DBB608},
  {0x5F748241, 0xCBA72510}, {0x8B2E1481, 0x1D29AE20}, {0x76006901, 0xBA84EC40}, {0x1711D201, 0x79F01880},
@@ -1009,6 +1015,17 @@ function getSaveStateInput()
  end
 end
 
+function checkAutosaveAdvances()
+ if autosaveSlotAdvances ~= nil then
+  local paintingSeed, currentSeed, currentAdvances = getRngInfo()
+  for slot in pairs(autosaveSlotAdvances) do
+   if autosaveSlotAdvances[slot] == currentAdvances then
+    emu:saveStateSlot(slot)
+   end
+  end
+ end
+end
+
 function updateBuffers()
  if (not wrongGameVersion) then
   updateCaptureBuffer()
@@ -1018,6 +1035,7 @@ function updateBuffers()
   updateTIDBotBuffer()
   updatePokemonInfoBuffer()
   getSaveStateInput()
+  checkAutosaveAdvances()
  end
 end
 
